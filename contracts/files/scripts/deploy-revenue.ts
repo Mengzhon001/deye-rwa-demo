@@ -11,6 +11,7 @@ export type RevenueManifest = {
   addresses: { usdc: string; station: string; vault: string };
   accounts: Record<string, string>;
   scenarioId: string;
+  contractName?: "RevenueShareVaultV3";
 };
 function configured(name: string, fallback: string) {
   const value = process.env[`REVENUE_${name.toUpperCase()}_ADDRESS`];
@@ -46,7 +47,7 @@ export async function deployRevenue(): Promise<RevenueManifest> {
   ).deploy(accounts.admin);
   await station.waitForDeployment();
   const vault = await (
-    await hre.ethers.getContractFactory("RevenueShareVault")
+    await hre.ethers.getContractFactory("RevenueShareVaultV3")
   ).deploy(
     accounts.admin,
     accounts.agent,
@@ -61,6 +62,7 @@ export async function deployRevenue(): Promise<RevenueManifest> {
   const block = (await hre.ethers.provider.getBlock("latest"))!;
   return {
     version: "revenue-rights.v2",
+    contractName: "RevenueShareVaultV3",
     chainId: Number((await hre.ethers.provider.getNetwork()).chainId),
     network: hre.network.name,
     deployedBlock: block.number,
@@ -94,8 +96,8 @@ export async function verifyRevenue(manifest: RevenueManifest) {
     },
     {
       address: manifest.addresses.vault,
-      source: "contracts/revenue/RevenueShareVault.sol",
-      name: "RevenueShareVault",
+      source: `contracts/revenue/${manifest.contractName || "RevenueShareVault"}.sol`,
+      name: manifest.contractName || "RevenueShareVault",
       types: Array(7).fill("address"),
       args: [
         manifest.accounts.admin,

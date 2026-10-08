@@ -6,7 +6,7 @@ async function main(){
  if(new Set(roles.slice(0,3)).size!==3)throw new Error("Manager and trustees must be distinct");
  const usdc=await(await ethers.getContractFactory("MockUSDC")).deploy(admin.address); await usdc.waitForDeployment();
  const station=await(await ethers.getContractFactory("DeyeRWA")).deploy(admin.address); await station.waitForDeployment();
- const vault=await(await ethers.getContractFactory("RevenueShareVault")).deploy(admin.address,...roles,await usdc.getAddress(),await station.getAddress()); await vault.waitForDeployment();
+ const vault=await(await ethers.getContractFactory("RevenueShareVaultV3")).deploy(admin.address,...roles,await usdc.getAddress(),await station.getAddress()); await vault.waitForDeployment();
  await(await station.grantRole(await station.ISSUER_ROLE(),roles[0])).wait();
  console.log(JSON.stringify({chainId:Number((await ethers.provider.getNetwork()).chainId),usdc:await usdc.getAddress(),station:await station.getAddress(),vault:await vault.getAddress()},null,2));
 }

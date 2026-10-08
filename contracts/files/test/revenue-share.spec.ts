@@ -16,7 +16,7 @@ async function setup() {
     [admin, agent, trustee, trustee2, treasury, owner, alice, bob, outsider] =
       await ethers.getSigners();
   const v: any = await ethers.getContractAt(
-      "RevenueShareVault",
+      m.contractName || "RevenueShareVault",
       m.addresses.vault
     ),
     u: any = await ethers.getContractAt("MockUSDC", m.addresses.usdc),
@@ -69,7 +69,10 @@ async function setup() {
   }
   async function settle() {
     await subscribe();
-    await jump((await now()) + 3 * 86400 + 1);
+    for (const investor of [alice,bob]) {
+      const sub=await v.subscriptions(investor.address);
+      if(sub.amount>0)await v.connect(agent).reviewSubscription(investor.address,await v.subscriptionNonce(investor.address),sub.amount,sub.terms,true,h("review"));
+    }
     await v.connect(agent).settle(h("settlement-evidence"));
     await price();
   }
@@ -116,7 +119,7 @@ describe("Revenue-share pool (separate from legacy)", function () {
     expect(await nft.ownerOf(BigInt(station))).eq(await v.getAddress());
     expect(await v.rightCount()).eq(1);
   });
-  it("enforces eligibility, cooling-off, binding terms and failed fundraising refunds", async () => {
+  it("enforces eligibility and terms; cancellation refunds before settlement without a waiting period", async () => {
     const { v, u, alice, outsider, agent } = await loadFixture(setup);
     await expect(
       v.connect(outsider).subscribe(cash(1), h("terms"))
@@ -132,9 +135,8 @@ describe("Revenue-share pool (separate from legacy)", function () {
     expect(await v.totalSubscriptions()).eq(0);
     await v.connect(alice).subscribe(cash(500), h("terms"));
     await jump((await now()) + 3 * 86400 + 1);
-    await expect(v.connect(alice).withdrawSubscription()).revertedWith(
-      "refund unavailable"
-    );
+    await v.connect(alice).withdrawSubscription();
+    await v.connect(alice).subscribe(cash(500), h("terms"));
     await v.connect(agent).failFundraising();
     await v.connect(alice).withdrawSubscription();
     expect(await v.totalSupply()).eq(0);
@@ -150,7 +152,10 @@ describe("Revenue-share pool (separate from legacy)", function () {
     await expect(
       v.connect(agent).settle(h("settlement-evidence"))
     ).revertedWith("unconfirmed order");
-    await jump((await now()) + 3 * 86400 + 1);
+    for (const investor of [alice,bob]) {
+      const sub=await v.subscriptions(investor.address);
+      await v.connect(agent).reviewSubscription(investor.address,await v.subscriptionNonce(investor.address),sub.amount,sub.terms,true,h("review"));
+    }
     await v.connect(agent).settle(h("settlement-evidence"));
     expect(await u.balanceOf(owner.address)).eq(cash(900));
     expect(await v.totalSupply()).eq(cash(1000));
@@ -165,6 +170,22 @@ describe("Revenue-share pool (separate from legacy)", function () {
     expect(await v.fresh()).eq(false);
     await price();
     expect(await v.nav()).eq(cash(1000));
+  });
+  it("binds manager review to order nonce, amount and terms; rejection refunds and approval mints nothing",async()=>{
+    const {v,u,agent,alice,outsider}=await loadFixture(setup);
+    await v.connect(alice).subscribe(cash(1000),h("terms"));
+    const nonce=await v.subscriptionNonce(alice.address);
+    const review=(who:any,n=nonce,amount=cash(1000),terms=h("terms"),approved=true)=>v.connect(who).reviewSubscription(alice.address,n,amount,terms,approved,h("review"));
+    await expect(review(outsider)).reverted;
+    await expect(review(agent,nonce,cash(999))).revertedWithCustomError(v,"InvalidSubscriptionReview");
+    await expect(review(agent,nonce,cash(1000),h("other"))).revertedWithCustomError(v,"InvalidSubscriptionReview");
+    await review(agent);expect(await v.subscriptionApproved(alice.address)).eq(true);expect(await v.totalSupply()).eq(0);
+    await expect(review(agent)).revertedWithCustomError(v,"InvalidSubscriptionReview");
+    await v.connect(alice).withdrawSubscription();await v.connect(alice).subscribe(cash(1000),h("terms"));
+    expect(await v.subscriptionApproved(alice.address)).eq(false);
+    await expect(review(agent)).revertedWithCustomError(v,"InvalidSubscriptionReview");
+    await review(agent,nonce+1n,cash(1000),h("terms"),false);
+    expect(await v.totalSubscriptions()).eq(0);expect(await u.balanceOf(alice.address)).eq(cash(10000));
   });
   it("rejects stale prices and unauthorized roles; monthly fees require approved opening NAV", async () => {
     const { v, alice, outsider, settle, price, month } = await loadFixture(
