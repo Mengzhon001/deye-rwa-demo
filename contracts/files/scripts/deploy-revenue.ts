@@ -11,7 +11,8 @@ export type RevenueManifest = {
   addresses: { usdc: string; station: string; vault: string };
   accounts: Record<string, string>;
   scenarioId: string;
-  contractName?: "RevenueShareVaultV3";
+  localMaintenance?: {kind:"anvil-local-code-maintenance";previousCodeHash:string;codeHash:string;at:string;record:string};
+  contractName?: "RevenueShareVaultV3" | "RevenueShareVaultV4" | "RevenueShareVaultV5";
 };
 function configured(name: string, fallback: string) {
   const value = process.env[`REVENUE_${name.toUpperCase()}_ADDRESS`];
@@ -46,8 +47,9 @@ export async function deployRevenue(): Promise<RevenueManifest> {
     await hre.ethers.getContractFactory("DeyeRWA")
   ).deploy(accounts.admin);
   await station.waitForDeployment();
+  const contractName=process.env.REVENUE_DISTRIBUTION_INTERVAL_MONTHS==="1"?"RevenueShareVaultV5":"RevenueShareVaultV4";
   const vault = await (
-    await hre.ethers.getContractFactory("RevenueShareVaultV3")
+    await hre.ethers.getContractFactory(contractName)
   ).deploy(
     accounts.admin,
     accounts.agent,
@@ -62,7 +64,7 @@ export async function deployRevenue(): Promise<RevenueManifest> {
   const block = (await hre.ethers.provider.getBlock("latest"))!;
   return {
     version: "revenue-rights.v2",
-    contractName: "RevenueShareVaultV3",
+    contractName,
     chainId: Number((await hre.ethers.provider.getNetwork()).chainId),
     network: hre.network.name,
     deployedBlock: block.number,
@@ -113,6 +115,7 @@ export async function verifyRevenue(manifest: RevenueManifest) {
   const results: Array<{ address: string; verified: boolean; message: string }> = [];
   const api = process.env.REVENUE_EXPLORER_API_URL?.replace(/\/$/u, "");
   for (const item of items) {
+    if(manifest.localMaintenance&&item.address===manifest.addresses.vault){results.push({address:item.address,verified:false,message:"Local Anvil runtime maintenance; historical deployment verification is not verification of the new runtime. Check the current runtime against its source package."});continue;}
     try {
       if (!api) {
         await hre.run("verify:verify", {

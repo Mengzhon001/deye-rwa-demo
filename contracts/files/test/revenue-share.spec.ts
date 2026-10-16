@@ -128,9 +128,9 @@ describe("Revenue-share pool (separate from legacy)", function () {
       v.connect(alice).subscribe(cash(1), h("different"))
     ).revertedWith("invalid subscription");
     await v.connect(alice).subscribe(cash(500), h("terms"));
-    await expect(v.connect(alice).subscribe(1, h("terms"))).revertedWith(
-      "one active subscription"
-    );
+    await v.connect(alice).subscribe(1, h("terms"));
+    expect((await v.subscriptions(alice.address)).amount).eq(cash(500)+1n);
+    expect(await v.subscriptionNonce(alice.address)).eq(2);
     await v.connect(alice).withdrawSubscription();
     expect(await v.totalSubscriptions()).eq(0);
     await v.connect(alice).subscribe(cash(500), h("terms"));
@@ -186,6 +186,36 @@ describe("Revenue-share pool (separate from legacy)", function () {
     await expect(review(agent)).revertedWithCustomError(v,"InvalidSubscriptionReview");
     await review(agent,nonce+1n,cash(1000),h("terms"),false);
     expect(await v.totalSubscriptions()).eq(0);expect(await u.balanceOf(alice.address)).eq(cash(10000));
+  });
+  it("accumulates repeated subscriptions, invalidates prior approval, rejects stale review and issues exactly the paid total",async()=>{
+    const {v,u,agent,alice,bob,owner}=await loadFixture(setup);
+    await v.connect(alice).subscribe(cash(100),h("terms"));
+    await v.connect(agent).reviewSubscription(alice.address,1,cash(100),h("terms"),true,h("first-review"));
+    for(const [amount,total,nonce] of [[200,300,2],[300,600,3]]){
+      await expect(v.connect(alice).subscribe(cash(amount),h("terms"))).emit(v,"Subscribed").withArgs(alice.address,cash(amount),h("terms"));
+      expect((await v.subscriptions(alice.address)).amount).eq(cash(total));
+      expect(await v.subscriptionNonce(alice.address)).eq(nonce);
+      expect(await v.subscriptionApproved(alice.address)).eq(false);
+    }
+    await expect(v.connect(agent).reviewSubscription(alice.address,1,cash(100),h("terms"),true,h("old-review"))).revertedWithCustomError(v,"InvalidSubscriptionReview");
+    await v.connect(bob).subscribe(cash(400),h("terms"));
+    await expect(v.connect(alice).subscribe(1,h("terms"))).revertedWith("invalid subscription");
+    await expect(v.connect(agent).settle(h("settlement"))).revertedWith("unconfirmed order");
+    for(const investor of [alice,bob]){const sub=await v.subscriptions(investor.address);await v.connect(agent).reviewSubscription(investor.address,await v.subscriptionNonce(investor.address),sub.amount,sub.terms,true,h("current-review"));}
+    await v.connect(agent).settle(h("settlement"));
+    expect(await v.totalSupply()).eq(cash(1000));expect(await v.balanceOf(alice.address)).eq(cash(600));expect(await v.balanceOf(bob.address)).eq(cash(400));expect(await u.balanceOf(owner.address)).eq(cash(900));
+    await expect(v.connect(alice).subscribe(1,h("terms"))).revertedWith("subscription unavailable");
+  });
+  it("refunds all accumulated cash on cancellation or rejection and never reuses a withdrawn approval",async()=>{
+    const {v,u,agent,alice}=await loadFixture(setup);
+    await v.connect(alice).subscribe(cash(100),h("terms"));await v.connect(alice).subscribe(cash(200),h("terms"));
+    await v.connect(agent).reviewSubscription(alice.address,2,cash(300),h("terms"),true,h("review"));
+    await expect(v.connect(alice).withdrawSubscription()).emit(v,"Refunded").withArgs(alice.address,cash(300));
+    expect(await u.balanceOf(alice.address)).eq(cash(10000));expect(await v.totalSubscriptions()).eq(0);
+    await v.connect(alice).subscribe(cash(40),h("terms"));expect(await v.subscriptionApproved(alice.address)).eq(false);
+    await v.connect(alice).subscribe(cash(60),h("terms"));
+    await v.connect(agent).reviewSubscription(alice.address,4,cash(100),h("terms"),false,h("rejection"));
+    expect(await v.totalSubscriptions()).eq(0);expect((await v.subscriptions(alice.address)).amount).eq(0);expect(await u.balanceOf(alice.address)).eq(cash(10000));expect(await v.totalSupply()).eq(0);
   });
   it("rejects stale prices and unauthorized roles; monthly fees require approved opening NAV", async () => {
     const { v, alice, outsider, settle, price, month } = await loadFixture(
