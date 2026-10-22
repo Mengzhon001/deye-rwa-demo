@@ -6,8 +6,9 @@ async function main(){
  if(new Set(roles.slice(0,3)).size!==3)throw new Error("Manager and trustees must be distinct");
  const usdc=await(await ethers.getContractFactory("MockUSDC")).deploy(admin.address); await usdc.waitForDeployment();
  const station=await(await ethers.getContractFactory("DeyeRWA")).deploy(admin.address); await station.waitForDeployment();
- const vault=await(await ethers.getContractFactory("RevenueShareVaultV4")).deploy(admin.address,...roles,await usdc.getAddress(),await station.getAddress()); await vault.waitForDeployment();
+ const vault=await(await ethers.getContractFactory("RevenueShareVaultV5")).deploy(admin.address,...roles,await usdc.getAddress(),await station.getAddress()); await vault.waitForDeployment();
  await(await station.grantRole(await station.ISSUER_ROLE(),roles[0])).wait();
- console.log(JSON.stringify({chainId:Number((await ethers.provider.getNetwork()).chainId),usdc:await usdc.getAddress(),station:await station.getAddress(),vault:await vault.getAddress()},null,2));
+ const billing=await(await ethers.getContractFactory("HouseholdBilling")).deploy(await usdc.getAddress(),await vault.getAddress(),roles[0],roles[3]); await billing.waitForDeployment(); await(await vault.grantRole(await vault.TREASURY(),await billing.getAddress())).wait();
+ console.log(JSON.stringify({chainId:Number((await ethers.provider.getNetwork()).chainId),usdc:await usdc.getAddress(),station:await station.getAddress(),vault:await vault.getAddress(),billing:await billing.getAddress()},null,2));
 }
 main().catch(e=>{console.error(e.message);process.exitCode=1;});

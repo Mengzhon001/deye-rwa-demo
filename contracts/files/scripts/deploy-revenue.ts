@@ -8,8 +8,9 @@ export type RevenueManifest = {
   network: string;
   deployedBlock: number;
   deployedBlockHash: string;
-  addresses: { usdc: string; station: string; vault: string };
+  addresses: { usdc: string; station: string; vault: string; billing?: string };
   accounts: Record<string, string>;
+  billingDeployment?: {transaction: string; block: number};
   scenarioId: string;
   localMaintenance?: {kind:"anvil-local-code-maintenance";previousCodeHash:string;codeHash:string;at:string;record:string};
   contractName?: "RevenueShareVaultV3" | "RevenueShareVaultV4" | "RevenueShareVaultV5";
@@ -61,6 +62,14 @@ export async function deployRevenue(): Promise<RevenueManifest> {
   );
   await vault.waitForDeployment();
   await (await station.grantRole(await station.ISSUER_ROLE(), accounts.agent)).wait();
+  let billingAddress: string | undefined;
+  let billingDeployment: RevenueManifest["billingDeployment"];
+  if (process.env.REVENUE_HOUSEHOLD_PAYMENTS_ENABLED !== "false") {
+    const billing = await (await hre.ethers.getContractFactory("HouseholdBilling")).deploy(await usdc.getAddress(), await vault.getAddress(), accounts.agent, accounts.treasury);
+    await billing.waitForDeployment();billingAddress=await billing.getAddress();
+    const receipt=await billing.deploymentTransaction()!.wait();billingDeployment={transaction:receipt!.hash,block:receipt!.blockNumber};
+    await (await vault.grantRole(await vault.TREASURY(), billingAddress)).wait();
+  }
   const block = (await hre.ethers.provider.getBlock("latest"))!;
   return {
     version: "revenue-rights.v2",
@@ -76,8 +85,10 @@ export async function deployRevenue(): Promise<RevenueManifest> {
       usdc: await usdc.getAddress(),
       station: await station.getAddress(),
       vault: await vault.getAddress(),
+      ...(billingAddress ? {billing:billingAddress}:{}),
     },
     accounts,
+    ...(billingDeployment?{billingDeployment}:{}),
   };
 }
 export async function verifyRevenue(manifest: RevenueManifest) {
@@ -112,6 +123,7 @@ export async function verifyRevenue(manifest: RevenueManifest) {
       ],
     },
   ];
+  if (manifest.addresses.billing) items.push({address:manifest.addresses.billing,source:"contracts/revenue/HouseholdBilling.sol",name:"HouseholdBilling",types:Array(4).fill("address"),args:[manifest.addresses.usdc,manifest.addresses.vault,manifest.accounts.agent,manifest.accounts.treasury]});
   const results: Array<{ address: string; verified: boolean; message: string }> = [];
   const api = process.env.REVENUE_EXPLORER_API_URL?.replace(/\/$/u, "");
   for (const item of items) {
