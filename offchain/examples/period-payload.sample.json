@@ -1,0 +1,21 @@
+{
+  "facilityId": "0x6421596a42afec2cd62caf4309854e462e7acb0ada65f0b6c504aed5e49578b0",
+  "periodId": "0x323032362d44454d4f2d50303100000000000000000000000000000000000000",
+  "reviewTimestamp": 1775650000,
+  "signedDecisionUri": "file://review-decision-2026-DEMO-P01.json",
+  "productionReport": {
+    "amountUSDC6": "14076750000",
+    "evidenceHash": "0xfa774272c9327ec83d6f761c3674aaef1e92dbb62fde2687dcfb3b1461a974b7",
+    "reportHash": "0x36520704e20cb07ef062f4157c8548ea2800ca736c694015ddca5cd17084ac9d",
+    "schemaVersionHash": "0x1f744e0fd85ba9ad5695ebfc849286e2dd8386b3ca1d3d278e0fd994c9d5ac5c"
+  },
+  "cashflowReport": {
+    "amountUSDC6": "14076750000",
+    "settlementRef": "SETTLE-2026-DEMO-P01-FAC-8C2DA0C2",
+    "reportHash": "0x813f76774c36f5d8abe282e61afb2651c12da8a4e6efcd83006ab4815eb8f5f6"
+  },
+  "rewardFunding": {
+    "amountUSDC6": "14076750000",
+    "claimRoot": "0x60c5bd5a5b64c4fb002c3e9ed059754fd2fc99cb1f39d32703440038f35abbc1"
+  }
+}

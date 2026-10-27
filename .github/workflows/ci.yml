@@ -1,0 +1,34 @@
+name: Source validation
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DEYE_LOCAL_SOLC: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.19.0"
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run typecheck:site --workspace ui
+      - run: npm run test:onchain
+      - run: npm run test:revenue
+      - run: npm run test:demo --workspace offchain
+      - run: npm run test:ui
+      - run: npm run test:revenue:workflow --workspace ui
+      - run: npm run test:revenue:dashboard --workspace ui
+      - run: npm run test:revenue:timeline --workspace ui
+      - run: npm run test:revenue:public --workspace ui
+      - run: npm run test:revenue:catalog
+      - run: npm run web3:test:rpc
+      - run: npm run remote:test:config
+      - run: npm run test:handoff

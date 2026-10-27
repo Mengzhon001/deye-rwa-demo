@@ -1,0 +1,27 @@
+{
+  "name": "green-energy-raw-onchain",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test",
+    "test:fork": "HARDHAT_FORK=1 hardhat test test/forked.demo.spec.ts",
+    "lint": "solhint 'contracts/**/*.sol'",
+    "deploy:local": "HARDHAT_NETWORK=${HARDHAT_NETWORK:-hardhat} node -r ts-node/register/transpile-only scripts/deploy.ts",
+    "demo:conduct": "HARDHAT_NETWORK=${HARDHAT_NETWORK:-hardhat} node -r ts-node/register/transpile-only scripts/demo-conductor.ts",
+    "node": "hardhat node --hostname 127.0.0.1",
+    "test:revenue": "hardhat test test/revenue-share.spec.ts",
+    "deploy:revenue": "node --import tsx scripts/deploy-revenue.ts"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/node": "^22.10.1",
+    "hardhat": "^2.22.16",
+    "solhint": "^5.0.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0"
+  }
+}

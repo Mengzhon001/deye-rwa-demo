@@ -1,0 +1,53 @@
+const {test} = require('node:test');
+const assert = require('node:assert/strict');
+const vm = require('node:vm');
+const {readFileSync} = require('node:fs');
+const {resolve} = require('node:path');
+const example = require('../../site/src/cashflow-example.generated.json');
+const context = vm.createContext({});
+vm.runInContext(readFileSync(resolve(__dirname,'../../public/revenue/period-timeline.js'),'utf8'),context);
+const {owner,investor,render} = context.RevenueTimeline;
+const near = (a,b,tol = 0.00001) => assert.ok(Math.abs(a-b)<tol,`${a} != ${b}`);
+test('owner timeline reconciles the full energy bill and discounted 60-period quote', () => {
+  const result = owner(example.report,example.report.rightsValueUSDC6,'CNY');
+  assert.equal(result.columns.length,60);
+  const v = result.columns[0].values;
+  assert.equal(v.generation,1000); assert.equal(v.export,400); assert.equal(v.self,540);
+  near(v.baseline,444); near(v.bill,379.2); near(v.saving,64.8);
+  near(v.household,259.2); near(v.sale,140); near(v.cost,100); near(v.assigned,41.888);
+  assert.equal(v.due,'2026-03-01');
+  near(v.pv,v.assigned / 1.1**(59/365.25));
+  near(result.columns.reduce((s,c)=>s+c.values.pv,0),result.closingValue,0.00006);
+  const missing = structuredClone(example.report);
+  missing.rows[0].billing.allGridBillLocal = null;
+  missing.rows[0].billing.householdBillLocal = null;
+  assert.equal(owner(missing,'0','CNY').columns[0].values.bill,null);
+  assert.match(render(owner(missing,'0','CNY')),/data-pt-value="bill"[^>]*><b>—/);
+});
+test('investor periods distinguish earned revenue from delayed cash and monthly payouts', () => {
+  const result = investor(example.projection,[example.report]);
+  const [p1,p2,p3,p4] = result.columns.map(c=>c.values);
+  assert.equal(result.columns.length,61);
+  near(p1.self,540); near(p1.household,259.2*.14);
+  assert.equal(p1.receipts,0); assert.equal(p1.payout,0);
+  near(p2.receipts,p1.assigned); near(p3.receipts,p2.assigned); near(p4.receipts,p3.assigned);
+  assert.equal(p2.origin,'第 1 期'); assert.equal(p3.origin,'第 2 期');
+  near(p1.paid,p1.expense); near(p2.paid,p2.expense); near(p3.paid,p3.expense);
+  near(p2.payout,10.17,0.01);near(p3.payout,11.60,0.01);
+  assert.match(render(result),/月度分配日/);
+  near(result.columns.reduce((s,c)=>s+c.values.payout,0),result.closingValue);
+  near(result.columns.reduce((s,c)=>s+c.values.receipts,0),example.report.rows.reduce((s,r)=>s+Number(r.assignedUSDC6)/1e6,0));
+  assert.equal(result.columns.at(-1).values.generation,undefined);
+  assert.equal(result.columns.at(-1).values.cash,0);
+});
+test('mixed-currency reports convert each source before aggregation; missing evidence stays unavailable', () => {
+  const other = structuredClone(example.report); other.reportHash = 'second'; other.assumptions.fxUSDC = 1.08;
+  const p = {...example.projection,sourceReports:[example.report.reportHash,'second']};
+  const result = investor(p,[example.report,other],'en');
+  near(result.columns[0].values.household,259.2*(.14+1.08));
+  assert.equal(result.columns[0].values.generation,2000);
+  const missing = investor(p,[example.report]);
+  assert.equal(missing.columns[0].values.generation,null);
+  assert.equal(missing.columns[0].values.household,null);
+  assert.equal(missing.columns[1].values.receipts,41.888); // The saved pool schedule is still known.
+});

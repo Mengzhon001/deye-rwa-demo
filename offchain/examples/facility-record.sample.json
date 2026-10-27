@@ -1,0 +1,32 @@
+{
+  "facilityName": "NTU Rooftop Inverter A",
+  "facilityType": "INVERTER",
+  "location": {
+    "country": "Singapore",
+    "region": "West",
+    "siteName": "SG-DEMO-SITE-001",
+    "latitude": 1.3483,
+    "longitude": 103.6831
+  },
+  "commercialTerms": {
+    "acquisitionCostUSDC6": "125000000",
+    "commissionedAt": 1775001600,
+    "expectedLifetimePeriods": 120
+  },
+  "technicalProfile": {
+    "nameplateCapacityKW": 500,
+    "gridConnectionId": "GRID-SG-001"
+  },
+  "beneficiary": "0x1111111111111111111111111111111111111111",
+  "operatorId": "demo.operator.01",
+  "activateOnDeploy": true,
+  "facilityId": "FAC-8C2DA0C2",
+  "assetId": "0x6421596a42afec2cd62caf4309854e462e7acb0ada65f0b6c504aed5e49578b0",
+  "deployedAt": 1775001600,
+  "lifecycleStatus": "ACTIVE",
+  "tokenization": {
+    "rawTokenId": "RAW-FAC-8C2DA0C2",
+    "metadataHash": "0xe819800dcaf1be6b407b6cd4b6b9b55a4aa8acc78325bc1261a2a72cbf197c9f",
+    "initialStatus": "ACTIVE"
+  }
+}

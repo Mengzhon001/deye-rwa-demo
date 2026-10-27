@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "date": "2026-10-17",
+  "workflow": {
+    "passed": true,
+    "chainId": 20261017,
+    "month": 60,
+    "screenshots": 50,
+    "operations": 702,
+    "closed": true,
+    "telemetryUnchanged": true,
+    "signing": "Dedicated local test keys sign normal authenticated transaction requests outside the screenshot browser. These screenshots are not a claim of new Rabby extension testing."
+  },
+  "englishInterfaceScreenshots": 50,
+  "explorerScreenshots": 2,
+  "narrativeContainsChinese": false,
+  "orphanScreenshotPages": false,
+  "contentsPageReferencesVerified": true,
+  "pages": 76,
+  "chineseManualUnchanged": true,
+  "repositoryPdfExcludesKeys": true,
+  "uiRegressionTests": 35,
+  "englishPdfSha256": "7807b938f140bbb40f4939ea85ad413855c11f5e71414d7434f1e863a264fb84",
+  "repositoryPdfSha256": "17cf6ecbb04f3a51e805779844e15355af3108528a1eaa0cb0e7bb96623ea1b5"
+}

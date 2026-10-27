@@ -1,0 +1,110 @@
+{
+  "E1": {
+    "file": "E1.zh.png",
+    "box": {
+      "x": 518,
+      "y": 959.140625,
+      "width": 114,
+      "height": 34
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"advance\"] button[type=\"submit\"]"
+  },
+  "E2": {
+    "file": "E2.zh.png",
+    "box": {
+      "x": 784,
+      "y": 700.28125,
+      "width": 140,
+      "height": 34
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"book-revenue\"] button[type=\"submit\"]"
+  },
+  "E3": {
+    "file": "E3.zh.png",
+    "box": {
+      "x": 289,
+      "y": 762.28125,
+      "width": 114,
+      "height": 34
+    },
+    "role": "owner",
+    "chinese": [],
+    "actionTarget": "[data-billing-id=\"0xce0353ae0355a9a4bc94f4be29ac917fe68bc6b00cad55c08bc0e18a398429c6\"] form[data-action=\"pay-household-bill\"] button[type=\"submit\"]"
+  },
+  "E3a": {
+    "file": "E3a.zh.png",
+    "box": {
+      "x": 289,
+      "y": 917.375,
+      "width": 166,
+      "height": 34
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "[data-billing-id=\"0xce0353ae0355a9a4bc94f4be29ac917fe68bc6b00cad55c08bc0e18a398429c6\"] form[data-action=\"fund-export\"] button[type=\"submit\"]"
+  },
+  "E3b": {
+    "file": "E3b.zh.png",
+    "box": {
+      "x": 289,
+      "y": 917.375,
+      "width": 153,
+      "height": 34
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "[data-billing-id=\"0xce0353ae0355a9a4bc94f4be29ac917fe68bc6b00cad55c08bc0e18a398429c6\"] form[data-action=\"confirm-receipt\"] button[type=\"submit\"]"
+  },
+  "E4": {
+    "file": "E4.zh.png",
+    "box": {
+      "x": 1099,
+      "y": 555.609375,
+      "width": 108,
+      "height": 33
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"accrue-fee\"] button[type=\"submit\"]"
+  },
+  "E5": {
+    "file": "E5.zh.png",
+    "box": {
+      "x": 436,
+      "y": 640.09375,
+      "width": 127,
+      "height": 34
+    },
+    "role": "trustee",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"approve-valuation\"] button[type=\"submit\"]"
+  },
+  "E6": {
+    "file": "E6.zh.png",
+    "box": {
+      "x": 367,
+      "y": 770.546875,
+      "width": 132,
+      "height": 33
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"distribute\"] button[type=\"submit\"]"
+  },
+  "E7": {
+    "file": "E7.zh.png",
+    "box": {
+      "x": 1542.6875,
+      "y": 929.09375,
+      "width": 62,
+      "height": 34
+    },
+    "role": "investor",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"claim\"] button[type=\"submit\"]"
+  }
+}

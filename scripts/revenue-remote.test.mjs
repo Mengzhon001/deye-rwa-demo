@@ -1,0 +1,24 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { makeCompose, chainId, ports } from "./revenue-remote.mjs";
+const urls = {app:"https://app-test.trycloudflare.com",explorer:"https://explorer-test.trycloudflare.com",rpc:"https://rpc-test.trycloudflare.com"};
+test("remote deployment isolates persistence, keeps administrative services private and supplies HTTPS wallet endpoints",()=>{
+  const d=makeCompose({},urls),s=d.services;
+  assert.equal(d.name,"deye-rwa-remote");
+  for(const name of ["anvil","postgres","redis","blockscout","smart-contract-verifier","blockscout-frontend"])assert.equal(s[name].ports,undefined);
+  assert.deepEqual(s.app.ports,[`127.0.0.1:${ports.app}:${ports.app}`]);
+  assert.ok(s.anvil.command[0].includes(`--chain-id ${chainId}`));
+  assert.equal(s.app.environment.REVENUE_PUBLIC_RPC_URL,urls.rpc);
+  assert.equal(s.app.environment.REVENUE_AUTH_DOMAIN,"app-test.trycloudflare.com");
+  assert.equal(s.app.environment.REVENUE_SECURE_COOKIES,"true");
+  assert.equal(s.app.environment.REVENUE_INITIAL_REPLAY,"true");
+  assert.equal(s.app.environment.REVENUE_GUIDANCE_ENABLED,"true");
+  assert.equal(s.app.environment.REVENUE_HOUSEHOLD_PAYMENTS_ENABLED,"true");
+  assert.equal(s.app.environment.REVENUE_DEMO_TIME_ADVANCE,"true");
+  assert.equal(s.app.environment.REVENUE_DISTRIBUTION_INTERVAL_MONTHS,"1");
+  assert.equal(s.app.environment.REVENUE_AUTO_SYNC_STATION_ID,"");
+  assert.ok(!JSON.stringify(d).includes("materials_from_Deye"));
+  assert.ok(!JSON.stringify(d).includes(".env.web3.local"));
+  assert.equal(s["blockscout-frontend"].environment.NEXT_PUBLIC_NETWORK_ID,String(chainId));
+  assert.equal(s["blockscout-frontend"].environment.NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL,"wss");
+});

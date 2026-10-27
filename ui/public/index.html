@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deye Demo Control Room</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy-block">
+          <p class="eyebrow" data-i18n="hero.eyebrow">Green Energy RWA Demo</p>
+          <h1 data-i18n="hero.title">Deye Control Room</h1>
+          <p class="hero-copy" data-i18n="hero.copy">
+            A management-facing operating view for facilities, revenue flow, smart
+            contracts, and investor-facing `digital_bond` activity.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <div class="locale-rail">
+            <p id="locale-label" class="eyebrow locale-label" data-i18n="common.language">Language</p>
+            <div class="locale-switch" role="group" aria-labelledby="locale-label">
+              <button type="button" class="locale-option" data-locale-switch="en">EN</button>
+              <button type="button" class="locale-option" data-locale-switch="zh-CN">中文</button>
+            </div>
+          </div>
+          <nav class="nav-tabs">
+            <a href="#manager" data-route="manager" data-i18n="nav.manager">Manager</a>
+            <a href="#investor" data-route="investor" data-i18n="nav.investor">Investor</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section id="manager-view" class="view-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow" data-i18n="manager.eyebrow">Manager Dashboard</p>
+              <h2 data-i18n="manager.title">Operate the full demo workflow</h2>
+            </div>
+            <button id="refresh-manager" class="ghost-button" data-i18n="manager.refresh">Refresh State</button>
+          </div>
+
+          <div id="manager-cards" class="metrics-grid"></div>
+
+          <div class="dashboard-grid">
+            <section class="panel">
+              <h3 data-i18n="manager.panels.deploy">Deploy Facility</h3>
+              <form id="deploy-form" class="form-grid">
+                <label>
+                  <span data-i18n="manager.form.facilityName">Facility Name</span>
+                  <input name="facilityName" value="NTU Rooftop Inverter B" />
+                </label>
+                <label>
+                  <span data-i18n="manager.form.siteName">Site Name</span>
+                  <input name="siteName" value="SG-DEMO-SITE-002" />
+                </label>
+                <label>
+                  <span data-i18n="manager.form.region">Region</span>
+                  <input name="region" value="West" />
+                </label>
+                <label>
+                  <span data-i18n="manager.form.acquisitionCostUSDC6">Acquisition Cost USDC6</span>
+                  <input name="acquisitionCostUSDC6" value="2000000000" />
+                </label>
+                <label>
+                  <span data-i18n="manager.form.capacityKw">Capacity kW</span>
+                  <input name="nameplateCapacityKW" value="650" />
+                </label>
+                <button type="submit" data-i18n="manager.form.deploy">Deploy Facility</button>
+              </form>
+            </section>
+
+            <section class="panel">
+              <h3 data-i18n="manager.panels.engine">Automated Revenue Engine</h3>
+              <div class="bond-stack">
+                <div class="stack-row">
+                  <span data-i18n="manager.engine.cadence">Cadence</span>
+                  <strong data-i18n="manager.engine.cadenceValue">Every 1 minute</strong>
+                </div>
+                <div class="stack-row">
+                  <span data-i18n="manager.engine.mode">Mode</span>
+                  <strong data-i18n="manager.engine.modeValue">Vault-first auto-claim</strong>
+                </div>
+                <div class="stack-row">
+                  <span data-i18n="manager.engine.behavior">Behavior</span>
+                  <strong data-i18n="manager.engine.behaviorValue">Only ACTIVE facilities produce new periods</strong>
+                </div>
+              </div>
+              <p class="disclosure" data-i18n="manager.engine.disclosure">
+                Each 1-minute tick represents a compressed demo settlement interval. The UI refreshes
+                automatically and the vault claims rewards as new periods are processed.
+              </p>
+            </section>
+
+            <section class="panel">
+              <h3 data-i18n="manager.panels.lifecycle">Lifecycle Update</h3>
+              <form id="lifecycle-form" class="form-grid">
+                <label>
+                  <span data-i18n="manager.form.facilityAssetId">Facility Asset ID</span>
+                  <input
+                    name="facilityAssetId"
+                    placeholder="Select from facility table"
+                    data-i18n-placeholder="manager.form.facilityAssetPlaceholder"
+                  />
+                </label>
+                <label>
+                  <span data-i18n="manager.form.eventType">Event Type</span>
+                  <select name="eventType">
+                    <option value="BROKEN" data-i18n="manager.form.eventBroken">Broken to Pending</option>
+                    <option value="RETIRED" data-i18n="manager.form.eventRetired">Retire Facility</option>
+                  </select>
+                </label>
+                <label>
+                  <span data-i18n="manager.form.reason">Reason</span>
+                  <input
+                    name="reason"
+                    value="Management demo lifecycle event"
+                    data-i18n-default-value="manager.form.reasonDefault"
+                  />
+                </label>
+                <button type="submit" data-i18n="manager.form.submitLifecycle">Submit Lifecycle Event</button>
+              </form>
+            </section>
+          </div>
+
+          <div class="dashboard-grid wide">
+            <section class="panel">
+              <h3 data-i18n="manager.panels.facilityRegistry">Facility Registry</h3>
+              <div id="facility-table" class="table-wrap"></div>
+            </section>
+            <section class="panel">
+              <h3 data-i18n="manager.panels.revenueFlow">Revenue and Reward Flow</h3>
+              <div id="period-table" class="table-wrap"></div>
+            </section>
+          </div>
+
+          <div class="dashboard-grid wide">
+            <section class="panel">
+              <h3 data-i18n="manager.panels.contractHealth">Contract Health</h3>
+              <div id="contract-summary" class="contract-list"></div>
+            </section>
+            <section class="panel">
+              <h3 data-i18n="manager.panels.bondOperations">Bond Operations</h3>
+              <div id="bond-summary" class="bond-stack"></div>
+            </section>
+          </div>
+
+          <div class="dashboard-grid wide">
+            <section class="panel">
+              <h3 data-i18n="manager.panels.activityFeed">Activity Feed</h3>
+              <div id="activity-table" class="table-wrap"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="investor-view" class="view-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow" data-i18n="investor.eyebrow">Investor Portal</p>
+              <h2 data-i18n="investor.title">Track and request `digital_bond` exposure</h2>
+            </div>
+            <div class="wallet-rail">
+              <button id="connect-wallet" data-i18n="investor.connectWallet">Connect MetaMask</button>
+              <span id="wallet-status" class="wallet-status">Wallet not connected</span>
+            </div>
+          </div>
+
+          <div id="investor-cards" class="metrics-grid"></div>
+
+          <div class="dashboard-grid">
+            <section class="panel">
+              <h3 data-i18n="investor.panels.bondOverview">Bond Overview</h3>
+              <div id="investor-bond-overview" class="bond-stack"></div>
+            </section>
+            <section class="panel">
+              <h3 data-i18n="investor.panels.buyAllocation">Buy Demo Allocation</h3>
+              <form id="buy-form" class="form-grid">
+                <label>
+                  <span data-i18n="investor.form.dbondUnits">DBOND Units</span>
+                  <input name="amountUnits" value="25" />
+                </label>
+                <button type="submit" data-i18n="investor.form.buy">Buy On-Chain</button>
+              </form>
+              <p class="disclosure" data-i18n="investor.buyDisclosure">
+                Buy uses real MetaMask transactions against the `DBondMarket` contract.
+                If approval is needed, the UI will prompt for it first.
+              </p>
+            </section>
+            <section class="panel">
+              <h3 data-i18n="investor.panels.redeem">Redeem DBOND</h3>
+              <form id="redeem-form" class="form-grid">
+                <label>
+                  <span data-i18n="investor.form.dbondUnits">DBOND Units</span>
+                  <input name="amountUnits" value="10" />
+                </label>
+                <button type="submit" data-i18n="investor.form.redeem">Redeem On-Chain</button>
+              </form>
+            </section>
+            <section class="panel">
+              <h3 data-i18n="investor.panels.faucet">Demo USDC Faucet</h3>
+              <button id="request-faucet" data-i18n="investor.form.requestFaucet">Request Demo USDC</button>
+              <p class="disclosure" data-i18n="investor.faucetDisclosure">
+                This mints mock USDC on the local demo chain so you can test buy and redeem flows.
+              </p>
+            </section>
+          </div>
+
+          <div class="dashboard-grid wide">
+            <section class="panel">
+              <h3 data-i18n="investor.panels.balance">Your Balance</h3>
+              <div id="investor-wallet-summary" class="bond-stack"></div>
+            </section>
+            <section class="panel">
+              <h3 data-i18n="investor.panels.history">Purchase and Redemption History</h3>
+              <div id="investor-history" class="table-wrap"></div>
+            </section>
+          </div>
+        </section>
+      </main>
+
+      <aside id="notice-banner" class="notice-banner"></aside>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

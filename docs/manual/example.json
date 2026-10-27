@@ -1,0 +1,4713 @@
+{
+  "applications": [
+    {
+      "offer": {
+        "version": "revenue-rights.v2",
+        "modelVersion": "household-export.2",
+        "energyEvidence": {
+          "version": "energy-calculation.v1",
+          "source": "replay",
+          "observedAt": 1790180543,
+          "timezone": "PRC",
+          "history": [
+            {
+              "month": "2023-10",
+              "generationKWh": 5819.7,
+              "exportKWh": 71.8,
+              "importKWh": 35644.5
+            },
+            {
+              "month": "2023-11",
+              "generationKWh": 4998.9,
+              "exportKWh": 118.5,
+              "importKWh": 36364.1
+            },
+            {
+              "month": "2023-12",
+              "generationKWh": 3887.7,
+              "exportKWh": 179.2,
+              "importKWh": 45428.9
+            },
+            {
+              "month": "2024-01",
+              "generationKWh": 4342.4,
+              "exportKWh": 364.6,
+              "importKWh": 43913.2
+            },
+            {
+              "month": "2024-02",
+              "generationKWh": 3109,
+              "exportKWh": 721.5,
+              "importKWh": 36140.3
+            },
+            {
+              "month": "2024-03",
+              "generationKWh": 5593.1,
+              "exportKWh": 813.9,
+              "importKWh": 39402.2
+            },
+            {
+              "month": "2024-04",
+              "generationKWh": 5949,
+              "exportKWh": 922.5,
+              "importKWh": 26355.2
+            },
+            {
+              "month": "2024-05",
+              "generationKWh": 8920.9,
+              "exportKWh": 1740.9,
+              "importKWh": 29583.7
+            },
+            {
+              "month": "2024-06",
+              "generationKWh": 5992,
+              "exportKWh": 525.6,
+              "importKWh": 48461.6
+            },
+            {
+              "month": "2024-07",
+              "generationKWh": 5957.6,
+              "exportKWh": 16.8,
+              "importKWh": 52310.4
+            },
+            {
+              "month": "2024-08",
+              "generationKWh": 4518.1,
+              "exportKWh": 291.6,
+              "importKWh": 36820.3
+            },
+            {
+              "month": "2024-09",
+              "generationKWh": 5924.3,
+              "exportKWh": 412.4,
+              "importKWh": 54179.8
+            },
+            {
+              "month": "2024-10",
+              "generationKWh": 4452,
+              "exportKWh": 746.6,
+              "importKWh": 31334.8
+            },
+            {
+              "month": "2024-11",
+              "generationKWh": 4000.6,
+              "exportKWh": 444.5,
+              "importKWh": 20630.2
+            },
+            {
+              "month": "2024-12",
+              "generationKWh": 3762.6,
+              "exportKWh": 15,
+              "importKWh": 32152.4
+            },
+            {
+              "month": "2025-01",
+              "generationKWh": 2627.3,
+              "exportKWh": 79.1,
+              "importKWh": 28945.1
+            },
+            {
+              "month": "2025-02",
+              "generationKWh": 3821.9,
+              "exportKWh": 89.8,
+              "importKWh": 37231.6
+            },
+            {
+              "month": "2025-03",
+              "generationKWh": 5871.6,
+              "exportKWh": 171.4,
+              "importKWh": 37476.9
+            },
+            {
+              "month": "2025-04",
+              "generationKWh": 8211.6,
+              "exportKWh": 312.1,
+              "importKWh": 32824
+            },
+            {
+              "month": "2025-05",
+              "generationKWh": 8203.4,
+              "exportKWh": 78.2,
+              "importKWh": 40070.1
+            },
+            {
+              "month": "2025-06",
+              "generationKWh": 6326.6,
+              "exportKWh": 16,
+              "importKWh": 55854
+            },
+            {
+              "month": "2025-07",
+              "generationKWh": 5387,
+              "exportKWh": 0.1,
+              "importKWh": 76685.8
+            },
+            {
+              "month": "2025-08",
+              "generationKWh": 920,
+              "exportKWh": 4,
+              "importKWh": 61809.6
+            },
+            {
+              "month": "2025-09",
+              "generationKWh": 177.4,
+              "exportKWh": 3,
+              "importKWh": 63427
+            },
+            {
+              "month": "2025-10",
+              "generationKWh": 1548.3,
+              "exportKWh": 35.7,
+              "importKWh": 45340
+            },
+            {
+              "month": "2025-11",
+              "generationKWh": 4194.4,
+              "exportKWh": 383.4,
+              "importKWh": 29936.1
+            },
+            {
+              "month": "2025-12",
+              "generationKWh": 3787.7,
+              "exportKWh": 13,
+              "importKWh": 48939.1
+            },
+            {
+              "month": "2026-01",
+              "generationKWh": 3629.7,
+              "exportKWh": 7.8,
+              "importKWh": 61075.1
+            },
+            {
+              "month": "2026-02",
+              "generationKWh": 4359.1,
+              "exportKWh": 239.6,
+              "importKWh": 40594.1
+            },
+            {
+              "month": "2026-03",
+              "generationKWh": 5234.6,
+              "exportKWh": 306.5,
+              "importKWh": 41963
+            },
+            {
+              "month": "2026-04",
+              "generationKWh": 5762.7,
+              "exportKWh": 542.8,
+              "importKWh": 37022.3
+            },
+            {
+              "month": "2026-05",
+              "generationKWh": 7997,
+              "exportKWh": 668.8,
+              "importKWh": 43710.7
+            },
+            {
+              "month": "2026-06",
+              "generationKWh": 5773.1,
+              "exportKWh": 8.4,
+              "importKWh": 65797.8
+            },
+            {
+              "month": "2026-07",
+              "generationKWh": 7534.5,
+              "exportKWh": 6,
+              "importKWh": 78985.8
+            },
+            {
+              "month": "2026-08",
+              "generationKWh": 5625.7,
+              "exportKWh": 948.1,
+              "importKWh": 77201.8
+            }
+          ]
+        },
+        "baseline": {
+          "policy": {
+            "windowDays": 30,
+            "minCompleteDays": 7,
+            "ratioThreshold": 3,
+            "minimumDailyDifferenceKWh": 5
+          },
+          "sourceHash": "0xe7784886c12ff9226226ff22dbd0ddb1f494a100969281f757a60f343793ebf9",
+          "captureDate": "2026-09-24",
+          "historyStart": "2023-10",
+          "historyEnd": "2026-08",
+          "historyMonths": 35,
+          "excludedMonths": [
+            "2023-09"
+          ],
+          "historicalDailyExportKWh": 10.599624765478422,
+          "matchedHistoricalDailyExportKWh": 6.923333333333335,
+          "recentStart": "2026-09-01",
+          "recentEnd": "2026-09-23",
+          "completeDays": 23,
+          "recentGenerationKWh": 4395.3,
+          "recentExportKWh": 4398.599999999999,
+          "recentDailyExportKWh": 191.24347826086955,
+          "observedExportRatio": 1.0007508019930378,
+          "solarExportRatio": null,
+          "energyInconsistent": true,
+          "inconsistentDates": [
+            "2026-09-09",
+            "2026-09-10",
+            "2026-09-11",
+            "2026-09-12",
+            "2026-09-13",
+            "2026-09-14",
+            "2026-09-15",
+            "2026-09-16",
+            "2026-09-17",
+            "2026-09-18",
+            "2026-09-19",
+            "2026-09-20",
+            "2026-09-21",
+            "2026-09-22",
+            "2026-09-23"
+          ],
+          "ratioToHistorical": 27.62303489564798,
+          "materialChange": true,
+          "recentEligible": false,
+          "conflictingDays": false,
+          "excludedDates": [],
+          "recent": [
+            {
+              "date": "2026-09-01",
+              "generationKWh": 183.1,
+              "exportKWh": 183.1
+            },
+            {
+              "date": "2026-09-02",
+              "generationKWh": 97.6,
+              "exportKWh": 97.6
+            },
+            {
+              "date": "2026-09-03",
+              "generationKWh": 209.5,
+              "exportKWh": 209.5
+            },
+            {
+              "date": "2026-09-04",
+              "generationKWh": 208.3,
+              "exportKWh": 208.3
+            },
+            {
+              "date": "2026-09-05",
+              "generationKWh": 188.2,
+              "exportKWh": 188.2
+            },
+            {
+              "date": "2026-09-06",
+              "generationKWh": 145.2,
+              "exportKWh": 145.2
+            },
+            {
+              "date": "2026-09-07",
+              "generationKWh": 192.6,
+              "exportKWh": 192.6
+            },
+            {
+              "date": "2026-09-08",
+              "generationKWh": 234.8,
+              "exportKWh": 234.8
+            },
+            {
+              "date": "2026-09-09",
+              "generationKWh": 189.2,
+              "exportKWh": 189.4
+            },
+            {
+              "date": "2026-09-10",
+              "generationKWh": 228.7,
+              "exportKWh": 228.9
+            },
+            {
+              "date": "2026-09-11",
+              "generationKWh": 94.1,
+              "exportKWh": 94.2
+            },
+            {
+              "date": "2026-09-12",
+              "generationKWh": 285.9,
+              "exportKWh": 286.2
+            },
+            {
+              "date": "2026-09-13",
+              "generationKWh": 203.2,
+              "exportKWh": 203.7
+            },
+            {
+              "date": "2026-09-14",
+              "generationKWh": 259.1,
+              "exportKWh": 259.3
+            },
+            {
+              "date": "2026-09-15",
+              "generationKWh": 273.2,
+              "exportKWh": 273.4
+            },
+            {
+              "date": "2026-09-16",
+              "generationKWh": 260.8,
+              "exportKWh": 260.9
+            },
+            {
+              "date": "2026-09-17",
+              "generationKWh": 196.6,
+              "exportKWh": 196.7
+            },
+            {
+              "date": "2026-09-18",
+              "generationKWh": 140.9,
+              "exportKWh": 141.1
+            },
+            {
+              "date": "2026-09-19",
+              "generationKWh": 94.4,
+              "exportKWh": 94.8
+            },
+            {
+              "date": "2026-09-20",
+              "generationKWh": 192,
+              "exportKWh": 192.2
+            },
+            {
+              "date": "2026-09-21",
+              "generationKWh": 209.9,
+              "exportKWh": 210.1
+            },
+            {
+              "date": "2026-09-22",
+              "generationKWh": 207.2,
+              "exportKWh": 207.5
+            },
+            {
+              "date": "2026-09-23",
+              "generationKWh": 100.8,
+              "exportKWh": 100.9
+            }
+          ],
+          "method": "historical",
+          "reviewRequired": true,
+          "reviewRecorded": true,
+          "comparison": [
+            {
+              "method": "historical",
+              "firstYearExportKWh": 3746.449846768917,
+              "grossLocal": 121416.04762370788,
+              "valueUSDC6": "13292753235"
+            }
+          ]
+        },
+        "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd",
+        "sourceHash": "0xe7784886c12ff9226226ff22dbd0ddb1f494a100969281f757a60f343793ebf9",
+        "assumptions": {
+          "revenueModel": "household-export",
+          "gridTariffLocal": 0.6,
+          "gridTariffEscalationPct": 0,
+          "gridTariffSchedule": [],
+          "householdPaymentBps": 8000,
+          "selfUseDeliveryPct": 90,
+          "baselineMethod": "historical",
+          "baselineReviewNote": "核对已采集完整历史月份。近期数据与历史统计范围不同，本次采用历史季节性基线，并明确标记演示电价及交付假设。",
+          "baselineReviewSourceHash": "0xe7784886c12ff9226226ff22dbd0ddb1f494a100969281f757a60f343793ebf9",
+          "termMonths": 60,
+          "shareBps": 10000,
+          "discountBps": 1000,
+          "tariffLocal": 0.35,
+          "tariffEscalationPct": 0,
+          "tariffSchedule": [],
+          "fxUSDC": 0.14,
+          "inflationPct": 2,
+          "degradationPct": 0.7,
+          "availabilityPct": 98,
+          "assumedExportRatio": 0.6,
+          "paymentDelayMonths": 1,
+          "costs": [
+            {
+              "id": "maintenance",
+              "label": "Maintenance",
+              "payer": "revenue",
+              "annualLocal": 80,
+              "evidence": "demo maintenance budget"
+            },
+            {
+              "id": "insurance",
+              "label": "Insurance",
+              "payer": "revenue",
+              "annualLocal": 25,
+              "evidence": "demo insurance budget"
+            }
+          ],
+          "monthlyMandatoryUSDC6": "1000000",
+          "poolFeeBps": 50
+        },
+        "startAt": 1792151451,
+        "asOf": 1792151451,
+        "validUntil": 1794829851,
+        "provisional": true,
+        "warnings": [
+          "业主电费以估算自用光伏量计费，需审核。自用量＝max(0，发电量－合格上网量) × 交付系数；并非经核验的结算表计。Household billing uses a reviewed delivered-solar proxy, not a verified billing meter.",
+          "数据核验提示：2025-10 月汇总发电 1548.3 kWh / 上网 35.7 kWh，逐日合计为 1624.7 / 36.0；保留月度 API 原值，差异待德业确认，估值须按暂定结果审核。2026-02 上网汇总另有 0.1 kWh 差异。Monthly/daily reconciliation differences require provisional valuation review.",
+          "近期与历史上网水平显著变化；必须核对统计口径与运行方式并明确选择预测基线。Recent export regime differs materially from historical seasonality.",
+          "近期上网电量超过发电量，近期比例不可用。当前历史季节性估算须审阅，不代表已核实的未来自用量。Recent solar allocation is unavailable; historical seasonal estimates require review and are not metered future self-use.",
+          "Source observations are more than seven days old",
+          "Tariffs, FX, expenses and receipts are demo assumptions; returns are not guaranteed"
+        ],
+        "rows": [
+          {
+            "month": 1,
+            "dueAt": 1797421851,
+            "generationKWh": 3861.2,
+            "exportKWh": 279.006,
+            "grossLocal": 1645.159908,
+            "costsLocal": 8.75,
+            "assignedUSDC6": "229097387",
+            "billing": {
+              "exportKWh": 279.006,
+              "selfUseKWh": 3223.9746,
+              "importKWh": 37439.76666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1547.507808,
+              "exportRevenueLocal": 97.65209999999999,
+              "avoidedGridCostLocal": 1934.38476,
+              "householdSavingLocal": 386.87695199999985,
+              "gridPurchaseCostLocal": 22463.86,
+              "allGridBillLocal": 24398.24476,
+              "householdBillLocal": 24011.367808,
+              "grossLocal": 1645.159908,
+              "costsLocal": 8.75,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "229097387",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9842083681483627,
+            "presentValueUSDC6": "225479565",
+            "calculation": {
+              "serviceStart": 1792151451,
+              "serviceEnd": 1794829851,
+              "meanImportKWh": 37439.76666666667,
+              "seasonMonth": 10,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-10",
+                "2024-10",
+                "2025-10"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3940,
+              "meanExportKWh": 284.7,
+              "exportSampleMonths": [
+                "2023-10",
+                "2024-10",
+                "2025-10"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 1,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 2,
+            "dueAt": 1800100251,
+            "generationKWh": 4307.485059831018,
+            "exportKWh": 308.97641035812575,
+            "grossLocal": 1835.497480197633,
+            "costsLocal": 8.764451336391803,
+            "assignedUSDC6": "255742624",
+            "billing": {
+              "exportKWh": 308.97641035812575,
+              "selfUseKWh": 3598.657784525603,
+              "importKWh": 28976.8,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1727.355736572289,
+              "exportRevenueLocal": 108.141743625344,
+              "avoidedGridCostLocal": 2159.1946707153616,
+              "householdSavingLocal": 431.8389341430725,
+              "gridPurchaseCostLocal": 17386.079999999998,
+              "allGridBillLocal": 19545.27467071536,
+              "householdBillLocal": 19113.435736572286,
+              "grossLocal": 1835.497480197633,
+              "costsLocal": 8.764451336391803,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "255742624",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9762789297959492,
+            "presentValueUSDC6": "249676135",
+            "calculation": {
+              "serviceStart": 1794829851,
+              "serviceEnd": 1797421851,
+              "meanImportKWh": 28976.8,
+              "seasonMonth": 11,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-11",
+                "2024-11",
+                "2025-11"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 4397.966666666666,
+              "meanExportKWh": 315.46666666666664,
+              "exportSampleMonths": [
+                "2023-11",
+                "2024-11",
+                "2025-11"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9994147867260439,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 3,
+            "dueAt": 1802778651,
+            "generationKWh": 3732.0414156005986,
+            "exportKWh": 67.60613580280155,
+            "grossLocal": 1606.6981884036288,
+            "costsLocal": 8.778926540340576,
+            "assignedUSDC6": "223708697",
+            "billing": {
+              "exportKWh": 67.60613580280155,
+              "selfUseKWh": 3297.9917518180173,
+              "importKWh": 42173.46666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1583.0360408726483,
+              "exportRevenueLocal": 23.66214753098054,
+              "avoidedGridCostLocal": 1978.7950510908104,
+              "householdSavingLocal": 395.7590102181621,
+              "gridPurchaseCostLocal": 25304.079999999998,
+              "allGridBillLocal": 27282.875051090807,
+              "householdBillLocal": 26887.116040872646,
+              "grossLocal": 1606.6981884036288,
+              "costsLocal": 8.778926540340576,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "223708697",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9684133762819701,
+            "presentValueUSDC6": "216642495",
+            "calculation": {
+              "serviceStart": 1797421851,
+              "serviceEnd": 1800100251,
+              "meanImportKWh": 42173.46666666667,
+              "seasonMonth": 12,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-12",
+                "2024-12",
+                "2025-12"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3812.6666666666665,
+              "meanExportKWh": 69.06666666666666,
+              "exportSampleMonths": [
+                "2023-12",
+                "2024-12",
+                "2025-12"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9988299159266637,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 4,
+            "dueAt": 1805197851,
+            "generationKWh": 3456.395372012785,
+            "exportKWh": 147.23121218783825,
+            "grossLocal": 1481.0898413101204,
+            "costsLocal": 8.793425651265533,
+            "assignedUSDC6": "206121498",
+            "billing": {
+              "exportKWh": 147.23121218783825,
+              "selfUseKWh": 2978.247743842452,
+              "importKWh": 44644.46666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1429.558917044377,
+              "exportRevenueLocal": 51.53092426574339,
+              "avoidedGridCostLocal": 1786.9486463054711,
+              "householdSavingLocal": 357.3897292610941,
+              "gridPurchaseCostLocal": 26786.68,
+              "allGridBillLocal": 28573.62864630547,
+              "householdBillLocal": 28216.23891704438,
+              "grossLocal": 1481.0898413101204,
+              "costsLocal": 8.793425651265533,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "206121498",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9613634875401192,
+            "presentValueUSDC6": "198157682",
+            "calculation": {
+              "serviceStart": 1800100251,
+              "serviceEnd": 1802778651,
+              "meanImportKWh": 44644.46666666667,
+              "seasonMonth": 1,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-01",
+                "2025-01",
+                "2026-01"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3533.133333333333,
+              "meanExportKWh": 150.5,
+              "exportSampleMonths": [
+                "2024-01",
+                "2025-01",
+                "2026-01"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.998245387401439,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 5,
+            "dueAt": 1807876251,
+            "generationKWh": 3679.4410198505743,
+            "exportKWh": 342.491104318952,
+            "grossLocal": 1561.434250021294,
+            "costsLocal": 8.80794870865099,
+            "assignedUSDC6": "217367682",
+            "billing": {
+              "exportKWh": 342.491104318952,
+              "selfUseKWh": 3003.2549239784603,
+              "importKWh": 37988.666666666664,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1441.5623635096608,
+              "exportRevenueLocal": 119.87188651163319,
+              "avoidedGridCostLocal": 1801.952954387076,
+              "householdSavingLocal": 360.3905908774152,
+              "gridPurchaseCostLocal": 22793.199999999997,
+              "allGridBillLocal": 24595.152954387075,
+              "householdBillLocal": 24234.762363509657,
+              "grossLocal": 1561.434250021294,
+              "costsLocal": 8.80794870865099,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "217367682",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9536181027665147,
+            "presentValueUSDC6": "207285757",
+            "calculation": {
+              "serviceStart": 1802778651,
+              "serviceEnd": 1805197851,
+              "meanImportKWh": 37988.666666666664,
+              "seasonMonth": 2,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-02",
+                "2025-02",
+                "2026-02"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3763.3333333333335,
+              "meanExportKWh": 350.3,
+              "exportSampleMonths": [
+                "2024-02",
+                "2025-02",
+                "2026-02"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9976612009500662,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 6,
+            "dueAt": 1810468251,
+            "generationKWh": 5439.1613397745205,
+            "exportKWh": 420.75467946085905,
+            "grossLocal": 2315.215815066803,
+            "costsLocal": 8.822495752046468,
+            "assignedUSDC6": "322895065",
+            "billing": {
+              "exportKWh": 420.75467946085905,
+              "selfUseKWh": 4516.565994282296,
+              "importKWh": 39614.03333333333,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2167.951677255502,
+              "exportRevenueLocal": 147.26413781130066,
+              "avoidedGridCostLocal": 2709.9395965693775,
+              "householdSavingLocal": 541.9879193138754,
+              "gridPurchaseCostLocal": 23768.42,
+              "allGridBillLocal": 26478.359596569375,
+              "householdBillLocal": 25936.3716772555,
+              "grossLocal": 2315.215815066803,
+              "costsLocal": 8.822495752046468,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "322895065",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9461819892692795,
+            "presentValueUSDC6": "305517495",
+            "calculation": {
+              "serviceStart": 1805197851,
+              "serviceEnd": 1807876251,
+              "meanImportKWh": 39614.03333333333,
+              "seasonMonth": 3,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-03",
+                "2025-03",
+                "2026-03"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 5566.433333333334,
+              "meanExportKWh": 430.59999999999997,
+              "exportSampleMonths": [
+                "2024-03",
+                "2025-03",
+                "2026-03"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9970773563723592,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 7,
+            "dueAt": 1813146651,
+            "generationKWh": 6485.459023662627,
+            "exportKWh": 578.581603883792,
+            "grossLocal": 2754.2746067037833,
+            "costsLocal": 8.83706682106682,
+            "assignedUSDC6": "384361256",
+            "billing": {
+              "exportKWh": 578.581603883792,
+              "selfUseKWh": 5316.189677800951,
+              "importKWh": 32067.166666666668,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2551.771045344456,
+              "exportRevenueLocal": 202.5035613593272,
+              "avoidedGridCostLocal": 3189.7138066805705,
+              "householdSavingLocal": 637.9427613361145,
+              "gridPurchaseCostLocal": 19240.3,
+              "allGridBillLocal": 22430.01380668057,
+              "householdBillLocal": 21792.071045344455,
+              "grossLocal": 2754.2746067037833,
+              "costsLocal": 8.83706682106682,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "384361256",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.938558916760569,
+            "presentValueUSDC6": "360745684",
+            "calculation": {
+              "serviceStart": 1807876251,
+              "serviceEnd": 1810468251,
+              "meanImportKWh": 32067.166666666668,
+              "seasonMonth": 4,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-04",
+                "2025-04",
+                "2026-04"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6641.099999999999,
+              "meanExportKWh": 592.4666666666666,
+              "exportSampleMonths": [
+                "2024-04",
+                "2025-04",
+                "2026-04"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9964938534682489,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 8,
+            "dueAt": 1815738651,
+            "generationKWh": 8172.733280843666,
+            "exportKWh": 809.3905621687953,
+            "grossLocal": 3464.250751226622,
+            "costsLocal": 8.851661955392313,
+            "assignedUSDC6": "483755872",
+            "billing": {
+              "exportKWh": 809.3905621687953,
+              "selfUseKWh": 6627.008446807383,
+              "importKWh": 37788.166666666664,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 3180.9640544675435,
+              "exportRevenueLocal": 283.2866967590783,
+              "avoidedGridCostLocal": 3976.2050680844295,
+              "householdSavingLocal": 795.241013616886,
+              "gridPurchaseCostLocal": 22672.899999999998,
+              "allGridBillLocal": 26649.105068084427,
+              "householdBillLocal": 25853.86405446754,
+              "grossLocal": 3464.250751226622,
+              "costsLocal": 8.851661955392313,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "483755872",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9312402316300892,
+            "presentValueUSDC6": "450492930",
+            "calculation": {
+              "serviceStart": 1810468251,
+              "serviceEnd": 1813146651,
+              "meanImportKWh": 37788.166666666664,
+              "seasonMonth": 5,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-05",
+                "2025-05",
+                "2026-05"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 8373.766666666666,
+              "meanExportKWh": 829.3000000000001,
+              "exportSampleMonths": [
+                "2024-05",
+                "2025-05",
+                "2026-05"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9959106920377836,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 9,
+            "dueAt": 1818417051,
+            "generationKWh": 5882.343264839191,
+            "exportKWh": 178.8272409813094,
+            "grossLocal": 2526.5084566500627,
+            "costsLocal": 8.866281194768757,
+            "assignedUSDC6": "352469905",
+            "billing": {
+              "exportKWh": 178.8272409813094,
+              "selfUseKWh": 5133.164421472093,
+              "importKWh": 56704.466666666674,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2463.9189223066046,
+              "exportRevenueLocal": 62.58953434345828,
+              "avoidedGridCostLocal": 3079.8986528832556,
+              "householdSavingLocal": 615.979730576651,
+              "gridPurchaseCostLocal": 34022.68,
+              "allGridBillLocal": 37102.578652883254,
+              "householdBillLocal": 36486.598922306606,
+              "grossLocal": 2526.5084566500627,
+              "costsLocal": 8.866281194768757,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "352469905",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9237375398760146,
+            "presentValueUSDC6": "325589683",
+            "calculation": {
+              "serviceStart": 1813146651,
+              "serviceEnd": 1815738651,
+              "meanImportKWh": 56704.466666666674,
+              "seasonMonth": 6,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-06",
+                "2025-06",
+                "2026-06"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6030.566666666667,
+              "meanExportKWh": 183.33333333333334,
+              "exportSampleMonths": [
+                "2024-06",
+                "2025-06",
+                "2026-06"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9953278718811283,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 10,
+            "dueAt": 1821095451,
+            "generationKWh": 6134.766596759906,
+            "exportKWh": 7.441358701728466,
+            "grossLocal": 2649.6089783867374,
+            "costsLocal": 8.880924579007601,
+            "assignedUSDC6": "369701928",
+            "billing": {
+              "exportKWh": 7.441358701728466,
+              "selfUseKWh": 5514.592714252359,
+              "importKWh": 69327.33333333333,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2647.0045028411323,
+              "exportRevenueLocal": 2.604475545604963,
+              "avoidedGridCostLocal": 3308.755628551415,
+              "householdSavingLocal": 661.7511257102828,
+              "gridPurchaseCostLocal": 41596.399999999994,
+              "allGridBillLocal": 44905.15562855141,
+              "householdBillLocal": 44243.40450284113,
+              "grossLocal": 2649.6089783867374,
+              "costsLocal": 8.880924579007601,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "369701928",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9162952948054537,
+            "presentValueUSDC6": "338756137",
+            "calculation": {
+              "serviceStart": 1815738651,
+              "serviceEnd": 1818417051,
+              "meanImportKWh": 69327.33333333333,
+              "seasonMonth": 7,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-07",
+                "2025-07",
+                "2026-07"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6293.033333333333,
+              "meanExportKWh": 7.633333333333335,
+              "exportSampleMonths": [
+                "2024-07",
+                "2025-07",
+                "2026-07"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9947453927985649,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 11,
+            "dueAt": 1823687451,
+            "generationKWh": 3593.0796492718414,
+            "exportKWh": 403.9040076465039,
+            "grossLocal": 1519.0902798584223,
+            "costsLocal": 8.895592147986054,
+            "assignedUSDC6": "211427256",
+            "billing": {
+              "exportKWh": 403.9040076465039,
+              "selfUseKWh": 2870.258077462804,
+              "importKWh": 58610.56666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1377.723877182146,
+              "exportRevenueLocal": 141.36640267627635,
+              "avoidedGridCostLocal": 1722.1548464776824,
+              "householdSavingLocal": 344.43096929553644,
+              "gridPurchaseCostLocal": 35166.340000000004,
+              "allGridBillLocal": 36888.49484647768,
+              "householdBillLocal": 36544.06387718215,
+              "grossLocal": 1519.0902798584223,
+              "costsLocal": 8.895592147986054,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "211427256",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9091502167187554,
+            "presentValueUSDC6": "192219136",
+            "calculation": {
+              "serviceStart": 1818417051,
+              "serviceEnd": 1821095451,
+              "meanImportKWh": 58610.56666666667,
+              "seasonMonth": 8,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-08",
+                "2025-08",
+                "2026-08"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3687.933333333333,
+              "meanExportKWh": 414.56666666666666,
+              "exportSampleMonths": [
+                "2024-08",
+                "2025-08",
+                "2026-08"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9941632545904925,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 12,
+            "dueAt": 1826365851,
+            "generationKWh": 2970.6426284983772,
+            "exportKWh": 202.23953125821097,
+            "grossLocal": 1266.7339739481256,
+            "costsLocal": 8.910283941647176,
+            "assignedUSDC6": "176095317",
+            "billing": {
+              "exportKWh": 202.23953125821097,
+              "selfUseKWh": 2491.5627875161495,
+              "importKWh": 58803.4,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1195.9501380077518,
+              "exportRevenueLocal": 70.78383594037383,
+              "avoidedGridCostLocal": 1494.9376725096897,
+              "householdSavingLocal": 298.98753450193794,
+              "gridPurchaseCostLocal": 35282.04,
+              "allGridBillLocal": 36776.97767250969,
+              "householdBillLocal": 36477.99013800775,
+              "grossLocal": 1266.7339739481256,
+              "costsLocal": 8.910283941647176,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "176095317",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.9018254968424986,
+            "presentValueUSDC6": "158807247",
+            "calculation": {
+              "serviceStart": 1821095451,
+              "serviceEnd": 1823687451,
+              "meanImportKWh": 58803.4,
+              "seasonMonth": 9,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-09",
+                "2025-09"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3050.85,
+              "meanExportKWh": 207.7,
+              "exportSampleMonths": [
+                "2024-09",
+                "2025-09"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9935814570574267,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 13,
+            "dueAt": 1828957851,
+            "generationKWh": 3834.1715999999997,
+            "exportKWh": 277.052958,
+            "grossLocal": 1633.6437886439996,
+            "costsLocal": 8.925,
+            "assignedUSDC6": "227460630",
+            "billing": {
+              "exportKWh": 277.052958,
+              "selfUseKWh": 3201.4067778,
+              "importKWh": 37439.76666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1536.6752533439997,
+              "exportRevenueLocal": 96.96853529999998,
+              "avoidedGridCostLocal": 1920.8440666799997,
+              "householdSavingLocal": 384.1688133360001,
+              "gridPurchaseCostLocal": 22463.86,
+              "allGridBillLocal": 24384.704066680002,
+              "householdBillLocal": 24000.535253344002,
+              "grossLocal": 1633.6437886439996,
+              "costsLocal": 8.925,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "227460630",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8947932511984965,
+            "presentValueUSDC6": "203530237",
+            "calculation": {
+              "serviceStart": 1823687451,
+              "serviceEnd": 1826365851,
+              "meanImportKWh": 37439.76666666667,
+              "seasonMonth": 10,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-10",
+                "2024-10",
+                "2025-10"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3940,
+              "meanExportKWh": 284.7,
+              "exportSampleMonths": [
+                "2023-10",
+                "2024-10",
+                "2025-10"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.993,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 14,
+            "dueAt": 1831636251,
+            "generationKWh": 4277.332664412201,
+            "exportKWh": 306.81357548561886,
+            "grossLocal": 1822.64899783625,
+            "costsLocal": 8.93974036311964,
+            "assignedUSDC6": "253919296",
+            "billing": {
+              "exportKWh": 306.81357548561886,
+              "selfUseKWh": 3573.467180033924,
+              "importKWh": 28976.8,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1715.2642464162834,
+              "exportRevenueLocal": 107.38475141996659,
+              "avoidedGridCostLocal": 2144.080308020354,
+              "householdSavingLocal": 428.8160616040707,
+              "gridPurchaseCostLocal": 17386.079999999998,
+              "allGridBillLocal": 19530.160308020353,
+              "householdBillLocal": 19101.34424641628,
+              "grossLocal": 1822.64899783625,
+              "costsLocal": 8.93974036311964,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "253919296",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8875842006019418,
+            "presentValueUSDC6": "225374755",
+            "calculation": {
+              "serviceStart": 1826365851,
+              "serviceEnd": 1828957851,
+              "meanImportKWh": 28976.8,
+              "seasonMonth": 11,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-11",
+                "2024-11",
+                "2025-11"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 4397.966666666666,
+              "meanExportKWh": 315.46666666666664,
+              "exportSampleMonths": [
+                "2023-11",
+                "2024-11",
+                "2025-11"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9924188832189615,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 15,
+            "dueAt": 1834314651,
+            "generationKWh": 3705.917125691394,
+            "exportKWh": 67.13289285218193,
+            "grossLocal": 1595.4513010848032,
+            "costsLocal": 8.954505071147388,
+            "assignedUSDC6": "222109551",
+            "billing": {
+              "exportKWh": 67.13289285218193,
+              "selfUseKWh": 3274.9058095552905,
+              "importKWh": 42173.46666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1571.9547885865395,
+              "exportRevenueLocal": 23.496512498263673,
+              "avoidedGridCostLocal": 1964.9434857331742,
+              "householdSavingLocal": 392.98869714663465,
+              "gridPurchaseCostLocal": 25304.079999999998,
+              "allGridBillLocal": 27269.02348573317,
+              "householdBillLocal": 26876.034788586538,
+              "grossLocal": 1595.4513010848032,
+              "costsLocal": 8.954505071147388,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "222109551",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8804332309200947,
+            "presentValueUSDC6": "195552630",
+            "calculation": {
+              "serviceStart": 1828957851,
+              "serviceEnd": 1831636251,
+              "meanImportKWh": 42173.46666666667,
+              "seasonMonth": 12,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-12",
+                "2024-12",
+                "2025-12"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3812.6666666666665,
+              "meanExportKWh": 69.06666666666666,
+              "exportSampleMonths": [
+                "2023-12",
+                "2024-12",
+                "2025-12"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9918381065151771,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 16,
+            "dueAt": 1836820251,
+            "generationKWh": 3432.2006044086957,
+            "exportKWh": 146.20059370252338,
+            "grossLocal": 1470.7222124209497,
+            "costsLocal": 8.969294164290845,
+            "assignedUSDC6": "204645409",
+            "billing": {
+              "exportKWh": 146.20059370252338,
+              "selfUseKWh": 2957.4000096355553,
+              "importKWh": 44644.46666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1419.5520046250665,
+              "exportRevenueLocal": 51.17020779588318,
+              "avoidedGridCostLocal": 1774.4400057813332,
+              "householdSavingLocal": 354.8880011562667,
+              "gridPurchaseCostLocal": 26786.68,
+              "allGridBillLocal": 28561.120005781333,
+              "householdBillLocal": 28206.232004625068,
+              "grossLocal": 1470.7222124209497,
+              "costsLocal": 8.969294164290845,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "204645409",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8737957806062612,
+            "presentValueUSDC6": "178818295",
+            "calculation": {
+              "serviceStart": 1831636251,
+              "serviceEnd": 1834314651,
+              "meanImportKWh": 44644.46666666667,
+              "seasonMonth": 1,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-01",
+                "2025-01",
+                "2026-01"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3533.133333333333,
+              "meanExportKWh": 150.5,
+              "exportSampleMonths": [
+                "2024-01",
+                "2025-01",
+                "2026-01"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9912576696896289,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 17,
+            "dueAt": 1839498651,
+            "generationKWh": 3653.6849327116197,
+            "exportKWh": 340.0936665887193,
+            "grossLocal": 1550.5042102711443,
+            "costsLocal": 8.984107682824009,
+            "assignedUSDC6": "215812814",
+            "billing": {
+              "exportKWh": 340.0936665887193,
+              "selfUseKWh": 2982.23213951061,
+              "importKWh": 37988.666666666664,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1431.4714269650926,
+              "exportRevenueLocal": 119.03278330605175,
+              "avoidedGridCostLocal": 1789.339283706366,
+              "householdSavingLocal": 357.8678567412733,
+              "gridPurchaseCostLocal": 22793.199999999997,
+              "allGridBillLocal": 24582.539283706363,
+              "householdBillLocal": 24224.67142696509,
+              "grossLocal": 1550.5042102711443,
+              "costsLocal": 8.984107682824009,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "215812814",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.866755899622571,
+            "presentValueUSDC6": "187057030",
+            "calculation": {
+              "serviceStart": 1834314651,
+              "serviceEnd": 1836820251,
+              "meanImportKWh": 37988.666666666664,
+              "seasonMonth": 2,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-02",
+                "2025-02",
+                "2026-02"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3763.3333333333335,
+              "meanExportKWh": 350.3,
+              "exportSampleMonths": [
+                "2024-02",
+                "2025-02",
+                "2026-02"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9906775725434157,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 18,
+            "dueAt": 1842090651,
+            "generationKWh": 5401.087210396099,
+            "exportKWh": 417.80939670463306,
+            "grossLocal": 2299.0093043613347,
+            "costsLocal": 8.998945667087398,
+            "assignedUSDC6": "320601450",
+            "billing": {
+              "exportKWh": 417.80939670463306,
+              "selfUseKWh": 4484.950032322319,
+              "importKWh": 39614.03333333333,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2152.776015514713,
+              "exportRevenueLocal": 146.23328884662155,
+              "avoidedGridCostLocal": 2690.9700193933913,
+              "householdSavingLocal": 538.1940038786784,
+              "gridPurchaseCostLocal": 23768.42,
+              "allGridBillLocal": 26459.390019393388,
+              "householdBillLocal": 25921.19601551471,
+              "grossLocal": 2299.0093043613347,
+              "costsLocal": 8.998945667087398,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "320601450",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.859997119325413,
+            "presentValueUSDC6": "275716323",
+            "calculation": {
+              "serviceStart": 1836820251,
+              "serviceEnd": 1839498651,
+              "meanImportKWh": 39614.03333333333,
+              "seasonMonth": 3,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-03",
+                "2025-03",
+                "2026-03"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 5566.433333333334,
+              "meanExportKWh": 430.59999999999997,
+              "exportSampleMonths": [
+                "2024-03",
+                "2025-03",
+                "2026-03"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9900978148777526,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 19,
+            "dueAt": 1844769051,
+            "generationKWh": 6440.06081049699,
+            "exportKWh": 574.5315326566056,
+            "grossLocal": 2734.9946844568576,
+            "costsLocal": 9.013808157488155,
+            "assignedUSDC6": "381637323",
+            "billing": {
+              "exportKWh": 574.5315326566056,
+              "selfUseKWh": 5278.976350056345,
+              "importKWh": 32067.166666666668,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2533.9086480270457,
+              "exportRevenueLocal": 201.08603642981194,
+              "avoidedGridCostLocal": 3167.385810033807,
+              "householdSavingLocal": 633.4771620067613,
+              "gridPurchaseCostLocal": 19240.3,
+              "allGridBillLocal": 22407.685810033807,
+              "householdBillLocal": 21774.208648027045,
+              "grossLocal": 2734.9946844568576,
+              "costsLocal": 9.013808157488155,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "381637323",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8530684095504966,
+            "presentValueUSDC6": "325562744",
+            "calculation": {
+              "serviceStart": 1839498651,
+              "serviceEnd": 1842090651,
+              "meanImportKWh": 32067.166666666668,
+              "seasonMonth": 4,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-04",
+                "2025-04",
+                "2026-04"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6641.099999999999,
+              "meanExportKWh": 592.4666666666666,
+              "exportSampleMonths": [
+                "2024-04",
+                "2025-04",
+                "2026-04"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9895183964939712,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 20,
+            "dueAt": 1847361051,
+            "generationKWh": 8115.52414787776,
+            "exportKWh": 803.7248282336137,
+            "grossLocal": 3440.0009959680356,
+            "costsLocal": 9.028695194500159,
+            "assignedUSDC6": "480336122",
+            "billing": {
+              "exportKWh": 803.7248282336137,
+              "selfUseKWh": 6580.619387679731,
+              "importKWh": 37788.166666666664,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 3158.6973060862706,
+              "exportRevenueLocal": 281.3036898817648,
+              "avoidedGridCostLocal": 3948.3716326078384,
+              "householdSavingLocal": 789.6743265215678,
+              "gridPurchaseCostLocal": 22672.899999999998,
+              "allGridBillLocal": 26621.271632607837,
+              "householdBillLocal": 25831.597306086267,
+              "grossLocal": 3440.0009959680356,
+              "costsLocal": 9.028695194500159,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "480336122",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8464163614235574,
+            "presentValueUSDC6": "406564353",
+            "calculation": {
+              "serviceStart": 1842090651,
+              "serviceEnd": 1844769051,
+              "meanImportKWh": 37788.166666666664,
+              "seasonMonth": 5,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-05",
+                "2025-05",
+                "2026-05"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 8373.766666666666,
+              "meanExportKWh": 829.3000000000001,
+              "exportSampleMonths": [
+                "2024-05",
+                "2025-05",
+                "2026-05"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9889393171935191,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 21,
+            "dueAt": 1850039451,
+            "generationKWh": 5841.166861985317,
+            "exportKWh": 177.57545029444023,
+            "grossLocal": 2508.8228974535127,
+            "costsLocal": 9.04360681866413,
+            "assignedUSDC6": "349969101",
+            "billing": {
+              "exportKWh": 177.57545029444023,
+              "selfUseKWh": 5097.232270521789,
+              "importKWh": 56704.466666666674,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2446.671489850459,
+              "exportRevenueLocal": 62.151407603054075,
+              "avoidedGridCostLocal": 3058.3393623130737,
+              "householdSavingLocal": 611.6678724626149,
+              "gridPurchaseCostLocal": 34022.68,
+              "allGridBillLocal": 37081.019362313076,
+              "householdBillLocal": 36469.35148985046,
+              "grossLocal": 2508.8228974535127,
+              "costsLocal": 9.04360681866413,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "349969101",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8395970672826134,
+            "presentValueUSDC6": "293833031",
+            "calculation": {
+              "serviceStart": 1844769051,
+              "serviceEnd": 1847361051,
+              "meanImportKWh": 56704.466666666674,
+              "seasonMonth": 6,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-06",
+                "2025-06",
+                "2026-06"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6030.566666666667,
+              "meanExportKWh": 183.33333333333334,
+              "exportSampleMonths": [
+                "2024-06",
+                "2025-06",
+                "2026-06"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9883605767779604,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 22,
+            "dueAt": 1852717851,
+            "generationKWh": 6091.823230582587,
+            "exportKWh": 7.389269190816367,
+            "grossLocal": 2631.0617155380305,
+            "costsLocal": 9.058543070587755,
+            "assignedUSDC6": "367080444",
+            "billing": {
+              "exportKWh": 7.389269190816367,
+              "selfUseKWh": 5475.990565252593,
+              "importKWh": 69327.33333333333,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2628.4754713212446,
+              "exportRevenueLocal": 2.5862442167857282,
+              "avoidedGridCostLocal": 3285.5943391515557,
+              "householdSavingLocal": 657.118867830311,
+              "gridPurchaseCostLocal": 41596.399999999994,
+              "allGridBillLocal": 44881.99433915155,
+              "householdBillLocal": 44224.87547132124,
+              "grossLocal": 2631.0617155380305,
+              "costsLocal": 9.058543070587755,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "367080444",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8328327139186914,
+            "presentValueUSDC6": "305716602",
+            "calculation": {
+              "serviceStart": 1847361051,
+              "serviceEnd": 1850039451,
+              "meanImportKWh": 69327.33333333333,
+              "seasonMonth": 7,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-07",
+                "2025-07",
+                "2026-07"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6293.033333333333,
+              "meanExportKWh": 7.633333333333335,
+              "exportSampleMonths": [
+                "2024-07",
+                "2025-07",
+                "2026-07"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9877821750489749,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 23,
+            "dueAt": 1855309851,
+            "generationKWh": 3567.928091726938,
+            "exportKWh": 401.07667959297834,
+            "grossLocal": 1508.4566478994127,
+            "costsLocal": 9.073503990945776,
+            "assignedUSDC6": "209913640",
+            "billing": {
+              "exportKWh": 401.07667959297834,
+              "selfUseKWh": 2850.1662709205634,
+              "importKWh": 58610.56666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1368.0798100418704,
+              "exportRevenueLocal": 140.3768378575424,
+              "avoidedGridCostLocal": 1710.099762552338,
+              "householdSavingLocal": 342.01995251046765,
+              "gridPurchaseCostLocal": 35166.340000000004,
+              "allGridBillLocal": 36876.43976255234,
+              "householdBillLocal": 36534.41981004187,
+              "grossLocal": 1508.4566478994127,
+              "costsLocal": 9.073503990945776,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "209913640",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.826338459492372,
+            "presentValueUSDC6": "173459714",
+            "calculation": {
+              "serviceStart": 1850039451,
+              "serviceEnd": 1852717851,
+              "meanImportKWh": 58610.56666666667,
+              "seasonMonth": 8,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-08",
+                "2025-08",
+                "2026-08"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3687.933333333333,
+              "meanExportKWh": 414.56666666666666,
+              "exportSampleMonths": [
+                "2024-08",
+                "2025-08",
+                "2026-08"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.987204111808359,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 24,
+            "dueAt": 1857988251,
+            "generationKWh": 2949.8481300988888,
+            "exportKWh": 200.8238545394035,
+            "grossLocal": 1257.8668361304885,
+            "costsLocal": 9.088489620480122,
+            "assignedUSDC6": "174828969",
+            "billing": {
+              "exportKWh": 200.8238545394035,
+              "selfUseKWh": 2474.121848003537,
+              "importKWh": 58803.4,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1187.5784870416974,
+              "exportRevenueLocal": 70.28834908879122,
+              "avoidedGridCostLocal": 1484.473108802122,
+              "householdSavingLocal": 296.89462176042457,
+              "gridPurchaseCostLocal": 35282.04,
+              "allGridBillLocal": 36766.51310880212,
+              "householdBillLocal": 36469.6184870417,
+              "grossLocal": 1257.8668361304885,
+              "costsLocal": 9.088489620480122,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "174828969",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8196809263064875,
+            "presentValueUSDC6": "143303971",
+            "calculation": {
+              "serviceStart": 1852717851,
+              "serviceEnd": 1855309851,
+              "meanImportKWh": 58803.4,
+              "seasonMonth": 9,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-09",
+                "2025-09"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3050.85,
+              "meanExportKWh": 207.7,
+              "exportSampleMonths": [
+                "2024-09",
+                "2025-09"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9866263868580247,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 25,
+            "dueAt": 1860580251,
+            "generationKWh": 3807.3323987999997,
+            "exportKWh": 275.11358729399996,
+            "grossLocal": 1622.208282123492,
+            "costsLocal": 9.1035,
+            "assignedUSDC6": "225834669",
+            "billing": {
+              "exportKWh": 275.11358729399996,
+              "selfUseKWh": 3178.9969303554,
+              "importKWh": 37439.76666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1525.918526570592,
+              "exportRevenueLocal": 96.28975555289998,
+              "avoidedGridCostLocal": 1907.3981582132399,
+              "householdSavingLocal": 381.479631642648,
+              "gridPurchaseCostLocal": 22463.86,
+              "allGridBillLocal": 24371.25815821324,
+              "householdBillLocal": 23989.778526570593,
+              "grossLocal": 1622.208282123492,
+              "costsLocal": 9.1035,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "225834669",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8132892267552193,
+            "presentValueUSDC6": "183668903",
+            "calculation": {
+              "serviceStart": 1855309851,
+              "serviceEnd": 1857988251,
+              "meanImportKWh": 37439.76666666667,
+              "seasonMonth": 10,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-10",
+                "2024-10",
+                "2025-10"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3940,
+              "meanExportKWh": 284.7,
+              "exportSampleMonths": [
+                "2023-10",
+                "2024-10",
+                "2025-10"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.986049,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 26,
+            "dueAt": 1863258651,
+            "generationKWh": 4247.3913357613155,
+            "exportKWh": 304.66588045721954,
+            "grossLocal": 1809.8904548513965,
+            "costsLocal": 9.11853517038203,
+            "assignedUSDC6": "252108069",
+            "billing": {
+              "exportKWh": 304.66588045721954,
+              "selfUseKWh": 3548.4529097736868,
+              "importKWh": 28976.8,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1703.2573966913696,
+              "exportRevenueLocal": 106.63305816002683,
+              "avoidedGridCostLocal": 2129.071745864212,
+              "householdSavingLocal": 425.8143491728424,
+              "gridPurchaseCostLocal": 17386.079999999998,
+              "allGridBillLocal": 19515.151745864212,
+              "householdBillLocal": 19089.337396691368,
+              "grossLocal": 1809.8904548513965,
+              "costsLocal": 9.11853517038203,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "252108069",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.8067368268824463,
+            "presentValueUSDC6": "203384864",
+            "calculation": {
+              "serviceStart": 1857988251,
+              "serviceEnd": 1860580251,
+              "meanImportKWh": 28976.8,
+              "seasonMonth": 11,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-11",
+                "2024-11",
+                "2025-11"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 4397.966666666666,
+              "meanExportKWh": 315.46666666666664,
+              "exportSampleMonths": [
+                "2023-11",
+                "2024-11",
+                "2025-11"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9854719510364288,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 27,
+            "dueAt": 1865937051,
+            "generationKWh": 3679.9757058115547,
+            "exportKWh": 66.66296260221667,
+            "grossLocal": 1584.2831419772097,
+            "costsLocal": 9.133595172570335,
+            "assignedUSDC6": "220520937",
+            "billing": {
+              "exportKWh": 66.66296260221667,
+              "selfUseKWh": 3251.9814688884044,
+              "importKWh": 42173.46666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1560.951105066434,
+              "exportRevenueLocal": 23.33203691077583,
+              "avoidedGridCostLocal": 1951.1888813330424,
+              "householdSavingLocal": 390.23777626660853,
+              "gridPurchaseCostLocal": 25304.079999999998,
+              "allGridBillLocal": 27255.26888133304,
+              "householdBillLocal": 26865.03110506643,
+              "grossLocal": 1584.2831419772097,
+              "costsLocal": 9.133595172570335,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "220520937",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.80023721750865,
+            "presentValueUSDC6": "176469061",
+            "calculation": {
+              "serviceStart": 1860580251,
+              "serviceEnd": 1863258651,
+              "meanImportKWh": 42173.46666666667,
+              "seasonMonth": 12,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-12",
+                "2024-12",
+                "2025-12"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3812.6666666666665,
+              "meanExportKWh": 69.06666666666666,
+              "exportSampleMonths": [
+                "2023-12",
+                "2024-12",
+                "2025-12"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9848952397695708,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 28,
+            "dueAt": 1868356251,
+            "generationKWh": 3408.175200177835,
+            "exportKWh": 145.17718954660572,
+            "grossLocal": 1460.427156934003,
+            "costsLocal": 9.148680047576661,
+            "assignedUSDC6": "203178987",
+            "billing": {
+              "exportKWh": 145.17718954660572,
+              "selfUseKWh": 2936.698209568106,
+              "importKWh": 44644.46666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1409.615140592691,
+              "exportRevenueLocal": 50.812016341311995,
+              "avoidedGridCostLocal": 1762.0189257408636,
+              "householdSavingLocal": 352.4037851481726,
+              "gridPurchaseCostLocal": 26786.68,
+              "allGridBillLocal": 28548.698925740864,
+              "householdBillLocal": 28196.29514059269,
+              "grossLocal": 1460.427156934003,
+              "costsLocal": 9.148680047576661,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "203178987",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7944116233061164,
+            "presentValueUSDC6": "161407749",
+            "calculation": {
+              "serviceStart": 1863258651,
+              "serviceEnd": 1865937051,
+              "meanImportKWh": 44644.46666666667,
+              "seasonMonth": 1,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-01",
+                "2025-01",
+                "2026-01"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3533.133333333333,
+              "meanExportKWh": 150.5,
+              "exportSampleMonths": [
+                "2024-01",
+                "2025-01",
+                "2026-01"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9843188660018015,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 29,
+            "dueAt": 1871034651,
+            "generationKWh": 3628.109138182638,
+            "exportKWh": 337.71301092259824,
+            "grossLocal": 1539.6506807992466,
+            "costsLocal": 9.163789836480488,
+            "assignedUSDC6": "214268165",
+            "billing": {
+              "exportKWh": 337.71301092259824,
+              "selfUseKWh": 2961.356514534036,
+              "importKWh": 37988.666666666664,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1421.4511269763373,
+              "exportRevenueLocal": 118.19955382290938,
+              "avoidedGridCostLocal": 1776.8139087204215,
+              "householdSavingLocal": 355.36278174408426,
+              "gridPurchaseCostLocal": 22793.199999999997,
+              "allGridBillLocal": 24570.01390872042,
+              "householdBillLocal": 24214.651126976336,
+              "grossLocal": 1539.6506807992466,
+              "costsLocal": 9.163789836480488,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "214268165",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7880113139841203,
+            "presentValueUSDC6": "168845738",
+            "calculation": {
+              "serviceStart": 1865937051,
+              "serviceEnd": 1868356251,
+              "meanImportKWh": 37988.666666666664,
+              "seasonMonth": 2,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-02",
+                "2025-02",
+                "2026-02"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3763.3333333333335,
+              "meanExportKWh": 350.3,
+              "exportSampleMonths": [
+                "2024-02",
+                "2025-02",
+                "2026-02"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9837428295356118,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 30,
+            "dueAt": 1873626651,
+            "generationKWh": 5363.279599923326,
+            "exportKWh": 414.88473092770056,
+            "grossLocal": 2282.916239230805,
+            "costsLocal": 9.178924580429147,
+            "assignedUSDC6": "318323224",
+            "billing": {
+              "exportKWh": 414.88473092770056,
+              "selfUseKWh": 4453.555382096062,
+              "importKWh": 39614.03333333333,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2137.7065834061095,
+              "exportRevenueLocal": 145.20965582469518,
+              "avoidedGridCostLocal": 2672.133229257637,
+              "householdSavingLocal": 534.4266458515276,
+              "gridPurchaseCostLocal": 23768.42,
+              "allGridBillLocal": 26440.553229257635,
+              "householdBillLocal": 25906.12658340611,
+              "grossLocal": 2282.916239230805,
+              "costsLocal": 9.178924580429147,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "318323224",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7818665674122045,
+            "presentValueUSDC6": "248886286",
+            "calculation": {
+              "serviceStart": 1868356251,
+              "serviceEnd": 1871034651,
+              "meanImportKWh": 39614.03333333333,
+              "seasonMonth": 3,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-03",
+                "2025-03",
+                "2026-03"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 5566.433333333334,
+              "meanExportKWh": 430.59999999999997,
+              "exportSampleMonths": [
+                "2024-03",
+                "2025-03",
+                "2026-03"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9831671301736084,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 31,
+            "dueAt": 1876305051,
+            "generationKWh": 6394.980384823511,
+            "exportKWh": 570.5098119280093,
+            "grossLocal": 2715.8497216656597,
+            "costsLocal": 9.194084320637918,
+            "assignedUSDC6": "378931789",
+            "billing": {
+              "exportKWh": 570.5098119280093,
+              "selfUseKWh": 5242.023515605951,
+              "importKWh": 32067.166666666668,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2516.1712874908562,
+              "exportRevenueLocal": 199.67843417480324,
+              "avoidedGridCostLocal": 3145.2141093635705,
+              "householdSavingLocal": 629.0428218727143,
+              "gridPurchaseCostLocal": 19240.3,
+              "allGridBillLocal": 22385.51410936357,
+              "householdBillLocal": 21756.471287490855,
+              "grossLocal": 2715.8497216656597,
+              "costsLocal": 9.194084320637918,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "378931789",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7755673294187581,
+            "presentValueUSDC6": "293887116",
+            "calculation": {
+              "serviceStart": 1871034651,
+              "serviceEnd": 1873626651,
+              "meanImportKWh": 32067.166666666668,
+              "seasonMonth": 4,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-04",
+                "2025-04",
+                "2026-04"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6641.099999999999,
+              "meanExportKWh": 592.4666666666666,
+              "exportSampleMonths": [
+                "2024-04",
+                "2025-04",
+                "2026-04"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9825917677185134,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 32,
+            "dueAt": 1878897051,
+            "generationKWh": 8058.715478842615,
+            "exportKWh": 798.0987544359783,
+            "grossLocal": 3415.920988996259,
+            "costsLocal": 9.209269098390163,
+            "assignedUSDC6": "476939641",
+            "billing": {
+              "exportKWh": 798.0987544359783,
+              "selfUseKWh": 6534.555051965973,
+              "importKWh": 37788.166666666664,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 3136.5864249436668,
+              "exportRevenueLocal": 279.3345640525924,
+              "avoidedGridCostLocal": 3920.7330311795836,
+              "householdSavingLocal": 784.1466062359168,
+              "gridPurchaseCostLocal": 22672.899999999998,
+              "allGridBillLocal": 26593.633031179583,
+              "householdBillLocal": 25809.486424943665,
+              "grossLocal": 3415.920988996259,
+              "costsLocal": 9.209269098390163,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "476939641",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7695196184225276,
+            "presentValueUSDC6": "367014411",
+            "calculation": {
+              "serviceStart": 1873626651,
+              "serviceEnd": 1876305051,
+              "meanImportKWh": 37788.166666666664,
+              "seasonMonth": 5,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-05",
+                "2025-05",
+                "2026-05"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 8373.766666666666,
+              "meanExportKWh": 829.3000000000001,
+              "exportSampleMonths": [
+                "2024-05",
+                "2025-05",
+                "2026-05"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9820167419731645,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 33,
+            "dueAt": 1881575451,
+            "generationKWh": 5800.278693951419,
+            "exportKWh": 176.33242214237913,
+            "grossLocal": 2491.2611371713374,
+            "costsLocal": 9.224478955037414,
+            "assignedUSDC6": "347485132",
+            "billing": {
+              "exportKWh": 176.33242214237913,
+              "selfUseKWh": 5061.551644628136,
+              "importKWh": 56704.466666666674,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2429.544789421505,
+              "exportRevenueLocal": 61.71634774983269,
+              "avoidedGridCostLocal": 3036.9309867768816,
+              "householdSavingLocal": 607.3861973553767,
+              "gridPurchaseCostLocal": 34022.68,
+              "allGridBillLocal": 37059.61098677688,
+              "householdBillLocal": 36452.2247894215,
+              "grossLocal": 2491.2611371713374,
+              "costsLocal": 9.224478955037414,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "347485132",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7633198556764194,
+            "presentValueUSDC6": "265242301",
+            "calculation": {
+              "serviceStart": 1876305051,
+              "serviceEnd": 1878897051,
+              "meanImportKWh": 56704.466666666674,
+              "seasonMonth": 6,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-06",
+                "2025-06",
+                "2026-06"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6030.566666666667,
+              "meanExportKWh": 183.33333333333334,
+              "exportSampleMonths": [
+                "2024-06",
+                "2025-06",
+                "2026-06"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9814420527405147,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 34,
+            "dueAt": 1884253851,
+            "generationKWh": 6049.180467968508,
+            "exportKWh": 7.337544306480652,
+            "grossLocal": 2612.6442835292646,
+            "costsLocal": 9.23971393199951,
+            "assignedUSDC6": "364476640",
+            "billing": {
+              "exportKWh": 7.337544306480652,
+              "selfUseKWh": 5437.658631295825,
+              "importKWh": 69327.33333333333,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2610.0761430219964,
+              "exportRevenueLocal": 2.568140507268228,
+              "avoidedGridCostLocal": 3262.595178777495,
+              "householdSavingLocal": 652.5190357554989,
+              "gridPurchaseCostLocal": 41596.399999999994,
+              "allGridBillLocal": 44858.99517877749,
+              "householdBillLocal": 44206.47614302199,
+              "grossLocal": 2612.6442835292646,
+              "costsLocal": 9.23971393199951,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "364476640",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7571700423496475,
+            "presentValueUSDC6": "275970793",
+            "calculation": {
+              "serviceStart": 1878897051,
+              "serviceEnd": 1881575451,
+              "meanImportKWh": 69327.33333333333,
+              "seasonMonth": 7,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-07",
+                "2025-07",
+                "2026-07"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6293.033333333333,
+              "meanExportKWh": 7.633333333333335,
+              "exportSampleMonths": [
+                "2024-07",
+                "2025-07",
+                "2026-07"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9808676998236321,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 35,
+            "dueAt": 1886845851,
+            "generationKWh": 3542.9525950848497,
+            "exportKWh": 398.2691428358275,
+            "grossLocal": 1497.897451364117,
+            "costsLocal": 9.254974070764693,
+            "assignedUSDC6": "208409947",
+            "billing": {
+              "exportKWh": 398.2691428358275,
+              "selfUseKWh": 2830.21510702412,
+              "importKWh": 58610.56666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1358.5032513715773,
+              "exportRevenueLocal": 139.39419999253963,
+              "avoidedGridCostLocal": 1698.1290642144718,
+              "householdSavingLocal": 339.62581284289445,
+              "gridPurchaseCostLocal": 35166.340000000004,
+              "allGridBillLocal": 36864.46906421448,
+              "householdBillLocal": 36524.84325137158,
+              "grossLocal": 1497.897451364117,
+              "costsLocal": 9.254974070764693,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "208409947",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7512657895305325,
+            "presentValueUSDC6": "156571263",
+            "calculation": {
+              "serviceStart": 1881575451,
+              "serviceEnd": 1884253851,
+              "meanImportKWh": 58610.56666666667,
+              "seasonMonth": 8,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-08",
+                "2025-08",
+                "2026-08"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3687.933333333333,
+              "meanExportKWh": 414.56666666666666,
+              "exportSampleMonths": [
+                "2024-08",
+                "2025-08",
+                "2026-08"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9802936830257005,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 36,
+            "dueAt": 1889524251,
+            "generationKWh": 2929.1991931881967,
+            "exportKWh": 199.4180875576277,
+            "grossLocal": 1249.0617682775758,
+            "costsLocal": 9.270259412889722,
+            "assignedUSDC6": "173570811",
+            "billing": {
+              "exportKWh": 199.4180875576277,
+              "selfUseKWh": 2456.8029950675123,
+              "importKWh": 58803.4,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1179.265437632406,
+              "exportRevenueLocal": 69.79633064516969,
+              "avoidedGridCostLocal": 1474.0817970405074,
+              "householdSavingLocal": 294.81635940810133,
+              "gridPurchaseCostLocal": 35282.04,
+              "allGridBillLocal": 36756.121797040505,
+              "householdBillLocal": 36461.30543763241,
+              "grossLocal": 1249.0617682775758,
+              "costsLocal": 9.270259412889722,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "173570811",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7452130917917733,
+            "presentValueUSDC6": "129347241",
+            "calculation": {
+              "serviceStart": 1884253851,
+              "serviceEnd": 1886845851,
+              "meanImportKWh": 58803.4,
+              "seasonMonth": 9,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-09",
+                "2025-09"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3050.85,
+              "meanExportKWh": 207.7,
+              "exportSampleMonths": [
+                "2024-09",
+                "2025-09"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9797200021500185,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 37,
+            "dueAt": 1892116251,
+            "generationKWh": 3780.6810720084,
+            "exportKWh": 273.18779218294196,
+            "grossLocal": 1610.8528241486274,
+            "costsLocal": 9.285570000000002,
+            "assignedUSDC6": "224219416",
+            "billing": {
+              "exportKWh": 273.18779218294196,
+              "selfUseKWh": 3156.7439518429123,
+              "importKWh": 37439.76666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1515.2370968845978,
+              "exportRevenueLocal": 95.61572726402969,
+              "avoidedGridCostLocal": 1894.0463711057473,
+              "householdSavingLocal": 378.8092742211495,
+              "gridPurchaseCostLocal": 22463.86,
+              "allGridBillLocal": 24357.906371105746,
+              "householdBillLocal": 23979.097096884598,
+              "grossLocal": 1610.8528241486274,
+              "costsLocal": 9.285570000000002,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "224219416",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7394020767595366,
+            "presentValueUSDC6": "165788302",
+            "calculation": {
+              "serviceStart": 1886845851,
+              "serviceEnd": 1889524251,
+              "meanImportKWh": 37439.76666666667,
+              "seasonMonth": 10,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-10",
+                "2024-10",
+                "2025-10"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3940,
+              "meanExportKWh": 284.7,
+              "exportSampleMonths": [
+                "2023-10",
+                "2024-10",
+                "2025-10"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.979146657,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 38,
+            "dueAt": 1894794651,
+            "generationKWh": 4217.6595964109865,
+            "exportKWh": 302.53321929401903,
+            "grossLocal": 1797.2212216674366,
+            "costsLocal": 9.300905873789672,
+            "assignedUSDC6": "250308844",
+            "billing": {
+              "exportKWh": 302.53321929401903,
+              "selfUseKWh": 3523.6137394052707,
+              "importKWh": 28976.8,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1691.3345949145298,
+              "exportRevenueLocal": 105.88662675290665,
+              "avoidedGridCostLocal": 2114.1682436431624,
+              "householdSavingLocal": 422.8336487286326,
+              "gridPurchaseCostLocal": 17386.079999999998,
+              "allGridBillLocal": 19500.24824364316,
+              "householdBillLocal": 19077.414594914528,
+              "grossLocal": 1797.2212216674366,
+              "costsLocal": 9.300905873789672,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "250308844",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7334449609951771,
+            "presentValueUSDC6": "183587760",
+            "calculation": {
+              "serviceStart": 1889524251,
+              "serviceEnd": 1892116251,
+              "meanImportKWh": 28976.8,
+              "seasonMonth": 11,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-11",
+                "2024-11",
+                "2025-11"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 4397.966666666666,
+              "meanExportKWh": 315.46666666666664,
+              "exportSampleMonths": [
+                "2023-11",
+                "2024-11",
+                "2025-11"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9785736473791738,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 39,
+            "dueAt": 1897473051,
+            "generationKWh": 3654.215875870874,
+            "exportKWh": 66.19632186400115,
+            "grossLocal": 1573.1931599833692,
+            "costsLocal": 9.316267076021743,
+            "assignedUSDC6": "218942765",
+            "billing": {
+              "exportKWh": 66.19632186400115,
+              "selfUseKWh": 3229.217598606185,
+              "importKWh": 42173.46666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1550.0244473309688,
+              "exportRevenueLocal": 23.1687126524004,
+              "avoidedGridCostLocal": 1937.5305591637111,
+              "householdSavingLocal": 387.50611183274236,
+              "gridPurchaseCostLocal": 25304.079999999998,
+              "allGridBillLocal": 27241.61055916371,
+              "householdBillLocal": 26854.104447330967,
+              "grossLocal": 1573.1931599833692,
+              "costsLocal": 9.316267076021743,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "218942765",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7275358397244029,
+            "presentValueUSDC6": "159288708",
+            "calculation": {
+              "serviceStart": 1892116251,
+              "serviceEnd": 1894794651,
+              "meanImportKWh": 42173.46666666667,
+              "seasonMonth": 12,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-12",
+                "2024-12",
+                "2025-12"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3812.6666666666665,
+              "meanExportKWh": 69.06666666666666,
+              "exportSampleMonths": [
+                "2023-12",
+                "2024-12",
+                "2025-12"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9780009730911838,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 40,
+            "dueAt": 1899892251,
+            "generationKWh": 3384.3179737765895,
+            "exportKWh": 144.16094921977944,
+            "grossLocal": 1450.2041668354645,
+            "costsLocal": 9.331653648528194,
+            "assignedUSDC6": "201722152",
+            "billing": {
+              "exportKWh": 144.16094921977944,
+              "selfUseKWh": 2916.141322101129,
+              "importKWh": 44644.46666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1399.7478346085418,
+              "exportRevenueLocal": 50.456332226922804,
+              "avoidedGridCostLocal": 1749.6847932606772,
+              "householdSavingLocal": 349.93695865213544,
+              "gridPurchaseCostLocal": 26786.68,
+              "allGridBillLocal": 28536.364793260676,
+              "householdBillLocal": 28186.42783460854,
+              "grossLocal": 1450.2041668354645,
+              "costsLocal": 9.331653648528194,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "201722152",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7222394994926539,
+            "presentValueUSDC6": "145691706",
+            "calculation": {
+              "serviceStart": 1894794651,
+              "serviceEnd": 1897473051,
+              "meanImportKWh": 44644.46666666667,
+              "seasonMonth": 1,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-01",
+                "2025-01",
+                "2026-01"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3533.133333333333,
+              "meanExportKWh": 150.5,
+              "exportSampleMonths": [
+                "2024-01",
+                "2025-01",
+                "2026-01"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9774286339397888,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 41,
+            "dueAt": 1902570651,
+            "generationKWh": 3602.7123742153603,
+            "exportKWh": 335.3490198461401,
+            "grossLocal": 1528.8731260336524,
+            "costsLocal": 9.3470656332101,
+            "assignedUSDC6": "212733648",
+            "billing": {
+              "exportKWh": 335.3490198461401,
+              "selfUseKWh": 2940.6270189322986,
+              "importKWh": 37988.666666666664,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1411.5009690875033,
+              "exportRevenueLocal": 117.37215694614902,
+              "avoidedGridCostLocal": 1764.376211359379,
+              "householdSavingLocal": 352.8752422718758,
+              "gridPurchaseCostLocal": 22793.199999999997,
+              "allGridBillLocal": 24557.576211359377,
+              "householdBillLocal": 24204.700969087502,
+              "grossLocal": 1528.8731260336524,
+              "costsLocal": 9.3470656332101,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "212733648",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7164206568854941,
+            "presentValueUSDC6": "152406780",
+            "calculation": {
+              "serviceStart": 1897473051,
+              "serviceEnd": 1899892251,
+              "meanImportKWh": 37988.666666666664,
+              "seasonMonth": 2,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-02",
+                "2025-02",
+                "2026-02"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3763.3333333333335,
+              "meanExportKWh": 350.3,
+              "exportSampleMonths": [
+                "2024-02",
+                "2025-02",
+                "2026-02"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9768566297288624,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 42,
+            "dueAt": 1905162651,
+            "generationKWh": 5325.736642723863,
+            "exportKWh": 411.9805378112067,
+            "grossLocal": 2266.9358255561897,
+            "costsLocal": 9.36250307203773,
+            "assignedUSDC6": "316060265",
+            "billing": {
+              "exportKWh": 411.9805378112067,
+              "selfUseKWh": 4422.380494421391,
+              "importKWh": 39614.03333333333,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2122.7426373222675,
+              "exportRevenueLocal": 144.19318823392234,
+              "avoidedGridCostLocal": 2653.4282966528344,
+              "householdSavingLocal": 530.685659330567,
+              "gridPurchaseCostLocal": 23768.42,
+              "allGridBillLocal": 26421.84829665283,
+              "householdBillLocal": 25891.162637322264,
+              "grossLocal": 2266.9358255561897,
+              "costsLocal": 9.36250307203773,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "316060265",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7108341592079551,
+            "presentValueUSDC6": "224666433",
+            "calculation": {
+              "serviceStart": 1899892251,
+              "serviceEnd": 1902570651,
+              "meanImportKWh": 39614.03333333333,
+              "seasonMonth": 3,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-03",
+                "2025-03",
+                "2026-03"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 5566.433333333334,
+              "meanExportKWh": 430.59999999999997,
+              "exportSampleMonths": [
+                "2024-03",
+                "2025-03",
+                "2026-03"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9762849602623931,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 43,
+            "dueAt": 1907841051,
+            "generationKWh": 6350.215522129746,
+            "exportKWh": 566.5162432445132,
+            "grossLocal": 2696.8387736140003,
+            "costsLocal": 9.377966007050677,
+            "assignedUSDC6": "376244513",
+            "billing": {
+              "exportKWh": 566.5162432445132,
+              "selfUseKWh": 5205.32935099671,
+              "importKWh": 32067.166666666668,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2498.558088478421,
+              "exportRevenueLocal": 198.28068513557963,
+              "avoidedGridCostLocal": 3123.1976105980257,
+              "householdSavingLocal": 624.6395221196049,
+              "gridPurchaseCostLocal": 19240.3,
+              "allGridBillLocal": 22363.497610598024,
+              "householdBillLocal": 21738.85808847842,
+              "grossLocal": 2696.8387736140003,
+              "costsLocal": 9.377966007050677,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "376244513",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.7051072056210502,
+            "presentValueUSDC6": "265292717",
+            "calculation": {
+              "serviceStart": 1902570651,
+              "serviceEnd": 1905162651,
+              "meanImportKWh": 32067.166666666668,
+              "seasonMonth": 4,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-04",
+                "2025-04",
+                "2026-04"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6641.099999999999,
+              "meanExportKWh": 592.4666666666666,
+              "exportSampleMonths": [
+                "2024-04",
+                "2025-04",
+                "2026-04"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9757136253444838,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 44,
+            "dueAt": 1910433051,
+            "generationKWh": 8002.304470490717,
+            "exportKWh": 792.5120631549265,
+            "grossLocal": 3392.009542073286,
+            "costsLocal": 9.393454480357965,
+            "assignedUSDC6": "473566252",
+            "billing": {
+              "exportKWh": 792.5120631549265,
+              "selfUseKWh": 6488.813166602212,
+              "importKWh": 37788.166666666664,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 3114.6303199690615,
+              "exportRevenueLocal": 277.37922210422425,
+              "avoidedGridCostLocal": 3893.2878999613267,
+              "householdSavingLocal": 778.6575799922653,
+              "gridPurchaseCostLocal": 22672.899999999998,
+              "allGridBillLocal": 26566.187899961325,
+              "householdBillLocal": 25787.53031996906,
+              "grossLocal": 3392.009542073286,
+              "costsLocal": 9.393454480357965,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "473566252",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.699608927858175,
+            "presentValueUSDC6": "331311178",
+            "calculation": {
+              "serviceStart": 1905162651,
+              "serviceEnd": 1907841051,
+              "meanImportKWh": 37788.166666666664,
+              "seasonMonth": 5,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-05",
+                "2025-05",
+                "2026-05"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 8373.766666666666,
+              "meanExportKWh": 829.3000000000001,
+              "exportSampleMonths": [
+                "2024-05",
+                "2025-05",
+                "2026-05"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9751426247793523,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 45,
+            "dueAt": 1913111451,
+            "generationKWh": 5759.67674309376,
+            "exportKWh": 175.09809518738248,
+            "grossLocal": 2473.822309211139,
+            "costsLocal": 9.408968534138163,
+            "assignedUSDC6": "345017868",
+            "billing": {
+              "exportKWh": 175.09809518738248,
+              "selfUseKWh": 5026.12078311574,
+              "importKWh": 56704.466666666674,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2412.537975895555,
+              "exportRevenueLocal": 61.284333315583865,
+              "avoidedGridCostLocal": 3015.672469869444,
+              "householdSavingLocal": 603.1344939738888,
+              "gridPurchaseCostLocal": 34022.68,
+              "allGridBillLocal": 37038.352469869445,
+              "householdBillLocal": 36435.21797589555,
+              "grossLocal": 2473.822309211139,
+              "costsLocal": 9.408968534138163,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "345017868",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6939724122139458,
+            "presentValueUSDC6": "239432882",
+            "calculation": {
+              "serviceStart": 1907841051,
+              "serviceEnd": 1910433051,
+              "meanImportKWh": 56704.466666666674,
+              "seasonMonth": 6,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-06",
+                "2025-06",
+                "2026-06"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6030.566666666667,
+              "meanExportKWh": 183.33333333333334,
+              "exportSampleMonths": [
+                "2024-06",
+                "2025-06",
+                "2026-06"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.974571958371331,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 46,
+            "dueAt": 1915789851,
+            "generationKWh": 6006.83620469273,
+            "exportKWh": 7.2861814963352876,
+            "grossLocal": 2594.3557735445597,
+            "costsLocal": 9.4245082106395,
+            "assignedUSDC6": "361890377",
+            "billing": {
+              "exportKWh": 7.2861814963352876,
+              "selfUseKWh": 5399.595020876755,
+              "importKWh": 69327.33333333333,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2591.8056100208423,
+              "exportRevenueLocal": 2.5501635237173503,
+              "avoidedGridCostLocal": 3239.757012526053,
+              "householdSavingLocal": 647.9514025052108,
+              "gridPurchaseCostLocal": 41596.399999999994,
+              "allGridBillLocal": 44836.15701252605,
+              "householdBillLocal": 44188.205610020836,
+              "grossLocal": 2594.3557735445597,
+              "costsLocal": 9.4245082106395,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "361890377",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6883813080951312,
+            "presentValueUSDC6": "249118571",
+            "calculation": {
+              "serviceStart": 1910433051,
+              "serviceEnd": 1913111451,
+              "meanImportKWh": 69327.33333333333,
+              "seasonMonth": 7,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-07",
+                "2025-07",
+                "2026-07"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6293.033333333333,
+              "meanExportKWh": 7.633333333333335,
+              "exportSampleMonths": [
+                "2024-07",
+                "2025-07",
+                "2026-07"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9740016259248667,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 47,
+            "dueAt": 1918381851,
+            "generationKWh": 3518.1519269192554,
+            "exportKWh": 395.4812588359767,
+            "grossLocal": 1487.4121692045683,
+            "costsLocal": 9.440073552179985,
+            "assignedUSDC6": "206916093",
+            "billing": {
+              "exportKWh": 395.4812588359767,
+              "selfUseKWh": 2810.4036012749507,
+              "importKWh": 58610.56666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1348.9937286119764,
+              "exportRevenueLocal": 138.41844059259182,
+              "avoidedGridCostLocal": 1686.2421607649703,
+              "householdSavingLocal": 337.2484321529939,
+              "gridPurchaseCostLocal": 35166.340000000004,
+              "allGridBillLocal": 36852.58216076497,
+              "householdBillLocal": 36515.33372861198,
+              "grossLocal": 1487.4121692045683,
+              "costsLocal": 9.440073552179985,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "206916093",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6830134553650705,
+            "presentValueUSDC6": "141326476",
+            "calculation": {
+              "serviceStart": 1913111451,
+              "serviceEnd": 1915789851,
+              "meanImportKWh": 58610.56666666667,
+              "seasonMonth": 8,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-08",
+                "2025-08",
+                "2026-08"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3687.933333333333,
+              "meanExportKWh": 414.56666666666666,
+              "exportSampleMonths": [
+                "2024-08",
+                "2025-08",
+                "2026-08"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9734316272445206,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 48,
+            "dueAt": 1921060251,
+            "generationKWh": 2908.694798835879,
+            "exportKWh": 198.02216094472428,
+            "grossLocal": 1240.318335899632,
+            "costsLocal": 9.455664601147518,
+            "assignedUSDC6": "172320774",
+            "billing": {
+              "exportKWh": 198.02216094472428,
+              "selfUseKWh": 2439.6053741020387,
+              "importKWh": 58803.4,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1171.0105795689785,
+              "exportRevenueLocal": 69.30775633065349,
+              "avoidedGridCostLocal": 1463.7632244612232,
+              "householdSavingLocal": 292.7526448922447,
+              "gridPurchaseCostLocal": 35282.04,
+              "allGridBillLocal": 36745.803224461226,
+              "householdBillLocal": 36453.05057956898,
+              "grossLocal": 1240.318335899632,
+              "costsLocal": 9.455664601147518,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "172320774",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6775106439041444,
+            "presentValueUSDC6": "116749159",
+            "calculation": {
+              "serviceStart": 1915789851,
+              "serviceEnd": 1918381851,
+              "meanImportKWh": 58803.4,
+              "seasonMonth": 9,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-09",
+                "2025-09"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3050.85,
+              "meanExportKWh": 207.7,
+              "exportSampleMonths": [
+                "2024-09",
+                "2025-09"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9728619621349683,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 49,
+            "dueAt": 1923652251,
+            "generationKWh": 3754.2163045043408,
+            "exportKWh": 271.27547763766137,
+            "grossLocal": 1599.5768543795868,
+            "costsLocal": 9.4712814,
+            "assignedUSDC6": "222614780",
+            "billing": {
+              "exportKWh": 271.27547763766137,
+              "selfUseKWh": 3134.6467441800114,
+              "importKWh": 37439.76666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1504.6304372064053,
+              "exportRevenueLocal": 94.94641717318147,
+              "avoidedGridCostLocal": 1880.7880465080068,
+              "householdSavingLocal": 376.1576093016015,
+              "gridPurchaseCostLocal": 22463.86,
+              "allGridBillLocal": 24344.648046508006,
+              "householdBillLocal": 23968.490437206405,
+              "grossLocal": 1599.5768543795868,
+              "costsLocal": 9.4712814,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "222614780",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6722275583282306,
+            "presentValueUSDC6": "149647790",
+            "calculation": {
+              "serviceStart": 1918381851,
+              "serviceEnd": 1921060251,
+              "meanImportKWh": 37439.76666666667,
+              "seasonMonth": 10,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-10",
+                "2024-10",
+                "2025-10"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3940,
+              "meanExportKWh": 284.7,
+              "exportSampleMonths": [
+                "2023-10",
+                "2024-10",
+                "2025-10"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.972292630401,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 50,
+            "dueAt": 1926330651,
+            "generationKWh": 4188.135979236109,
+            "exportKWh": 300.41548675896087,
+            "grossLocal": 1784.640673115764,
+            "costsLocal": 9.486923991265465,
+            "assignedUSDC6": "248521525",
+            "billing": {
+              "exportKWh": 300.41548675896087,
+              "selfUseKWh": 3498.948443229433,
+              "importKWh": 28976.8,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1679.4952527501277,
+              "exportRevenueLocal": 105.1454203656363,
+              "avoidedGridCostLocal": 2099.36906593766,
+              "householdSavingLocal": 419.87381318753205,
+              "gridPurchaseCostLocal": 17386.079999999998,
+              "allGridBillLocal": 19485.449065937657,
+              "householdBillLocal": 19065.575252750124,
+              "grossLocal": 1784.640673115764,
+              "costsLocal": 9.486923991265465,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "248521525",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6668116452400443,
+            "presentValueUSDC6": "165717047",
+            "calculation": {
+              "serviceStart": 1921060251,
+              "serviceEnd": 1923652251,
+              "meanImportKWh": 28976.8,
+              "seasonMonth": 11,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-11",
+                "2024-11",
+                "2025-11"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 4397.966666666666,
+              "meanExportKWh": 315.46666666666664,
+              "exportSampleMonths": [
+                "2023-11",
+                "2024-11",
+                "2025-11"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9717236318475195,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 51,
+            "dueAt": 1929009051,
+            "generationKWh": 3628.6363647397775,
+            "exportKWh": 65.73294761095313,
+            "grossLocal": 1562.1808078634858,
+            "costsLocal": 9.502592417542177,
+            "assignedUSDC6": "217374950",
+            "billing": {
+              "exportKWh": 65.73294761095313,
+              "selfUseKWh": 3206.613075415942,
+              "importKWh": 42173.46666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1539.1742761996522,
+              "exportRevenueLocal": 23.006531663833595,
+              "avoidedGridCostLocal": 1923.9678452495652,
+              "householdSavingLocal": 384.793569049913,
+              "gridPurchaseCostLocal": 25304.079999999998,
+              "allGridBillLocal": 27228.047845249563,
+              "householdBillLocal": 26843.254276199652,
+              "grossLocal": 1562.1808078634858,
+              "costsLocal": 9.502592417542177,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "217374950",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6614393663561026,
+            "presentValueUSDC6": "143780349",
+            "calculation": {
+              "serviceStart": 1923652251,
+              "serviceEnd": 1926330651,
+              "meanImportKWh": 42173.46666666667,
+              "seasonMonth": 12,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2023-12",
+                "2024-12",
+                "2025-12"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3812.6666666666665,
+              "meanExportKWh": 69.06666666666666,
+              "exportSampleMonths": [
+                "2023-12",
+                "2024-12",
+                "2025-12"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9711549662795456,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 52,
+            "dueAt": 1931428251,
+            "generationKWh": 3360.6277479601536,
+            "exportKWh": 143.151822575241,
+            "grossLocal": 1440.0527376676166,
+            "costsLocal": 9.51828672149876,
+            "assignedUSDC6": "200274823",
+            "billing": {
+              "exportKWh": 143.151822575241,
+              "selfUseKWh": 2895.7283328464214,
+              "importKWh": 44644.46666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1389.9495997662823,
+              "exportRevenueLocal": 50.10313790133435,
+              "avoidedGridCostLocal": 1737.4369997078527,
+              "householdSavingLocal": 347.4873999415704,
+              "gridPurchaseCostLocal": 26786.68,
+              "allGridBillLocal": 28524.116999707854,
+              "householdBillLocal": 28176.629599766282,
+              "grossLocal": 1440.0527376676166,
+              "costsLocal": 9.51828672149876,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "200274823",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6566241974865917,
+            "presentValueUSDC6": "131505295",
+            "calculation": {
+              "serviceStart": 1926330651,
+              "serviceEnd": 1929009051,
+              "meanImportKWh": 44644.46666666667,
+              "seasonMonth": 1,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-01",
+                "2025-01",
+                "2026-01"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3533.133333333333,
+              "meanExportKWh": 150.5,
+              "exportSampleMonths": [
+                "2024-01",
+                "2025-01",
+                "2026-01"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9705866335022103,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 53,
+            "dueAt": 1934106651,
+            "generationKWh": 3577.4933875958527,
+            "exportKWh": 333.0015767072171,
+            "grossLocal": 1518.1710141514163,
+            "costsLocal": 9.534006945874301,
+            "assignedUSDC6": "211209181",
+            "billing": {
+              "exportKWh": 333.0015767072171,
+              "selfUseKWh": 2920.042629799772,
+              "importKWh": 37988.666666666664,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1401.6204623038905,
+              "exportRevenueLocal": 116.55055184752598,
+              "avoidedGridCostLocal": 1752.025577879863,
+              "householdSavingLocal": 350.40511557597256,
+              "gridPurchaseCostLocal": 22793.199999999997,
+              "allGridBillLocal": 24545.22557787986,
+              "householdBillLocal": 24194.820462303887,
+              "grossLocal": 1518.1710141514163,
+              "costsLocal": 9.534006945874301,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "211209181",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6513339954692401,
+            "presentValueUSDC6": "137567720",
+            "calculation": {
+              "serviceStart": 1929009051,
+              "serviceEnd": 1931428251,
+              "meanImportKWh": 37988.666666666664,
+              "seasonMonth": 2,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-02",
+                "2025-02",
+                "2026-02"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3763.3333333333335,
+              "meanExportKWh": 350.3,
+              "exportSampleMonths": [
+                "2024-02",
+                "2025-02",
+                "2026-02"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9700186333207604,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 54,
+            "dueAt": 1936698651,
+            "generationKWh": 5288.456486224795,
+            "exportKWh": 409.0966740465282,
+            "grossLocal": 2251.0672747772956,
+            "costsLocal": 9.549753133478484,
+            "assignedUSDC6": "313812453",
+            "billing": {
+              "exportKWh": 409.0966740465282,
+              "selfUseKWh": 4391.42383096044,
+              "importKWh": 39614.03333333333,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2107.8834388610107,
+              "exportRevenueLocal": 143.18383591628486,
+              "avoidedGridCostLocal": 2634.854298576264,
+              "householdSavingLocal": 526.970859715253,
+              "gridPurchaseCostLocal": 23768.42,
+              "allGridBillLocal": 26403.274298576263,
+              "householdBillLocal": 25876.30343886101,
+              "grossLocal": 2251.0672747772956,
+              "costsLocal": 9.549753133478484,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "313812453",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6462550298950066,
+            "presentValueUSDC6": "202802876",
+            "calculation": {
+              "serviceStart": 1931428251,
+              "serviceEnd": 1934106651,
+              "meanImportKWh": 39614.03333333333,
+              "seasonMonth": 3,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-03",
+                "2025-03",
+                "2026-03"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 5566.433333333334,
+              "meanExportKWh": 430.59999999999997,
+              "exportSampleMonths": [
+                "2024-03",
+                "2025-03",
+                "2026-03"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9694509655405563,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 55,
+            "dueAt": 1939377051,
+            "generationKWh": 6305.764013474837,
+            "exportKWh": 562.5506295418015,
+            "grossLocal": 2677.960902198702,
+            "costsLocal": 9.56552532719169,
+            "assignedUSDC6": "373575353",
+            "billing": {
+              "exportKWh": 562.5506295418015,
+              "selfUseKWh": 5168.892045539732,
+              "importKWh": 32067.166666666668,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2481.0681818590715,
+              "exportRevenueLocal": 196.89272033963053,
+              "avoidedGridCostLocal": 3101.3352273238393,
+              "householdSavingLocal": 620.2670454647678,
+              "gridPurchaseCostLocal": 19240.3,
+              "allGridBillLocal": 22341.635227323837,
+              "householdBillLocal": 21721.36818185907,
+              "grossLocal": 2677.960902198702,
+              "costsLocal": 9.56552532719169,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "373575353",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6410483688003338,
+            "presentValueUSDC6": "239479871",
+            "calculation": {
+              "serviceStart": 1934106651,
+              "serviceEnd": 1936698651,
+              "meanImportKWh": 32067.166666666668,
+              "seasonMonth": 4,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-04",
+                "2025-04",
+                "2026-04"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6641.099999999999,
+              "meanExportKWh": 592.4666666666666,
+              "exportSampleMonths": [
+                "2024-04",
+                "2025-04",
+                "2026-04"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9688836299670724,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 56,
+            "dueAt": 1941969051,
+            "generationKWh": 7946.288339197283,
+            "exportKWh": 786.9644787128422,
+            "grossLocal": 3368.265475278773,
+            "costsLocal": 9.581323569965123,
+            "assignedUSDC6": "470215781",
+            "billing": {
+              "exportKWh": 786.9644787128422,
+              "selfUseKWh": 6443.391474435996,
+              "importKWh": 37788.166666666664,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 3092.827907729278,
+              "exportRevenueLocal": 275.43756754949476,
+              "avoidedGridCostLocal": 3866.0348846615975,
+              "householdSavingLocal": 773.2069769323193,
+              "gridPurchaseCostLocal": 22672.899999999998,
+              "allGridBillLocal": 26538.934884661594,
+              "householdBillLocal": 25765.727907729277,
+              "grossLocal": 3368.265475278773,
+              "costsLocal": 9.581323569965123,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "470215781",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6360496083806358,
+            "presentValueUSDC6": "299080563",
+            "calculation": {
+              "serviceStart": 1936698651,
+              "serviceEnd": 1939377051,
+              "meanImportKWh": 37788.166666666664,
+              "seasonMonth": 5,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-05",
+                "2025-05",
+                "2026-05"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 8373.766666666666,
+              "meanExportKWh": 829.3000000000001,
+              "exportSampleMonths": [
+                "2024-05",
+                "2025-05",
+                "2026-05"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9683166264058969,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 57,
+            "dueAt": 1944647451,
+            "generationKWh": 5719.359005892103,
+            "exportKWh": 173.87240852107078,
+            "grossLocal": 2456.5055530466607,
+            "costsLocal": 9.597147904820925,
+            "assignedUSDC6": "342567177",
+            "billing": {
+              "exportKWh": 173.87240852107078,
+              "selfUseKWh": 4990.937937633929,
+              "importKWh": 56704.466666666674,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2395.650210064286,
+              "exportRevenueLocal": 60.85534298237477,
+              "avoidedGridCostLocal": 2994.5627625803577,
+              "householdSavingLocal": 598.9125525160716,
+              "gridPurchaseCostLocal": 34022.68,
+              "allGridBillLocal": 37017.24276258036,
+              "householdBillLocal": 36418.33021006428,
+              "grossLocal": 2456.5055530466607,
+              "costsLocal": 9.597147904820925,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "342567177",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6309251689611464,
+            "presentValueUSDC6": "216134254",
+            "calculation": {
+              "serviceStart": 1939377051,
+              "serviceEnd": 1941969051,
+              "meanImportKWh": 56704.466666666674,
+              "seasonMonth": 6,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-06",
+                "2025-06",
+                "2026-06"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6030.566666666667,
+              "meanExportKWh": 183.33333333333334,
+              "exportSampleMonths": [
+                "2024-06",
+                "2025-06",
+                "2026-06"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9677499546627317,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 58,
+            "dueAt": 1947325851,
+            "generationKWh": 5964.78835125988,
+            "exportKWh": 7.23517822586094,
+            "grossLocal": 2576.195283129747,
+            "costsLocal": 9.61299837485229,
+            "assignedUSDC6": "359321520",
+            "billing": {
+              "exportKWh": 7.23517822586094,
+              "selfUseKWh": 5361.797855730617,
+              "importKWh": 69327.33333333333,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 2573.662970750696,
+              "exportRevenueLocal": 2.5323123790513287,
+              "avoidedGridCostLocal": 3217.07871343837,
+              "householdSavingLocal": 643.4157426876741,
+              "gridPurchaseCostLocal": 41596.399999999994,
+              "allGridBillLocal": 44813.478713438366,
+              "householdBillLocal": 44170.06297075069,
+              "grossLocal": 2576.195283129747,
+              "costsLocal": 9.61299837485229,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "359321520",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6258420154398289,
+            "presentValueUSDC6": "224878504",
+            "calculation": {
+              "serviceStart": 1941969051,
+              "serviceEnd": 1944647451,
+              "meanImportKWh": 69327.33333333333,
+              "seasonMonth": 7,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-07",
+                "2025-07",
+                "2026-07"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 6293.033333333333,
+              "meanExportKWh": 7.633333333333335,
+              "exportSampleMonths": [
+                "2024-07",
+                "2025-07",
+                "2026-07"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9671836145433926,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 59,
+            "dueAt": 1949917851,
+            "generationKWh": 3493.524863430821,
+            "exportKWh": 392.7128900241249,
+            "grossLocal": 1477.0002840201362,
+            "costsLocal": 9.628875023223586,
+            "assignedUSDC6": "205431997",
+            "billing": {
+              "exportKWh": 392.7128900241249,
+              "selfUseKWh": 2790.7307760660265,
+              "importKWh": 58610.56666666667,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1339.5507725116925,
+              "exportRevenueLocal": 137.4495115084437,
+              "avoidedGridCostLocal": 1674.4384656396157,
+              "householdSavingLocal": 334.8876931279233,
+              "gridPurchaseCostLocal": 35166.340000000004,
+              "allGridBillLocal": 36840.77846563962,
+              "householdBillLocal": 36505.890772511695,
+              "grossLocal": 1477.0002840201362,
+              "costsLocal": 9.628875023223586,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "205431997",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6209618309669798,
+            "presentValueUSDC6": "127565429",
+            "calculation": {
+              "serviceStart": 1944647451,
+              "serviceEnd": 1947325851,
+              "meanImportKWh": 58610.56666666667,
+              "seasonMonth": 8,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-08",
+                "2025-08",
+                "2026-08"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3687.933333333333,
+              "meanExportKWh": 414.56666666666666,
+              "exportSampleMonths": [
+                "2024-08",
+                "2025-08",
+                "2026-08"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.966617605853809,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          },
+          {
+            "month": 60,
+            "dueAt": 1952596251,
+            "generationKWh": 2888.333935244028,
+            "exportKWh": 196.63600581811122,
+            "grossLocal": 1231.636107548335,
+            "costsLocal": 9.644777893170467,
+            "assignedUSDC6": "171078786",
+            "billing": {
+              "exportKWh": 196.63600581811122,
+              "selfUseKWh": 2422.5281364833254,
+              "importKWh": 58803.4,
+              "exportTariffLocal": 0.35,
+              "gridTariffLocal": 0.6,
+              "householdPaymentLocal": 1162.8135055119963,
+              "exportRevenueLocal": 68.82260203633892,
+              "avoidedGridCostLocal": 1453.5168818899951,
+              "householdSavingLocal": 290.7033763779989,
+              "gridPurchaseCostLocal": 35282.04,
+              "allGridBillLocal": 36735.55688189,
+              "householdBillLocal": 36444.853505511994,
+              "grossLocal": 1231.636107548335,
+              "costsLocal": 9.644777893170467,
+              "retainedRevenueLocal": 0,
+              "assignedUSDC6": "171078786",
+              "uncoveredCostsLocal": 0
+            },
+            "discountFactor": 0.6159589487347163,
+            "presentValueUSDC6": "105377509",
+            "calculation": {
+              "serviceStart": 1947325851,
+              "serviceEnd": 1949917851,
+              "meanImportKWh": 58803.4,
+              "seasonMonth": 9,
+              "seasonalFallback": false,
+              "sampleMonths": [
+                "2024-09",
+                "2025-09"
+              ],
+              "imputedExportMonths": [],
+              "meanGenerationKWh": 3050.85,
+              "meanExportKWh": 207.7,
+              "exportSampleMonths": [
+                "2024-09",
+                "2025-09"
+              ],
+              "excludedExportMonths": [],
+              "assumedExportFallback": false,
+              "availabilityFactor": 0.98,
+              "degradationFactor": 0.9660519284000236,
+              "remainingFraction": 1,
+              "exportRatio": null
+            }
+          }
+        ],
+        "rightsValueUSDC6": "13292753235",
+        "sensitivities": [
+          {
+            "discountBps": 600,
+            "valueUSDC6": "14567468657"
+          },
+          {
+            "discountBps": 1000,
+            "valueUSDC6": "13292753235"
+          },
+          {
+            "discountBps": 1400,
+            "valueUSDC6": "12201653635"
+          }
+        ],
+        "scenarios": [
+          {
+            "name": "downside",
+            "valueUSDC6": "10634202588"
+          },
+          {
+            "name": "base",
+            "valueUSDC6": "13292753235"
+          },
+          {
+            "name": "upside",
+            "valueUSDC6": "14622028559"
+          }
+        ],
+        "projectedNetIRRPct": 6.144298310329221,
+        "futureFeesUSDC6": "203413047",
+        "reportHash": "0x966f71faa948bb44e428921a1dc311016d2ff7134a15fd71621d0864947e6c7c"
+      }
+    }
+  ],
+  "chain": {
+    "target": "14769725817"
+  },
+  "poolProjection": {
+    "version": "pool-projection.v3",
+    "distributionIntervalMonths": 1,
+    "periods": [
+      {
+        "month": 1,
+        "at": 1794829851,
+        "receiptsUSDC6": "0",
+        "feeUSDC6": "6041577",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "0",
+        "endingCashUSDC6": "1469931005",
+        "redemptionRetainedUSDC6": "0"
+      },
+      {
+        "month": 2,
+        "at": 1797421851,
+        "receiptsUSDC6": "229097387",
+        "feeUSDC6": "6085648",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "166508804",
+        "endingCashUSDC6": "1525433940",
+        "redemptionRetainedUSDC6": "55502935"
+      },
+      {
+        "month": 3,
+        "at": 1800100251,
+        "receiptsUSDC6": "255742624",
+        "feeUSDC6": "6059284",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "186512505",
+        "endingCashUSDC6": "1587604775",
+        "redemptionRetainedUSDC6": "117673770"
+      },
+      {
+        "month": 4,
+        "at": 1802778651,
+        "receiptsUSDC6": "223708697",
+        "feeUSDC6": "6025622",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "162512306",
+        "endingCashUSDC6": "1641775544",
+        "redemptionRetainedUSDC6": "171844538"
+      },
+      {
+        "month": 5,
+        "at": 1805197851,
+        "receiptsUSDC6": "206121498",
+        "feeUSDC6": "6001477",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "149340016",
+        "endingCashUSDC6": "1691555549",
+        "redemptionRetainedUSDC6": "221624544"
+      },
+      {
+        "month": 6,
+        "at": 1807876251,
+        "receiptsUSDC6": "217367682",
+        "feeUSDC6": "5978245",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "157792078",
+        "endingCashUSDC6": "1744152908",
+        "redemptionRetainedUSDC6": "274221903"
+      },
+      {
+        "month": 7,
+        "at": 1810468251,
+        "receiptsUSDC6": "322895065",
+        "feeUSDC6": "5955330",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "236954801",
+        "endingCashUSDC6": "1823137842",
+        "redemptionRetainedUSDC6": "353206837"
+      },
+      {
+        "month": 8,
+        "at": 1813146651,
+        "receiptsUSDC6": "384361256",
+        "feeUSDC6": "5897691",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "283097674",
+        "endingCashUSDC6": "1917503733",
+        "redemptionRetainedUSDC6": "447572728"
+      },
+      {
+        "month": 9,
+        "at": 1815738651,
+        "receiptsUSDC6": "483755872",
+        "feeUSDC6": "5821465",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "357700805",
+        "endingCashUSDC6": "2036737335",
+        "redemptionRetainedUSDC6": "566806330"
+      },
+      {
+        "month": 10,
+        "at": 1818417051,
+        "receiptsUSDC6": "352469905",
+        "feeUSDC6": "5711895",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "259318507",
+        "endingCashUSDC6": "2123176838",
+        "redemptionRetainedUSDC6": "653245832"
+      },
+      {
+        "month": 11,
+        "at": 1821095451,
+        "receiptsUSDC6": "369701928",
+        "feeUSDC6": "5643346",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "272293937",
+        "endingCashUSDC6": "2213941483",
+        "redemptionRetainedUSDC6": "744010478"
+      },
+      {
+        "month": 12,
+        "at": 1823687451,
+        "receiptsUSDC6": "211427256",
+        "feeUSDC6": "5568541",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "153644037",
+        "endingCashUSDC6": "2265156162",
+        "redemptionRetainedUSDC6": "795225157"
+      },
+      {
+        "month": 13,
+        "at": 1826365851,
+        "receiptsUSDC6": "176095317",
+        "feeUSDC6": "5541036",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "127165711",
+        "endingCashUSDC6": "2307544732",
+        "redemptionRetainedUSDC6": "837613727"
+      },
+      {
+        "month": 14,
+        "at": 1828957851,
+        "receiptsUSDC6": "227460630",
+        "feeUSDC6": "5525389",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "165701430",
+        "endingCashUSDC6": "2362778542",
+        "redemptionRetainedUSDC6": "892847537"
+      },
+      {
+        "month": 15,
+        "at": 1831636251,
+        "receiptsUSDC6": "253919296",
+        "feeUSDC6": "5492215",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "185570311",
+        "endingCashUSDC6": "2424635313",
+        "redemptionRetainedUSDC6": "954704307"
+      },
+      {
+        "month": 16,
+        "at": 1834314651,
+        "receiptsUSDC6": "222109551",
+        "feeUSDC6": "5451506",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "161743533",
+        "endingCashUSDC6": "2478549824",
+        "redemptionRetainedUSDC6": "1008618818"
+      },
+      {
+        "month": 17,
+        "at": 1836820251,
+        "receiptsUSDC6": "204645409",
+        "feeUSDC6": "5420186",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "148668918",
+        "endingCashUSDC6": "2528106130",
+        "redemptionRetainedUSDC6": "1058175124"
+      },
+      {
+        "month": 18,
+        "at": 1839498651,
+        "receiptsUSDC6": "215812814",
+        "feeUSDC6": "5391568",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "157065935",
+        "endingCashUSDC6": "2580461441",
+        "redemptionRetainedUSDC6": "1110530436"
+      },
+      {
+        "month": 19,
+        "at": 1842090651,
+        "receiptsUSDC6": "320601450",
+        "feeUSDC6": "5361359",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "235680068",
+        "endingCashUSDC6": "2659021464",
+        "redemptionRetainedUSDC6": "1189090459"
+      },
+      {
+        "month": 20,
+        "at": 1844769051,
+        "receiptsUSDC6": "381637323",
+        "feeUSDC6": "5296844",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "281505359",
+        "endingCashUSDC6": "2752856584",
+        "redemptionRetainedUSDC6": "1282925578"
+      },
+      {
+        "month": 21,
+        "at": 1847361051,
+        "receiptsUSDC6": "480336122",
+        "feeUSDC6": "5213573",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "355591912",
+        "endingCashUSDC6": "2871387221",
+        "redemptionRetainedUSDC6": "1401456215"
+      },
+      {
+        "month": 22,
+        "at": 1850039451,
+        "receiptsUSDC6": "349969101",
+        "feeUSDC6": "5097369",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "257903799",
+        "endingCashUSDC6": "2957355154",
+        "redemptionRetainedUSDC6": "1487424148"
+      },
+      {
+        "month": 23,
+        "at": 1852717851,
+        "receiptsUSDC6": "367080444",
+        "feeUSDC6": "5021593",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "270794138",
+        "endingCashUSDC6": "3047619867",
+        "redemptionRetainedUSDC6": "1577688861"
+      },
+      {
+        "month": 24,
+        "at": 1855309851,
+        "receiptsUSDC6": "209913640",
+        "feeUSDC6": "4939540",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "152980575",
+        "endingCashUSDC6": "3098613392",
+        "redemptionRetainedUSDC6": "1628682386"
+      },
+      {
+        "month": 25,
+        "at": 1857988251,
+        "receiptsUSDC6": "174828969",
+        "feeUSDC6": "4904638",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "126693248",
+        "endingCashUSDC6": "3140844474",
+        "redemptionRetainedUSDC6": "1670913469"
+      },
+      {
+        "month": 26,
+        "at": 1860580251,
+        "receiptsUSDC6": "225834669",
+        "feeUSDC6": "4881199",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "164965102",
+        "endingCashUSDC6": "3195832842",
+        "redemptionRetainedUSDC6": "1725901836"
+      },
+      {
+        "month": 27,
+        "at": 1863258651,
+        "receiptsUSDC6": "252108069",
+        "feeUSDC6": "4840540",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "184700647",
+        "endingCashUSDC6": "3257399724",
+        "redemptionRetainedUSDC6": "1787468718"
+      },
+      {
+        "month": 28,
+        "at": 1865937051,
+        "receiptsUSDC6": "220520937",
+        "feeUSDC6": "4792082",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "161046641",
+        "endingCashUSDC6": "3311081938",
+        "redemptionRetainedUSDC6": "1841150932"
+      },
+      {
+        "month": 29,
+        "at": 1868356251,
+        "receiptsUSDC6": "203178987",
+        "feeUSDC6": "4752877",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "148069582",
+        "endingCashUSDC6": "3360438465",
+        "redemptionRetainedUSDC6": "1890507460"
+      },
+      {
+        "month": 30,
+        "at": 1871034651,
+        "receiptsUSDC6": "214268165",
+        "feeUSDC6": "4715918",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "156414185",
+        "endingCashUSDC6": "3412576527",
+        "redemptionRetainedUSDC6": "1942645521"
+      },
+      {
+        "month": 31,
+        "at": 1873626651,
+        "receiptsUSDC6": "318323224",
+        "feeUSDC6": "4677676",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "234484161",
+        "endingCashUSDC6": "3490737914",
+        "redemptionRetainedUSDC6": "2020806908"
+      },
+      {
+        "month": 32,
+        "at": 1876305051,
+        "receiptsUSDC6": "378931789",
+        "feeUSDC6": "4605562",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "279994670",
+        "endingCashUSDC6": "3584069471",
+        "redemptionRetainedUSDC6": "2114138465"
+      },
+      {
+        "month": 33,
+        "at": 1878897051,
+        "receiptsUSDC6": "476939641",
+        "feeUSDC6": "4514491",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "353568863",
+        "endingCashUSDC6": "3701925758",
+        "redemptionRetainedUSDC6": "2231994753"
+      },
+      {
+        "month": 34,
+        "at": 1881575451,
+        "receiptsUSDC6": "347485132",
+        "feeUSDC6": "4390914",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "256570664",
+        "endingCashUSDC6": "3787449313",
+        "redemptionRetainedUSDC6": "2317518307"
+      },
+      {
+        "month": 35,
+        "at": 1884253851,
+        "receiptsUSDC6": "364476640",
+        "feeUSDC6": "4307145",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "269377121",
+        "endingCashUSDC6": "3877241686",
+        "redemptionRetainedUSDC6": "2407310681"
+      },
+      {
+        "month": 36,
+        "at": 1886845851,
+        "receiptsUSDC6": "208409947",
+        "feeUSDC6": "4217070",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "152394658",
+        "endingCashUSDC6": "3928039906",
+        "redemptionRetainedUSDC6": "2458108900"
+      },
+      {
+        "month": 37,
+        "at": 1889524251,
+        "receiptsUSDC6": "173570811",
+        "feeUSDC6": "4174018",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "126297595",
+        "endingCashUSDC6": "3970139104",
+        "redemptionRetainedUSDC6": "2500208099"
+      },
+      {
+        "month": 38,
+        "at": 1892116251,
+        "receiptsUSDC6": "224219416",
+        "feeUSDC6": "4142002",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "164308060",
+        "endingCashUSDC6": "4024908457",
+        "redemptionRetainedUSDC6": "2554977452"
+      },
+      {
+        "month": 39,
+        "at": 1894794651,
+        "receiptsUSDC6": "250308844",
+        "feeUSDC6": "4093092",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "183911814",
+        "endingCashUSDC6": "4086212395",
+        "redemptionRetainedUSDC6": "2616281390"
+      },
+      {
+        "month": 40,
+        "at": 1897473051,
+        "receiptsUSDC6": "218942765",
+        "feeUSDC6": "4036086",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "160430009",
+        "endingCashUSDC6": "4139689065",
+        "redemptionRetainedUSDC6": "2669758060"
+      },
+      {
+        "month": 41,
+        "at": 1899892251,
+        "receiptsUSDC6": "201722152",
+        "feeUSDC6": "3988193",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "147550469",
+        "endingCashUSDC6": "4188872555",
+        "redemptionRetainedUSDC6": "2718941549"
+      },
+      {
+        "month": 42,
+        "at": 1902570651,
+        "receiptsUSDC6": "212733648",
+        "feeUSDC6": "3943311",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "155842753",
+        "endingCashUSDC6": "4240820139",
+        "redemptionRetainedUSDC6": "2770889134"
+      },
+      {
+        "month": 43,
+        "at": 1905162651,
+        "receiptsUSDC6": "316060265",
+        "feeUSDC6": "3896228",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "233373027",
+        "endingCashUSDC6": "4318611148",
+        "redemptionRetainedUSDC6": "2848680143"
+      },
+      {
+        "month": 44,
+        "at": 1907841051,
+        "receiptsUSDC6": "376244513",
+        "feeUSDC6": "3815723",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "278571592",
+        "endingCashUSDC6": "4411468346",
+        "redemptionRetainedUSDC6": "2941537340"
+      },
+      {
+        "month": 45,
+        "at": 1910433051,
+        "receiptsUSDC6": "473566252",
+        "feeUSDC6": "3716028",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "351637668",
+        "endingCashUSDC6": "4528680902",
+        "redemptionRetainedUSDC6": "3058749896"
+      },
+      {
+        "month": 46,
+        "at": 1913111451,
+        "receiptsUSDC6": "345017868",
+        "feeUSDC6": "3584271",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "255325197",
+        "endingCashUSDC6": "4613789301",
+        "redemptionRetainedUSDC6": "3143858295"
+      },
+      {
+        "month": 47,
+        "at": 1915789851,
+        "receiptsUSDC6": "361890377",
+        "feeUSDC6": "3491672",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "268049029",
+        "endingCashUSDC6": "4703138977",
+        "redemptionRetainedUSDC6": "3233207972"
+      },
+      {
+        "month": 48,
+        "at": 1918381851,
+        "receiptsUSDC6": "206916093",
+        "feeUSDC6": "3392730",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "151892522",
+        "endingCashUSDC6": "4753769818",
+        "redemptionRetainedUSDC6": "3283838812"
+      },
+      {
+        "month": 49,
+        "at": 1921060251,
+        "receiptsUSDC6": "172320774",
+        "feeUSDC6": "3340705",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "125985052",
+        "endingCashUSDC6": "4795764835",
+        "redemptionRetainedUSDC6": "3325833830"
+      },
+      {
+        "month": 50,
+        "at": 1923652251,
+        "receiptsUSDC6": "222614780",
+        "feeUSDC6": "3299257",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "163736643",
+        "endingCashUSDC6": "4850343716",
+        "redemptionRetainedUSDC6": "3380412710"
+      },
+      {
+        "month": 51,
+        "at": 1926330651,
+        "receiptsUSDC6": "248521525",
+        "feeUSDC6": "3241258",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "183210200",
+        "endingCashUSDC6": "4911413783",
+        "redemptionRetainedUSDC6": "3441482777"
+      },
+      {
+        "month": 52,
+        "at": 1929009051,
+        "receiptsUSDC6": "217374950",
+        "feeUSDC6": "3174832",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "159900089",
+        "endingCashUSDC6": "4964713812",
+        "redemptionRetainedUSDC6": "3494782807"
+      },
+      {
+        "month": 53,
+        "at": 1931428251,
+        "receiptsUSDC6": "200274823",
+        "feeUSDC6": "3117372",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "147118089",
+        "endingCashUSDC6": "5013753175",
+        "redemptionRetainedUSDC6": "3543822170"
+      },
+      {
+        "month": 54,
+        "at": 1934106651,
+        "receiptsUSDC6": "211209181",
+        "feeUSDC6": "3063763",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "155359064",
+        "endingCashUSDC6": "5065539530",
+        "redemptionRetainedUSDC6": "3595608524"
+      },
+      {
+        "month": 55,
+        "at": 1936698651,
+        "receiptsUSDC6": "313812453",
+        "feeUSDC6": "3006947",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "232354130",
+        "endingCashUSDC6": "5142990906",
+        "redemptionRetainedUSDC6": "3673059901"
+      },
+      {
+        "month": 56,
+        "at": 1939377051,
+        "receiptsUSDC6": "373575353",
+        "feeUSDC6": "2917177",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "277243632",
+        "endingCashUSDC6": "5235405450",
+        "redemptionRetainedUSDC6": "3765474445"
+      },
+      {
+        "month": 57,
+        "at": 1941969051,
+        "receiptsUSDC6": "470215781",
+        "feeUSDC6": "2807947",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "349805875",
+        "endingCashUSDC6": "5352007409",
+        "redemptionRetainedUSDC6": "3882076403"
+      },
+      {
+        "month": 58,
+        "at": 1944647451,
+        "receiptsUSDC6": "342567177",
+        "feeUSDC6": "2667118",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "254175044",
+        "endingCashUSDC6": "5436732423",
+        "redemptionRetainedUSDC6": "3966801418"
+      },
+      {
+        "month": 59,
+        "at": 1947325851,
+        "receiptsUSDC6": "359321520",
+        "feeUSDC6": "2564763",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "266817568",
+        "endingCashUSDC6": "5525671613",
+        "redemptionRetainedUSDC6": "4055740607"
+      },
+      {
+        "month": 60,
+        "at": 1949917851,
+        "receiptsUSDC6": "205431997",
+        "feeUSDC6": "2456021",
+        "mandatoryCostUSDC6": "1000000",
+        "payoutUSDC6": "151481982",
+        "endingCashUSDC6": "5576165607",
+        "redemptionRetainedUSDC6": "4106234601"
+      }
+    ],
+    "asOf": 1792151451,
+    "sourceReports": [
+      "0x966f71faa948bb44e428921a1dc311016d2ff7134a15fd71621d0864947e6c7c"
+    ],
+    "initialInvestmentUSDC6": "14769725817",
+    "futureExpensesUSDC6": "269942088",
+    "projectedNetIRRPct": 6.26651304642275,
+    "unfundedExpenses": false,
+    "cashflows": [
+      {
+        "at": 1792151451,
+        "valueUSDC6": "-14769725817"
+      },
+      {
+        "at": 1794829851,
+        "valueUSDC6": "0"
+      },
+      {
+        "at": 1797421851,
+        "valueUSDC6": "166508804"
+      },
+      {
+        "at": 1800100251,
+        "valueUSDC6": "186512505"
+      },
+      {
+        "at": 1802778651,
+        "valueUSDC6": "162512306"
+      },
+      {
+        "at": 1805197851,
+        "valueUSDC6": "149340016"
+      },
+      {
+        "at": 1807876251,
+        "valueUSDC6": "157792078"
+      },
+      {
+        "at": 1810468251,
+        "valueUSDC6": "236954801"
+      },
+      {
+        "at": 1813146651,
+        "valueUSDC6": "283097674"
+      },
+      {
+        "at": 1815738651,
+        "valueUSDC6": "357700805"
+      },
+      {
+        "at": 1818417051,
+        "valueUSDC6": "259318507"
+      },
+      {
+        "at": 1821095451,
+        "valueUSDC6": "272293937"
+      },
+      {
+        "at": 1823687451,
+        "valueUSDC6": "153644037"
+      },
+      {
+        "at": 1826365851,
+        "valueUSDC6": "127165711"
+      },
+      {
+        "at": 1828957851,
+        "valueUSDC6": "165701430"
+      },
+      {
+        "at": 1831636251,
+        "valueUSDC6": "185570311"
+      },
+      {
+        "at": 1834314651,
+        "valueUSDC6": "161743533"
+      },
+      {
+        "at": 1836820251,
+        "valueUSDC6": "148668918"
+      },
+      {
+        "at": 1839498651,
+        "valueUSDC6": "157065935"
+      },
+      {
+        "at": 1842090651,
+        "valueUSDC6": "235680068"
+      },
+      {
+        "at": 1844769051,
+        "valueUSDC6": "281505359"
+      },
+      {
+        "at": 1847361051,
+        "valueUSDC6": "355591912"
+      },
+      {
+        "at": 1850039451,
+        "valueUSDC6": "257903799"
+      },
+      {
+        "at": 1852717851,
+        "valueUSDC6": "270794138"
+      },
+      {
+        "at": 1855309851,
+        "valueUSDC6": "152980575"
+      },
+      {
+        "at": 1857988251,
+        "valueUSDC6": "126693248"
+      },
+      {
+        "at": 1860580251,
+        "valueUSDC6": "164965102"
+      },
+      {
+        "at": 1863258651,
+        "valueUSDC6": "184700647"
+      },
+      {
+        "at": 1865937051,
+        "valueUSDC6": "161046641"
+      },
+      {
+        "at": 1868356251,
+        "valueUSDC6": "148069582"
+      },
+      {
+        "at": 1871034651,
+        "valueUSDC6": "156414185"
+      },
+      {
+        "at": 1873626651,
+        "valueUSDC6": "234484161"
+      },
+      {
+        "at": 1876305051,
+        "valueUSDC6": "279994670"
+      },
+      {
+        "at": 1878897051,
+        "valueUSDC6": "353568863"
+      },
+      {
+        "at": 1881575451,
+        "valueUSDC6": "256570664"
+      },
+      {
+        "at": 1884253851,
+        "valueUSDC6": "269377121"
+      },
+      {
+        "at": 1886845851,
+        "valueUSDC6": "152394658"
+      },
+      {
+        "at": 1889524251,
+        "valueUSDC6": "126297595"
+      },
+      {
+        "at": 1892116251,
+        "valueUSDC6": "164308060"
+      },
+      {
+        "at": 1894794651,
+        "valueUSDC6": "183911814"
+      },
+      {
+        "at": 1897473051,
+        "valueUSDC6": "160430009"
+      },
+      {
+        "at": 1899892251,
+        "valueUSDC6": "147550469"
+      },
+      {
+        "at": 1902570651,
+        "valueUSDC6": "155842753"
+      },
+      {
+        "at": 1905162651,
+        "valueUSDC6": "233373027"
+      },
+      {
+        "at": 1907841051,
+        "valueUSDC6": "278571592"
+      },
+      {
+        "at": 1910433051,
+        "valueUSDC6": "351637668"
+      },
+      {
+        "at": 1913111451,
+        "valueUSDC6": "255325197"
+      },
+      {
+        "at": 1915789851,
+        "valueUSDC6": "268049029"
+      },
+      {
+        "at": 1918381851,
+        "valueUSDC6": "151892522"
+      },
+      {
+        "at": 1921060251,
+        "valueUSDC6": "125985052"
+      },
+      {
+        "at": 1923652251,
+        "valueUSDC6": "163736643"
+      },
+      {
+        "at": 1926330651,
+        "valueUSDC6": "183210200"
+      },
+      {
+        "at": 1929009051,
+        "valueUSDC6": "159900089"
+      },
+      {
+        "at": 1931428251,
+        "valueUSDC6": "147118089"
+      },
+      {
+        "at": 1934106651,
+        "valueUSDC6": "155359064"
+      },
+      {
+        "at": 1936698651,
+        "valueUSDC6": "232354130"
+      },
+      {
+        "at": 1939377051,
+        "valueUSDC6": "277243632"
+      },
+      {
+        "at": 1941969051,
+        "valueUSDC6": "349805875"
+      },
+      {
+        "at": 1944647451,
+        "valueUSDC6": "254175044"
+      },
+      {
+        "at": 1947325851,
+        "valueUSDC6": "266817568"
+      },
+      {
+        "at": 1949917851,
+        "valueUSDC6": "151481982"
+      },
+      {
+        "at": 1952596251,
+        "valueUSDC6": "5747244393"
+      }
+    ],
+    "assumptions": "Hold to expiry, no early exits; collectible receivables assumed collected before next dealing; projected monthly NAV, settlement-relative monthly distributions, observed history plus simulated tariffs/FX/costs",
+    "hash": "0x1699132fb9395f2ca1154e7cf8739244a6fa8aefb5ccc51e3a83fb75efc7b80b"
+  }
+}

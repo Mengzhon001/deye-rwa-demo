@@ -1,0 +1,10 @@
+{
+  "facilityId": "0x6421596a42afec2cd62caf4309854e462e7acb0ada65f0b6c504aed5e49578b0",
+  "admin": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "serialHash": "0xbd8366826d77c4c167a2939cff83fa2ddd6a24a552aee45cfc6be6dd1f0b7703",
+  "siteHash": "0xc526f6c4569944d4f27c0e286d50b8d6d5c4b6eb30839e27e6500610e8551de5",
+  "metadataHash": "0xe819800dcaf1be6b407b6cd4b6b9b55a4aa8acc78325bc1261a2a72cbf197c9f",
+  "acquisitionCostUSDC6": "125000000",
+  "commissionedAt": 1775001600,
+  "activateOnMint": true
+}

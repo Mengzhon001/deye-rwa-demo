@@ -1,0 +1,161 @@
+.wallet-login {
+  box-sizing: border-box;
+  width: min(660px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 32px;
+  border: 1px solid #31434d;
+  border-radius: 24px;
+  background: #101d26;
+  color: #eef6f4;
+  box-shadow: 0 28px 120px #0007;
+  font: 15px/1.6 Inter, system-ui, -apple-system, "PingFang SC", sans-serif;
+}
+.wallet-login::backdrop {
+  background: #020c14b8;
+  backdrop-filter: blur(9px);
+}
+.wallet-login * {
+  box-sizing: border-box;
+}
+.wl-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #a4b9bd;
+}
+.wl-top button {
+  border: 0;
+  background: none;
+  color: #cdddda;
+  font-size: 28px;
+  cursor: pointer;
+}
+.wl-step {
+  font-size: 11px;
+  color: #84d8bb;
+  margin-top: 24px;
+}
+.wallet-login h2 {
+  font-size: 30px;
+  margin: 8px 0;
+}
+.wl-intro {
+  color: #a7babe;
+  margin: 0 0 24px;
+}
+.wl-roles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.wl-roles button {
+  text-align: left;
+  border: 1px solid #31434c;
+  border-radius: 12px;
+  background: #14252e;
+  color: #e6f3ef;
+  padding: 16px;
+  cursor: pointer;
+  display: grid;
+  gap: 6px;
+}
+.wl-roles button[aria-pressed="true"] {
+  background: #1e3b37;
+  border-color: #8cddb7;
+  box-shadow: inset 0 0 0 1px #8cddb7;
+}
+.wl-number {
+  font: 11px monospace;
+  color: #7ba89b;
+}
+.wl-roles strong {
+  font-size: 17px;
+}
+.wl-roles small {
+  font-size: 12px;
+  color: #a7babe;
+  line-height: 1.5;
+}
+.wl-address {
+  min-height: 52px;
+  font-size: 12px;
+  color: #b1c5c9;
+  margin-top: 20px;
+}
+.wl-address code {
+  font-size: 11px;
+  overflow-wrap: anywhere;
+  color: #9edabd;
+}
+.wl-error {
+  min-height: 24px;
+  color: #ffbba6;
+  font-size: 13px;
+  margin: 10px 0;
+}
+.wl-wallet-label { display: flex; align-items: center; gap: 14px; margin-top: 14px; color: #b1c5c9; font-size: 13px; }
+.wl-wallet-label select { flex: 1; min-width: 0; background: #14252e; color: #eef6f4; border: 1px solid #536867; border-radius: 8px; padding: 10px; font: inherit; }
+.wl-wallet-help { color: #a7babe; font-size: 12px; margin: 8px 0; }
+.wl-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.wl-actions button {
+  padding: 13px 20px;
+  border-radius: 8px;
+  font: 600 14px system-ui;
+  cursor: pointer;
+}
+.wl-connect {
+  flex: 1;
+  background: #b8f5cc;
+  color: #10221d;
+  border: 1px solid #b8f5cc;
+}
+.wl-switch {
+  background: transparent;
+  border: 1px solid #536867;
+  color: #d1e8df;
+}
+.wallet-login button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.wallet-login button:focus-visible {
+  outline: 2px solid #f0d298;
+  outline-offset: 4px;
+}
+.wl-foot {
+  font-size: 11px;
+  color: #809b9b;
+  text-align: center;
+  margin: 18px 0 0;
+}
+.app-doc-link {
+  font-size: 12px;
+  color: #56706e;
+}
+.logo a {
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  .wallet-login {
+    padding: 22px;
+  }
+  .wl-roles button {
+    padding: 12px;
+  }
+  .wl-roles small {
+    font-size: 11px;
+  }
+  .wallet-login h2 {
+    font-size: 25px;
+  }
+  .wl-step {
+    font-size: 10px;
+  }
+}

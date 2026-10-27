@@ -1,0 +1,26 @@
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+
+// Only reviewed, key-free repository manuals may enter the public website.
+export function publishManuals(root, out) {
+  const target = join(out, "manual");
+  mkdirSync(target, { recursive: true });
+  for (const lang of ["zh", "en"]) {
+    const name = `manual.${lang}.pdf`;
+    const source = join(root, "docs/manual", name);
+    if (readFileSync(source).subarray(0, 5).toString() !== "%PDF-") {
+      throw new Error(`Invalid public manual: ${name}`);
+    }
+    copyFileSync(source, join(target, name));
+  }
+  writeFileSync(join(target, "index.html"), `<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deye RWA · 操作手册 / Operating manuals</title>
+<style>body{margin:0;background:#f5f7fa;color:#19272e;font:18px/1.7 system-ui,sans-serif}main{max-width:760px;margin:10vh auto;padding:32px}a{color:#1759b8}li{margin:20px 0}small{color:#52616a}</style></head>
+<body><main><p>DEYE · SOLAR REVENUE RIGHTS</p><h1>操作手册 / Operating manuals</h1>
+<p>手册说明角色交接、钱包操作、月度 USDC 缴费、投资及链上核对流程。公开版本不包含私钥。</p>
+<p lang="en">The manuals cover role handoffs, wallet operations, monthly USDC payments, investments and on-chain verification. Public copies contain no private keys.</p>
+<ul><li><a href="manual.zh.pdf">下载中文操作手册（PDF）</a></li><li><a href="manual.en.pdf" lang="en">Download the English operating manual (PDF)</a></li></ul>
+<p><a href="../">返回首页 / Back to website</a></p><small>本地演示及测试资金。Demo environment with test funds.</small></main></body></html>
+`);
+}

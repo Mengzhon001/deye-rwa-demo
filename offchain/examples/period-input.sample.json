@@ -1,0 +1,72 @@
+{
+  "facility": {
+    "facilityName": "NTU Rooftop Inverter A",
+    "facilityType": "INVERTER",
+    "location": {
+      "country": "Singapore",
+      "region": "West",
+      "siteName": "SG-DEMO-SITE-001",
+      "latitude": 1.3483,
+      "longitude": 103.6831
+    },
+    "commercialTerms": {
+      "acquisitionCostUSDC6": "125000000",
+      "commissionedAt": 1775001600,
+      "expectedLifetimePeriods": 120
+    },
+    "technicalProfile": {
+      "nameplateCapacityKW": 500,
+      "gridConnectionId": "GRID-SG-001"
+    },
+    "beneficiary": "0x1111111111111111111111111111111111111111",
+    "operatorId": "demo.operator.01",
+    "activateOnDeploy": true,
+    "facilityId": "FAC-8C2DA0C2",
+    "assetId": "0x6421596a42afec2cd62caf4309854e462e7acb0ada65f0b6c504aed5e49578b0",
+    "deployedAt": 1775001600,
+    "lifecycleStatus": "ACTIVE",
+    "tokenization": {
+      "rawTokenId": "RAW-FAC-8C2DA0C2",
+      "metadataHash": "0xe819800dcaf1be6b407b6cd4b6b9b55a4aa8acc78325bc1261a2a72cbf197c9f",
+      "initialStatus": "ACTIVE"
+    }
+  },
+  "operatingPeriod": {
+    "periodId": "2026-DEMO-P01",
+    "facilityId": "FAC-8C2DA0C2",
+    "assetId": "0x6421596a42afec2cd62caf4309854e462e7acb0ada65f0b6c504aed5e49578b0",
+    "siteId": "SG-DEMO-SITE-001",
+    "productionData": {
+      "startTs": 1775001600,
+      "endTs": 1775606400,
+      "rawTelemetryFiles": ["fac-8c2da0c2-2026-demo-p01-telemetry.csv"],
+      "rawEventFiles": ["fac-8c2da0c2-2026-demo-p01-events.json"],
+      "energyGeneratedKWh": 59270.4,
+      "energySoldKWh": 56306.88,
+      "availabilityPct": 98,
+      "operatingState": "ACTIVE",
+      "anomalyFlags": ["NONE"],
+      "offlineDurationSec": 12096
+    },
+    "cashflowData": {
+      "settlementRef": "SETTLE-2026-DEMO-P01-FAC-8C2DA0C2",
+      "payer": "SG Grid Settlement Pool",
+      "grossRevenueUSDC6": "14076750000",
+      "netRevenueUSDC6": "14076750000",
+      "settledAt": 1775606400
+    },
+    "rewardDistribution": {
+      "beneficiary": "0x1111111111111111111111111111111111111111",
+      "amountUSDC6": "14076750000",
+      "eligibilityStatus": "ELIGIBLE"
+    }
+  },
+  "reviewDecision": {
+    "periodId": "2026-DEMO-P01",
+    "status": "APPROVED",
+    "reviewerId": "demo.reviewer.01",
+    "reviewNotesHash": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "reviewedAt": 1775650000
+  },
+  "signedDecisionUri": "file://review-decision-2026-DEMO-P01.json"
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deye · Revenue Rights Platform</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/wallet-login.css" />
+    <script src="/wallet-login.js" defer></script>
+    <script src="/dashboard.js" defer></script>
+    <link rel="stylesheet" href="/cashflow.css" />
+    <link rel="stylesheet" href="/period-timeline.css" />
+    <script src="/period-timeline.js" defer></script>
+    <script src="/cashflow.js" defer></script>
+    <script src="/workflow.js" defer></script>
+    <script src="/product.js" defer></script>
+    <script src="/billing.js" defer></script>
+    <script src="/investor.js" defer></script>
+    <script src="/reset.js" defer></script>
+    <link rel="stylesheet" href="/guidance.css" />
+    <script src="/guidance-model.js" defer></script>
+    <script src="/guidance.js" defer></script>
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="logo"><a href="/">DEYE</a> <span id="brand"></span></div><a class="app-doc-link" href="/docs/">Documentation ↗</a>
+      <div class="role-switcher" id="roles"></div>
+      <div class="header-tools">
+        <select id="product-select" aria-label="当前产品" hidden></select>
+        <button id="product-create" class="btn btn-outline btn-sm" hidden>创建新一期</button>
+        <span id="wallet-status" class="wallet-status"></span>
+        <select id="account" aria-label="Local role account"></select
+        ><button id="wallet-connect" class="btn btn-primary btn-sm" hidden>
+          Connect wallet
+        </button
+        ><button id="wallet-faucet" class="btn btn-outline btn-sm" hidden>
+          Demo funds
+        </button
+        ><button id="language" class="btn btn-outline btn-sm">中文</button
+        ><button id="refresh" class="btn btn-outline btn-sm">↻</button>
+        <button id="demo-reset" class="btn btn-outline btn-sm" hidden></button>
+      </div>
+    </header>
+    <div class="layout">
+      <aside class="sidebar" id="nav"></aside>
+      <main class="main" id="main" aria-live="polite">
+        <section
+          id="startup"
+          style="
+            max-width: 760px;
+            margin: 32px auto;
+            padding: 32px;
+            border: 1px solid #dce4f0;
+            border-radius: 16px;
+            background: #fff;
+            color: #24364f;
+            font: 15px/1.8 system-ui, sans-serif;
+          "
+        >
+          <p style="color: #2453d2; font-weight: 700; letter-spacing: 2px">
+            DEYE · RWA
+          </p>
+          <h1 id="startup-title" style="font-size: 26px; margin: 12px 0">
+            正在加载 Demo · Loading Demo
+          </h1>
+          <p id="startup-message">
+            如果您直接打开了 index.html，请使用下面的本地服务地址。平台需要后端
+            API 和本地区块链，不能作为独立 HTML 运行。
+          </p>
+          <p>
+            Open the local server below. This application requires its backend
+            API and local blockchain; it cannot run as a standalone HTML file.
+          </p>
+          <p style="margin: 24px 0">
+            <a
+              href="http://127.0.0.1:4174/"
+              style="
+                display: inline-block;
+                padding: 10px 20px;
+                border-radius: 8px;
+                background: #2453d2;
+                color: #fff;
+                text-decoration: none;
+                font-weight: 600;
+              "
+              >打开本地 Demo · Open demo →</a
+            >
+          </p>
+          <p>
+            地址 / URL:
+            <a href="http://127.0.0.1:4174/">http://127.0.0.1:4174/</a>
+          </p>
+          <details>
+            <summary>服务未启动时 · If the server is stopped</summary>
+            <p>
+              在项目根目录分别用两个终端运行 / Run from the project root in two
+              terminals:
+            </p>
+            <pre
+              style="
+                padding: 16px;
+                background: #f3f6fb;
+                border-radius: 8px;
+                white-space: pre-wrap;
+              "
+            >
+npm run chain:local
+npm run dev:revenue</pre
+            >
+            <p>
+              如果服务已经运行，直接点击上面的链接，无需重新启动或重置 Demo。<br />If
+              already running, open the link above; no restart or reset is
+              needed.
+            </p>
+          </details>
+          <noscript
+            ><p>
+              请允许 JavaScript 后重新打开本地服务地址。<br />Enable JavaScript
+              and open the local server.
+            </p></noscript
+          >
+        </section>
+      </main>
+    </div>
+    <div id="feedback" role="status"></div>
+    <dialog id="reset-dialog" aria-labelledby="reset-title"></dialog>
+  </body>
+</html>

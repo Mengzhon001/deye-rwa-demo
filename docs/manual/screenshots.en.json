@@ -1,0 +1,798 @@
+{
+  "A0": {
+    "file": "A0.en.png",
+    "role": "home",
+    "page": "",
+    "box": {
+      "x": 1668.78125,
+      "y": 21.5,
+      "width": 155.21875,
+      "height": 44
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:34.335Z"
+  },
+  "A1": {
+    "file": "A1.en.png",
+    "role": "owner",
+    "page": "owner_kyc",
+    "box": {
+      "x": 33,
+      "y": 681.765625,
+      "width": 392.28125,
+      "height": 45
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:34.567Z"
+  },
+  "A2": {
+    "file": "A2.en.png",
+    "role": "agent",
+    "page": "agent_apply_review",
+    "box": {
+      "x": 121.5,
+      "y": 227.59375,
+      "width": 138.125,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:34.938Z"
+  },
+  "A3": {
+    "file": "A3.en.png",
+    "role": "investor",
+    "page": "position",
+    "box": {
+      "x": 1468.9375,
+      "y": 19,
+      "width": 95.8125,
+      "height": 25
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:35.301Z"
+  },
+  "B1": {
+    "file": "B1.en.png",
+    "role": "owner",
+    "page": "owner_stations",
+    "box": {
+      "x": 0,
+      "y": 175,
+      "width": 219,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:35.664Z"
+  },
+  "B2": {
+    "file": "B2.en.png",
+    "role": "owner",
+    "page": "owner_station_detail",
+    "box": {
+      "x": 244,
+      "y": 134,
+      "width": 1652,
+      "height": 120.1875
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:36.036Z"
+  },
+  "B3": {
+    "file": "B3.en.png",
+    "role": "owner",
+    "page": "owner_apply",
+    "box": {
+      "x": 879,
+      "y": 211,
+      "width": 151.484375,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:36.362Z"
+  },
+  "B4": {
+    "file": "B4.en.png",
+    "role": "agent",
+    "page": "agent_apply_review",
+    "box": {
+      "x": 1602.546875,
+      "y": 484.59375,
+      "width": 138.234375,
+      "height": 25
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:36.752Z"
+  },
+  "B5": {
+    "file": "B5.en.png",
+    "role": "agent",
+    "page": "agent_apply_review",
+    "box": {
+      "x": 725,
+      "y": 616.921875,
+      "width": 212.96875,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:37.130Z"
+  },
+  "B6": {
+    "file": "B6.en.png",
+    "role": "agent",
+    "page": "agent_financing",
+    "box": {
+      "x": 1608.609375,
+      "y": 554.84375,
+      "width": 262.390625,
+      "height": 34
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:37.545Z"
+  },
+  "B7": {
+    "file": "B7.en.png",
+    "role": "trustee",
+    "page": "trustee_events",
+    "box": {
+      "x": 594.125,
+      "y": 567.125,
+      "width": 259.78125,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:38.048Z"
+  },
+  "B8": {
+    "file": "B8.en.png",
+    "role": "owner",
+    "page": "owner_agreement",
+    "box": {
+      "x": 272,
+      "y": 9.015625,
+      "width": 1596,
+      "height": 1126.875
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:38.484Z"
+  },
+  "B9": {
+    "file": "B9.en.png",
+    "role": "owner",
+    "page": "owner_agreement",
+    "box": {
+      "x": 269,
+      "y": 556.125,
+      "width": 260.3125,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:38.675Z"
+  },
+  "B10": {
+    "file": "B10.en.png",
+    "role": "owner",
+    "page": "owner_agreement",
+    "box": {
+      "x": 269,
+      "y": 556.015625,
+      "width": 203.265625,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:39.116Z"
+  },
+  "C1": {
+    "file": "C1.en.png",
+    "role": "agent",
+    "page": "agent_pool",
+    "box": {
+      "x": 269,
+      "y": 555.96875,
+      "width": 174.640625,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:39.571Z"
+  },
+  "C2": {
+    "file": "C2.en.png",
+    "role": "owner",
+    "page": "owner_agreement",
+    "box": {
+      "x": 269,
+      "y": 555.515625,
+      "width": 299.546875,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:40.107Z"
+  },
+  "C3": {
+    "file": "C3.en.png",
+    "role": "agent",
+    "page": "agent_pool",
+    "box": {
+      "x": 269,
+      "y": 555.96875,
+      "width": 210.953125,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:22:40.672Z"
+  },
+  "C4": {
+    "file": "C4.en.png",
+    "role": "agent",
+    "page": "agent_pool",
+    "box": {
+      "x": 264,
+      "y": 729.46875,
+      "width": 198.90625,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:27.247Z"
+  },
+  "C5": {
+    "file": "C5.en.png",
+    "role": "trustee",
+    "page": "trustee_events",
+    "box": {
+      "x": 589.125,
+      "y": 627.09375,
+      "width": 220.203125,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:27.909Z"
+  },
+  "C6": {
+    "file": "C6.en.png",
+    "role": "agent",
+    "page": "agent_product",
+    "box": {
+      "x": 367,
+      "y": 556.140625,
+      "width": 169.375,
+      "height": 31
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:28.508Z"
+  },
+  "D1": {
+    "file": "D1.en.png",
+    "role": "investor",
+    "page": "product_hall",
+    "box": {
+      "x": 1753.3125,
+      "y": 701.984375,
+      "width": 113.6875,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:29.001Z"
+  },
+  "D2": {
+    "file": "D2.en.png",
+    "role": "investor",
+    "page": "pool_detail",
+    "box": {
+      "x": 302,
+      "y": -14.5,
+      "width": 1536,
+      "height": 1172.953125
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:29.400Z"
+  },
+  "D3": {
+    "file": "D3.en.png",
+    "role": "investor",
+    "page": "investor_eligibility",
+    "box": {
+      "x": 264,
+      "y": 496.671875,
+      "width": 230.953125,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:29.801Z"
+  },
+  "D4": {
+    "file": "D4.en.png",
+    "role": "agent",
+    "page": "agent_kyc_review",
+    "box": {
+      "x": 264,
+      "y": 766.21875,
+      "width": 184.875,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:30.305Z"
+  },
+  "D5": {
+    "file": "D5.en.png",
+    "role": "investor",
+    "page": "subscribe",
+    "box": {
+      "x": 439.53125,
+      "y": 1047.71875,
+      "width": 213.953125,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:31.181Z"
+  },
+  "D6": {
+    "file": "D6.en.png",
+    "role": "investor",
+    "page": "subscribe",
+    "box": {
+      "x": 545.4375,
+      "y": 194.21875,
+      "width": 277.875,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:31.792Z"
+  },
+  "D7": {
+    "file": "D7.en.png",
+    "role": "agent",
+    "page": "agent_product",
+    "box": {
+      "x": 1380.65625,
+      "y": 1048.109375,
+      "width": 129.5625,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:32.871Z"
+  },
+  "D8": {
+    "file": "D8.en.png",
+    "role": "agent",
+    "page": "agent_product",
+    "box": {
+      "x": 1099,
+      "y": 746.109375,
+      "width": 225.65625,
+      "height": 31
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:33.623Z"
+  },
+  "D9": {
+    "file": "D9.en.png",
+    "role": "investor",
+    "page": "position",
+    "box": {
+      "x": 244,
+      "y": 130,
+      "width": 529.375,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:24:34.523Z"
+  },
+  "E1": {
+    "file": "E1.en.png",
+    "box": {
+      "x": 530,
+      "y": 960.59375,
+      "width": 158.171875,
+      "height": 32
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"advance\"] button[type=\"submit\"]"
+  },
+  "E2": {
+    "file": "E2.en.png",
+    "box": {
+      "x": 920.65625,
+      "y": 700.375,
+      "width": 156.796875,
+      "height": 32
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"book-revenue\"] button[type=\"submit\"]"
+  },
+  "E3": {
+    "file": "E3.en.png",
+    "box": {
+      "x": 289,
+      "y": 760.375,
+      "width": 224.734375,
+      "height": 32
+    },
+    "role": "owner",
+    "chinese": [],
+    "actionTarget": "[data-billing-id=\"0xce0353ae0355a9a4bc94f4be29ac917fe68bc6b00cad55c08bc0e18a398429c6\"] form[data-action=\"pay-household-bill\"] button[type=\"submit\"]"
+  },
+  "E4": {
+    "file": "E4.en.png",
+    "box": {
+      "x": 1099,
+      "y": 605.875,
+      "width": 184.671875,
+      "height": 31
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"accrue-fee\"] button[type=\"submit\"]"
+  },
+  "E5": {
+    "file": "E5.en.png",
+    "box": {
+      "x": 589.125,
+      "y": 627.09375,
+      "width": 220.203125,
+      "height": 32
+    },
+    "role": "trustee",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"approve-valuation\"] button[type=\"submit\"]"
+  },
+  "E6": {
+    "file": "E6.en.png",
+    "box": {
+      "x": 367,
+      "y": 810.8125,
+      "width": 199.8125,
+      "height": 31
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"distribute\"] button[type=\"submit\"]"
+  },
+  "E7": {
+    "file": "E7.en.png",
+    "box": {
+      "x": 1535.5,
+      "y": 933.09375,
+      "width": 70.8125,
+      "height": 32
+    },
+    "role": "investor",
+    "chinese": [],
+    "actionTarget": "form[data-action=\"claim\"] button[type=\"submit\"]"
+  },
+  "F1": {
+    "file": "F1.en.png",
+    "role": "investor",
+    "page": "bond_transfer",
+    "box": {
+      "x": 787.890625,
+      "y": 468.734375,
+      "width": 189.71875,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:00.932Z"
+  },
+  "F2": {
+    "file": "F2.en.png",
+    "role": "investor2",
+    "page": "bond_transfer",
+    "box": {
+      "x": 1270.921875,
+      "y": 868.734375,
+      "width": 187.34375,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:01.750Z"
+  },
+  "F3": {
+    "file": "F3.en.png",
+    "role": "agent",
+    "page": "agent_transfer_review",
+    "box": {
+      "x": 1315.328125,
+      "y": 329.515625,
+      "width": 182.640625,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:02.866Z"
+  },
+  "F4": {
+    "file": "F4.en.png",
+    "role": "investor",
+    "page": "bond_transfer",
+    "box": {
+      "x": 1291.484375,
+      "y": 658.453125,
+      "width": 180.390625,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:03.803Z"
+  },
+  "F5": {
+    "file": "F5.en.png",
+    "role": "investor",
+    "page": "bond_transfer",
+    "box": {
+      "x": 436,
+      "y": 970.265625,
+      "width": 205.171875,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:04.936Z"
+  },
+  "F6": {
+    "file": "F6.en.png",
+    "role": "agent",
+    "page": "agent_product",
+    "box": {
+      "x": 1099,
+      "y": 779.40625,
+      "width": 199.015625,
+      "height": 31
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:24.488Z"
+  },
+  "F7": {
+    "file": "F7.en.png",
+    "role": "investor",
+    "page": "bond_transfer",
+    "box": {
+      "x": 264,
+      "y": 1048.359375,
+      "width": 179.203125,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:25.826Z"
+  },
+  "G1": {
+    "file": "G1.en.png",
+    "role": "agent",
+    "page": "agent_monitor",
+    "box": {
+      "x": 1107,
+      "y": 598.46875,
+      "width": 182.96875,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:26.954Z"
+  },
+  "G2": {
+    "file": "G2.en.png",
+    "role": "investor",
+    "page": "position",
+    "box": {
+      "x": 284,
+      "y": 940.234375,
+      "width": 233.140625,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:28.414Z"
+  },
+  "G3": {
+    "file": "G3.en.png",
+    "role": "trustee",
+    "page": "trustee_review",
+    "box": {
+      "x": 268,
+      "y": 492.328125,
+      "width": 184.40625,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:29.547Z"
+  },
+  "G4": {
+    "file": "G4.en.png",
+    "role": "trustee2",
+    "page": "trustee_review",
+    "box": {
+      "x": 268,
+      "y": 492.328125,
+      "width": 184.40625,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:25:30.669Z"
+  },
+  "H1": {
+    "file": "H1.en.png",
+    "role": "agent",
+    "page": "agent_product",
+    "box": {
+      "x": 1099,
+      "y": 835.796875,
+      "width": 183.515625,
+      "height": 31
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:39:55.213Z"
+  },
+  "H2": {
+    "file": "H2.en.png",
+    "role": "investor",
+    "page": "position",
+    "box": {
+      "x": 1535.5,
+      "y": 630,
+      "width": 70.8125,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:39:58.972Z"
+  },
+  "H3": {
+    "file": "H3.en.png",
+    "role": "owner",
+    "page": "owner_agreement",
+    "box": {
+      "x": 269,
+      "y": 556.40625,
+      "width": 246.234375,
+      "height": 32
+    },
+    "chinese": [
+      "中文"
+    ],
+    "chainId": 20261017,
+    "capturedAt": "2026-10-17T05:40:04.587Z"
+  },
+  "E3a": {
+    "file": "E3a.en.png",
+    "box": {
+      "x": 289,
+      "y": 907.46875,
+      "width": 272.59375,
+      "height": 32
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "[data-billing-id=\"0xce0353ae0355a9a4bc94f4be29ac917fe68bc6b00cad55c08bc0e18a398429c6\"] form[data-action=\"fund-export\"] button[type=\"submit\"]"
+  },
+  "E3b": {
+    "file": "E3b.en.png",
+    "box": {
+      "x": 289,
+      "y": 907.46875,
+      "width": 277.9375,
+      "height": 32
+    },
+    "role": "agent",
+    "chinese": [],
+    "actionTarget": "[data-billing-id=\"0xce0353ae0355a9a4bc94f4be29ac917fe68bc6b00cad55c08bc0e18a398429c6\"] form[data-action=\"confirm-receipt\"] button[type=\"submit\"]"
+  }
+}

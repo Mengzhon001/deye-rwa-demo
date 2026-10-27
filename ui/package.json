@@ -1,0 +1,39 @@
+{
+  "name": "green-energy-raw-ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "HARDHAT_CONFIG=../onchain/hardhat.config.ts node --import tsx src/server.ts",
+    "build": "tsc -p tsconfig.json && npm run build:site",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:demo-ui": "HARDHAT_CONFIG=../onchain/hardhat.config.ts node --import tsx src/validate.ts",
+    "dev:revenue": "HARDHAT_NETWORK=${HARDHAT_NETWORK:-localhost} HARDHAT_CONFIG=../onchain/hardhat.config.ts node --import tsx src/revenue/server.ts",
+    "test:revenue": "HARDHAT_CONFIG=../onchain/hardhat.config.ts node --import tsx src/revenue/validate.ts",
+    "test:revenue:web3": "node --import tsx src/revenue/web3-e2e.ts",
+    "reset:revenue": "node --import tsx src/revenue/reset.ts",
+    "seed:revenue": "node --import tsx src/revenue/seed.ts",
+    "test:revenue:dashboard": "node --test src/revenue/dashboard.test.cjs",
+    "test:revenue:workflow": "node --test src/revenue/workflow.test.cjs src/revenue/product.test.cjs src/revenue/investor.test.cjs src/revenue/reset-recovery.test.cjs",
+    "build:site": "node scripts/build-public.mjs && vite build --config site/vite.config.ts",
+    "typecheck:site": "tsc --noEmit -p site/tsconfig.json",
+    "test:site": "playwright test --config site/playwright.config.ts",
+    "test:revenue:public": "HARDHAT_CONFIG=../onchain/hardhat.config.ts node --import tsx --test src/revenue/public.test.ts",
+    "test:revenue:billing-ui": "node scripts/test-billing-ui.mjs",
+    "test:revenue:timeline": "node --import tsx scripts/build-cashflow-example.ts && node --test src/revenue/period-timeline.test.cjs",
+    "test:revenue:household": "node --import tsx --test src/revenue/household-billing.test.ts"
+  },
+  "dependencies": {
+    "driver.js": "1.9.0",
+    "ethers": "^6.13.4",
+    "marked": "^17.0.3",
+    "three": "^0.183.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^22.10.1",
+    "@types/three": "^0.183.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^7.3.1"
+  }
+}

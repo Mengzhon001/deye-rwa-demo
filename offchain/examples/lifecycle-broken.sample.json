@@ -1,0 +1,11 @@
+{
+  "facilityId": "FAC-8C2DA0C2",
+  "assetId": "0x6421596a42afec2cd62caf4309854e462e7acb0ada65f0b6c504aed5e49578b0",
+  "eventId": "EVT-F36AB0F1",
+  "eventType": "BROKEN",
+  "fromStatus": "ACTIVE",
+  "toStatus": "PENDING",
+  "eventTs": 1775650000,
+  "reason": "Inverter control board fault detected during demo period",
+  "evidenceHash": "0xf36ab0f1ca0345f9b7bc998361fd5756c7bc8b172424d88f3535867a21326e8f"
+}

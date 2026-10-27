@@ -1,0 +1,8 @@
+{
+  "metamask": {"version":"13.49.0", "release":"https://github.com/MetaMask/metamask-extension/releases/tag/v13.49.0", "asset":"metamask-chrome-13.49.0.zip", "sha256":"7ba00bfe4fe8b0ffb27be1e8fc06506248f1b888cb4f2e5e5e8b1c37f461f262"},
+  "playwright":"1.58.2",
+  "ffmpeg":"9.0.2",
+  "narration":{"engine":"macOS say", "voice":"Tingting", "locale":"zh_CN"},
+  "revisedNarration":{"engine":"mlx-audio 0.5.5", "model":"mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-8bit", "revision":"41d3337e8b7f2843a75841595fc14e4b9a7a4b96", "voice":"Serena", "locale":"zh_CN", "local":true},
+  "delivery":{"width":2560,"height":1440,"fps":30,"codec":"h264","audio":"aac","backgroundMusic":false}
+}

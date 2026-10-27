@@ -1,0 +1,12 @@
+{
+  "periodId": "2026-DEMO-P01",
+  "startTs": 1775001600,
+  "endTs": 1775606400,
+  "capacityFactorPct": 72,
+  "availabilityPct": 98,
+  "soldRatioPct": 95,
+  "payoutRatioPct": 100,
+  "pricePerKWhUSDC6": "250000",
+  "payer": "SG Grid Settlement Pool",
+  "operatingState": "ACTIVE"
+}

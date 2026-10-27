@@ -1,0 +1,76 @@
+# OS
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build / cache
+cache/
+coverage/
+dist/
+out/
+artifacts/
+typechain-types/
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# IDE
+.vscode/
+.idea/
+
+# Hardhat
+onchain/cache/
+onchain/artifacts/
+onchain/coverage/
+onchain/typechain-types/
+
+# Offchain
+offchain/dist/
+offchain/.tsbuildinfo
+
+# Logs
+*.log
+
+# Separate revenue-rights state, signed intents and private API evidence
+.data/
+.env.revenue
+# User-supplied Deye account/application credentials
+materials_from_Deye/deye_api.md
+
+# Generated public site and browser QA artifacts
+ui/site-dist/
+ui/site/src/docs.generated.json
+ui/test-results/
+ui/site/test-results/
+ui/playwright-report/
+
+ui/site/src/cashflow-example.generated.json
+
+# Internal product manual includes dedicated demo wallet keys.
+output/pdf/deye-rwa-product-manual*
+
+# Guidance dependencies are pinned and served locally.
+
+# Local credentials, evidence, wallet exports and media are never source files.
+__pycache__/
+*.pyc
+*.tsbuildinfo
+output/
+tmp/
+materials_from_Deye/
+*.pem
+*.key
+*.private.json
+*.mp4
+*.mov
+
+# Ignore dependency directories and temporary verification symlinks.
+node_modules

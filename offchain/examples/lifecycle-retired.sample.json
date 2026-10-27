@@ -1,0 +1,11 @@
+{
+  "facilityId": "FAC-8C2DA0C2",
+  "assetId": "0x6421596a42afec2cd62caf4309854e462e7acb0ada65f0b6c504aed5e49578b0",
+  "eventId": "EVT-2C47FB86",
+  "eventType": "RETIRED",
+  "fromStatus": "ACTIVE",
+  "toStatus": "RETIRED",
+  "eventTs": 1806537600,
+  "reason": "Facility reached end of economic lifetime and is retired",
+  "evidenceHash": "0x2c47fb8671ca9c33cb8cda1e2038a1e2f14b94c861f55e5a464947dd734391c0"
+}

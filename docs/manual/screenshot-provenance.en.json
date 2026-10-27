@@ -1,0 +1,9 @@
+{
+  "sourceFile": ".data/demo-recording/source/station.json",
+  "sourceSha256": "c24f407e5d149a3a861fc72616750f8db9f38fd4232fbaa6c068f8ec9597a3a0",
+  "displayTranslation": {
+    "stationName": "Deye Shanghai Solar and Storage Station",
+    "locationAddress": "Changning District, Shanghai"
+  },
+  "unchanged": "All energy observations, device readings and collection timestamps are unchanged. The English name and address are display translations for the isolated manual screenshots."
+}

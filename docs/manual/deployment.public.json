@@ -1,0 +1,17 @@
+{
+  "app": "https://ski-june-reached-oldest.trycloudflare.com",
+  "rpc": "https://sarah-reggae-calling-pat.trycloudflare.com",
+  "explorer": "https://polyphonic-reduction-gratuit-pic.trycloudflare.com",
+  "chainId": 20261008,
+  "pages": "https://mengzhon001.github.io/deye-rwa-demo/",
+  "accounts": {
+    "admin": "0x28b530b166b32F41BAC503325AB4d7B0CC474758",
+    "treasury": "0xFF1d846114E098C5A15000bEb46da3dFe367be1C",
+    "owner": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b",
+    "agent": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+    "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+    "investor2": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+    "trustee": "0x2641feCc09b01C7C482F51deDB28372daa41326a",
+    "trustee2": "0xfcf63f6E1100C4dD1bd0630C358848d990E33e64"
+  }
+}

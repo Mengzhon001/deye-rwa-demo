@@ -1,0 +1,964 @@
+[
+  {
+    "id": "01-owner-apply",
+    "role": "owner",
+    "action": "apply",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 768,
+      "y": 254,
+      "width": 88,
+      "height": 34
+    }
+  },
+  {
+    "id": "01-owner-apply",
+    "role": "owner",
+    "action": "apply",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 768,
+      "y": 246,
+      "width": 151.484375,
+      "height": 32
+    }
+  },
+  {
+    "id": "02-agent-review",
+    "role": "agent",
+    "action": "review",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 723,
+      "y": 567.921875,
+      "width": 127,
+      "height": 34
+    }
+  },
+  {
+    "id": "02-agent-review",
+    "role": "agent",
+    "action": "review",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 725,
+      "y": 611.5,
+      "width": 212.96875,
+      "height": 32
+    }
+  },
+  {
+    "id": "03-agent-offer",
+    "role": "agent",
+    "action": "offer",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 896,
+      "y": 507.734375,
+      "width": 153,
+      "height": 36
+    }
+  },
+  {
+    "id": "03-agent-offer",
+    "role": "agent",
+    "action": "offer",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 786.609375,
+      "y": 507.3125,
+      "width": 262.390625,
+      "height": 34
+    }
+  },
+  {
+    "id": "04-trustee-approve-offer",
+    "role": "trustee",
+    "action": "approve-offer",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 441,
+      "y": 521.125,
+      "width": 171.828125,
+      "height": 34
+    }
+  },
+  {
+    "id": "04-trustee-approve-offer",
+    "role": "trustee",
+    "action": "approve-offer",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 594.125,
+      "y": 544.90625,
+      "width": 259.78125,
+      "height": 32
+    }
+  },
+  {
+    "id": "05-owner-accept",
+    "role": "owner",
+    "action": "accept",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 269,
+      "y": 508.125,
+      "width": 153,
+      "height": 34
+    }
+  },
+  {
+    "id": "05-owner-accept",
+    "role": "owner",
+    "action": "accept",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 269,
+      "y": 531.90625,
+      "width": 260.3125,
+      "height": 32
+    }
+  },
+  {
+    "id": "06-owner-sign",
+    "role": "owner",
+    "action": "sign",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 269,
+      "y": 508.015625,
+      "width": 140,
+      "height": 34
+    }
+  },
+  {
+    "id": "06-owner-sign",
+    "role": "owner",
+    "action": "sign",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 269,
+      "y": 552.6875,
+      "width": 203.265625,
+      "height": 32
+    }
+  },
+  {
+    "id": "07-agent-mint-station",
+    "role": "agent",
+    "action": "mint-station",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 269,
+      "y": 508.859375,
+      "width": 114,
+      "height": 34
+    }
+  },
+  {
+    "id": "07-agent-mint-station",
+    "role": "agent",
+    "action": "mint-station",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 269,
+      "y": 563.421875,
+      "width": 174.640625,
+      "height": 32
+    }
+  },
+  {
+    "id": "08-owner-custody-consent",
+    "role": "owner",
+    "action": "custody-consent",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 269,
+      "y": 508.515625,
+      "width": 140,
+      "height": 34
+    }
+  },
+  {
+    "id": "08-owner-custody-consent",
+    "role": "owner",
+    "action": "custody-consent",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 269,
+      "y": 553.1875,
+      "width": 299.546875,
+      "height": 32
+    }
+  },
+  {
+    "id": "09-agent-admit",
+    "role": "agent",
+    "action": "admit",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 269,
+      "y": 508.859375,
+      "width": 153,
+      "height": 34
+    }
+  },
+  {
+    "id": "09-agent-admit",
+    "role": "agent",
+    "action": "admit",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 269,
+      "y": 563.421875,
+      "width": 210.953125,
+      "height": 32
+    }
+  },
+  {
+    "id": "10-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 264,
+      "y": 594.46875,
+      "width": 114,
+      "height": 34
+    }
+  },
+  {
+    "id": "10-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 264,
+      "y": 631.65625,
+      "width": 198.90625,
+      "height": 32
+    }
+  },
+  {
+    "id": "11-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 436,
+      "y": 677.09375,
+      "width": 127,
+      "height": 34
+    }
+  },
+  {
+    "id": "11-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 589.125,
+      "y": 664.09375,
+      "width": 220.203125,
+      "height": 32
+    }
+  },
+  {
+    "id": "12-agent-publish",
+    "role": "agent",
+    "action": "publish",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 291,
+      "y": 508.9375,
+      "width": 108,
+      "height": 33
+    }
+  },
+  {
+    "id": "12-agent-publish",
+    "role": "agent",
+    "action": "publish",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 291,
+      "y": 673.890625,
+      "width": 169.375,
+      "height": 31
+    }
+  },
+  {
+    "id": "13-investor-apply-eligibility",
+    "role": "investor",
+    "action": "apply-eligibility",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 264,
+      "y": 548.671875,
+      "width": 114,
+      "height": 34
+    }
+  },
+  {
+    "id": "13-investor-apply-eligibility",
+    "role": "investor",
+    "action": "apply-eligibility",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 264,
+      "y": 554.765625,
+      "width": 230.953125,
+      "height": 32
+    }
+  },
+  {
+    "id": "14-agent-eligible",
+    "role": "agent",
+    "action": "eligible",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 264,
+      "y": 828.21875,
+      "width": 114,
+      "height": 34
+    }
+  },
+  {
+    "id": "14-agent-eligible",
+    "role": "agent",
+    "action": "eligible",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 264,
+      "y": 801.21875,
+      "width": 184.875,
+      "height": 32
+    }
+  },
+  {
+    "id": "15-investor-subscribe",
+    "role": "investor",
+    "action": "subscribe",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 436,
+      "y": 915.8125,
+      "width": 153,
+      "height": 34
+    }
+  },
+  {
+    "id": "15-investor-subscribe",
+    "role": "investor",
+    "action": "subscribe",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 439.53125,
+      "y": 918.28125,
+      "width": 213.953125,
+      "height": 32
+    }
+  },
+  {
+    "id": "16-agent-review-subscription",
+    "role": "agent",
+    "action": "review-subscription",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 657,
+      "y": 508.5,
+      "width": 114,
+      "height": 34
+    }
+  },
+  {
+    "id": "16-agent-review-subscription",
+    "role": "agent",
+    "action": "review-subscription",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 878.421875,
+      "y": 779.828125,
+      "width": 129.5625,
+      "height": 32
+    }
+  },
+  {
+    "id": "17-agent-settle",
+    "role": "agent",
+    "action": "settle",
+    "language": "zh",
+    "scope": "issuance",
+    "box": {
+      "x": 688,
+      "y": 144.5,
+      "width": 108,
+      "height": 33
+    }
+  },
+  {
+    "id": "17-agent-settle",
+    "role": "agent",
+    "action": "settle",
+    "language": "en",
+    "scope": "issuance",
+    "box": {
+      "x": 688,
+      "y": 364.828125,
+      "width": 225.65625,
+      "height": 31
+    }
+  },
+  {
+    "id": "18-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "zh",
+    "scope": "opening",
+    "box": {
+      "x": 264,
+      "y": 508.46875,
+      "width": 114,
+      "height": 34
+    }
+  },
+  {
+    "id": "18-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "en",
+    "scope": "opening",
+    "box": {
+      "x": 264,
+      "y": 545.65625,
+      "width": 198.90625,
+      "height": 32
+    }
+  },
+  {
+    "id": "19-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "zh",
+    "scope": "opening",
+    "box": {
+      "x": 436,
+      "y": 677.09375,
+      "width": 127,
+      "height": 34
+    }
+  },
+  {
+    "id": "19-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "en",
+    "scope": "opening",
+    "box": {
+      "x": 589.125,
+      "y": 664.09375,
+      "width": 220.203125,
+      "height": 32
+    }
+  },
+  {
+    "id": "21-agent-book-revenue",
+    "role": "agent",
+    "action": "book-revenue",
+    "language": "zh",
+    "scope": "month1",
+    "box": {
+      "x": 784,
+      "y": 760.375,
+      "width": 127,
+      "height": 34
+    }
+  },
+  {
+    "id": "21-agent-book-revenue",
+    "role": "agent",
+    "action": "book-revenue",
+    "language": "en",
+    "scope": "month1",
+    "box": {
+      "x": 809.65625,
+      "y": 773.46875,
+      "width": 191.625,
+      "height": 32
+    }
+  },
+  {
+    "id": "22-agent-collect-revenue",
+    "role": "agent",
+    "action": "collect-revenue",
+    "language": "zh",
+    "scope": "month1",
+    "box": {
+      "x": 268,
+      "y": 806.375,
+      "width": 207.390625,
+      "height": 34
+    }
+  },
+  {
+    "id": "22-agent-collect-revenue",
+    "role": "agent",
+    "action": "collect-revenue",
+    "language": "en",
+    "scope": "month1",
+    "box": {
+      "x": 268,
+      "y": 817.46875,
+      "width": 269.640625,
+      "height": 32
+    }
+  },
+  {
+    "id": "23-agent-accrue-fee",
+    "role": "agent",
+    "action": "accrue-fee",
+    "language": "zh",
+    "scope": "month1",
+    "box": {
+      "x": 688,
+      "y": 509.265625,
+      "width": 108,
+      "height": 33
+    }
+  },
+  {
+    "id": "23-agent-accrue-fee",
+    "role": "agent",
+    "action": "accrue-fee",
+    "language": "en",
+    "scope": "month1",
+    "box": {
+      "x": 688,
+      "y": 673.609375,
+      "width": 184.671875,
+      "height": 31
+    }
+  },
+  {
+    "id": "24-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "zh",
+    "scope": "month1",
+    "box": {
+      "x": 264,
+      "y": 508.46875,
+      "width": 114,
+      "height": 34
+    }
+  },
+  {
+    "id": "24-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "en",
+    "scope": "month1",
+    "box": {
+      "x": 264,
+      "y": 545.65625,
+      "width": 198.90625,
+      "height": 32
+    }
+  },
+  {
+    "id": "25-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "zh",
+    "scope": "month1",
+    "box": {
+      "x": 436,
+      "y": 677.09375,
+      "width": 127,
+      "height": 34
+    }
+  },
+  {
+    "id": "25-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "en",
+    "scope": "month1",
+    "box": {
+      "x": 589.125,
+      "y": 664.09375,
+      "width": 220.203125,
+      "height": 32
+    }
+  },
+  {
+    "id": "26-agent-distribute",
+    "role": "agent",
+    "action": "distribute",
+    "language": "zh",
+    "scope": "month1",
+    "box": {
+      "x": 291,
+      "y": 619.796875,
+      "width": 132,
+      "height": 33
+    }
+  },
+  {
+    "id": "26-agent-distribute",
+    "role": "agent",
+    "action": "distribute",
+    "language": "en",
+    "scope": "month1",
+    "box": {
+      "x": 291,
+      "y": 793.53125,
+      "width": 199.8125,
+      "height": 31
+    }
+  },
+  {
+    "id": "27-investor-claim",
+    "role": "investor",
+    "action": "claim",
+    "language": "zh",
+    "scope": "month1",
+    "box": {
+      "x": 896.765625,
+      "y": 798.5625,
+      "width": 62,
+      "height": 34
+    }
+  },
+  {
+    "id": "27-investor-claim",
+    "role": "investor",
+    "action": "claim",
+    "language": "en",
+    "scope": "month1",
+    "box": {
+      "x": 893.234375,
+      "y": 873.03125,
+      "width": 70.8125,
+      "height": 32
+    }
+  },
+  {
+    "id": "28-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "zh",
+    "scope": "month1-after",
+    "box": {
+      "x": 264,
+      "y": 508.46875,
+      "width": 114,
+      "height": 34
+    }
+  },
+  {
+    "id": "28-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "en",
+    "scope": "month1-after",
+    "box": {
+      "x": 264,
+      "y": 545.65625,
+      "width": 198.90625,
+      "height": 32
+    }
+  },
+  {
+    "id": "29-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "zh",
+    "scope": "month1-after",
+    "box": {
+      "x": 436,
+      "y": 677.09375,
+      "width": 127,
+      "height": 34
+    }
+  },
+  {
+    "id": "29-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "en",
+    "scope": "month1-after",
+    "box": {
+      "x": 589.125,
+      "y": 664.09375,
+      "width": 220.203125,
+      "height": 32
+    }
+  },
+  {
+    "id": "31-agent-book-revenue",
+    "role": "agent",
+    "action": "book-revenue",
+    "language": "zh",
+    "scope": "month2",
+    "box": {
+      "x": 784,
+      "y": 760.375,
+      "width": 127,
+      "height": 34
+    }
+  },
+  {
+    "id": "31-agent-book-revenue",
+    "role": "agent",
+    "action": "book-revenue",
+    "language": "en",
+    "scope": "month2",
+    "box": {
+      "x": 809.65625,
+      "y": 773.46875,
+      "width": 191.625,
+      "height": 32
+    }
+  },
+  {
+    "id": "32-agent-collect-revenue",
+    "role": "agent",
+    "action": "collect-revenue",
+    "language": "zh",
+    "scope": "month2",
+    "box": {
+      "x": 268,
+      "y": 806.375,
+      "width": 207.390625,
+      "height": 34
+    }
+  },
+  {
+    "id": "32-agent-collect-revenue",
+    "role": "agent",
+    "action": "collect-revenue",
+    "language": "en",
+    "scope": "month2",
+    "box": {
+      "x": 268,
+      "y": 817.46875,
+      "width": 269.640625,
+      "height": 32
+    }
+  },
+  {
+    "id": "33-agent-accrue-fee",
+    "role": "agent",
+    "action": "accrue-fee",
+    "language": "zh",
+    "scope": "month2",
+    "box": {
+      "x": 688,
+      "y": 509.265625,
+      "width": 108,
+      "height": 33
+    }
+  },
+  {
+    "id": "33-agent-accrue-fee",
+    "role": "agent",
+    "action": "accrue-fee",
+    "language": "en",
+    "scope": "month2",
+    "box": {
+      "x": 688,
+      "y": 673.609375,
+      "width": 184.671875,
+      "height": 31
+    }
+  },
+  {
+    "id": "34-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "zh",
+    "scope": "month2",
+    "box": {
+      "x": 264,
+      "y": 508.46875,
+      "width": 114,
+      "height": 34
+    }
+  },
+  {
+    "id": "34-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "en",
+    "scope": "month2",
+    "box": {
+      "x": 264,
+      "y": 545.65625,
+      "width": 198.90625,
+      "height": 32
+    }
+  },
+  {
+    "id": "35-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "zh",
+    "scope": "month2",
+    "box": {
+      "x": 436,
+      "y": 677.09375,
+      "width": 127,
+      "height": 34
+    }
+  },
+  {
+    "id": "35-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "en",
+    "scope": "month2",
+    "box": {
+      "x": 589.125,
+      "y": 664.09375,
+      "width": 220.203125,
+      "height": 32
+    }
+  },
+  {
+    "id": "36-agent-distribute",
+    "role": "agent",
+    "action": "distribute",
+    "language": "zh",
+    "scope": "month2",
+    "box": {
+      "x": 291,
+      "y": 619.796875,
+      "width": 132,
+      "height": 33
+    }
+  },
+  {
+    "id": "36-agent-distribute",
+    "role": "agent",
+    "action": "distribute",
+    "language": "en",
+    "scope": "month2",
+    "box": {
+      "x": 291,
+      "y": 793.53125,
+      "width": 199.8125,
+      "height": 31
+    }
+  },
+  {
+    "id": "37-investor-claim",
+    "role": "investor",
+    "action": "claim",
+    "language": "zh",
+    "scope": "month2",
+    "box": {
+      "x": 895.15625,
+      "y": 799.375,
+      "width": 62,
+      "height": 34
+    }
+  },
+  {
+    "id": "37-investor-claim",
+    "role": "investor",
+    "action": "claim",
+    "language": "en",
+    "scope": "month2",
+    "box": {
+      "x": 893.234375,
+      "y": 897.03125,
+      "width": 70.8125,
+      "height": 32
+    }
+  },
+  {
+    "id": "38-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "zh",
+    "scope": "month2-after",
+    "box": {
+      "x": 264,
+      "y": 508.46875,
+      "width": 114,
+      "height": 34
+    }
+  },
+  {
+    "id": "38-agent-prepare-valuation",
+    "role": "agent",
+    "action": "prepare-valuation",
+    "language": "en",
+    "scope": "month2-after",
+    "box": {
+      "x": 264,
+      "y": 545.65625,
+      "width": 198.90625,
+      "height": 32
+    }
+  },
+  {
+    "id": "39-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "zh",
+    "scope": "month2-after",
+    "box": {
+      "x": 436,
+      "y": 677.09375,
+      "width": 127,
+      "height": 34
+    }
+  },
+  {
+    "id": "39-trustee-approve-valuation",
+    "role": "trustee",
+    "action": "approve-valuation",
+    "language": "en",
+    "scope": "month2-after",
+    "box": {
+      "x": 589.125,
+      "y": 664.09375,
+      "width": 220.203125,
+      "height": 32
+    }
+  }
+]
