@@ -322,6 +322,8 @@ export async function startRevenueServer(
         const files: Record<string, [string, string]> = {
           "/app/": ["index.html", "text/html"],
           ...(process.env.REVENUE_DEMO_RECORDING === "true" ? {"/app/recording/": ["recording.html", "text/html"] as [string,string], "/recording.js": ["recording.js", "text/javascript"] as [string,string]} : {}),
+          "/network-context.js": ["network-context.js", "text/javascript"],
+          "/network-context.css": ["network-context.css", "text/css"],
           "/wallet-login.js": ["wallet-login.js", "text/javascript"],
           "/wallet-login.css": ["wallet-login.css", "text/css"],
           "/guidance-model.js": ["guidance-model.js", "text/javascript"],

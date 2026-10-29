@@ -35,3 +35,6 @@ The current contract fixes the initial issue price at 1 mUSDC per share, with si
 ## Failure and duplicate actions
 
 Campaigns that do not meet conditions can follow the deadline failure path, after which investors claim refunds. Primary issuance closes after successful settlement. Redemptions do not rely on new subscriptions. Persistent operation intents and idempotency keys prevent repeated clicks from duplicating payment or minting.
+
+
+The private demonstration faucet issues DETH and mUSDC on that chain. Base Sepolia uses Circle test USDC and test ETH; the application links to official faucets and cannot mint either asset. Check the selected chain and the actual wallet address. Funds on another chain or at another address cannot pay for this subscription.

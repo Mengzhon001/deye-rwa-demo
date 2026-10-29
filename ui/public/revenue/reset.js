@@ -1,13 +1,15 @@
 "use strict";
+function resetStorageKey(k) { return globalThis.RevenueNetworks?.storageKey(k) || k; }
+function resetOwnKey(k) { return !globalThis.RevenueNetworks?.active || k.endsWith(`:chain:${globalThis.RevenueNetworks.chainId}`); }
 let resetBusy = false;
 function clearDemoClient() {
   for (const key of Object.keys(sessionStorage)) {
-    if (key.startsWith("revenue.")) sessionStorage.removeItem(key);
+    if (key.startsWith("revenue.") && resetOwnKey(key)) sessionStorage.removeItem(key);
   }
   for (const key of Object.keys(localStorage)) {
     if (
       key.startsWith("revenue.dashboard-tariff.") ||
-      key === "revenue.station"
+      key === resetStorageKey("revenue.station")
     )
       localStorage.removeItem(key);
   }
@@ -34,16 +36,16 @@ function clearDemoClient() {
 function syncDemoGeneration() {
   const current = state?.manifest?.addresses.vault;
   if (!current) return;
-  const previous = sessionStorage.getItem("revenue.generation");
+  const previous = sessionStorage.getItem(resetStorageKey("revenue.generation"));
   if (previous && previous !== current) clearDemoClient();
-  sessionStorage.setItem("revenue.generation", current);
+  sessionStorage.setItem(resetStorageKey("revenue.generation"), current);
 }
 function openResetDialog() {
   if (!state || resetBusy) return;
   const canReset = role === "agent";
   const dialog = document.querySelector("#reset-dialog");
   const pending = JSON.parse(
-    sessionStorage.getItem("revenue.reset-pending") || "null"
+    sessionStorage.getItem(resetStorageKey("revenue.reset-pending")) || "null"
   );
   const request =
     pending?.expectedVault === state.manifest.addresses.vault
@@ -140,7 +142,7 @@ function openResetDialog() {
     )
       return;
     resetBusy = true;
-    sessionStorage.setItem("revenue.reset-pending", JSON.stringify(request));
+    sessionStorage.setItem(resetStorageKey("revenue.reset-pending"), JSON.stringify(request));
     dialog
       .querySelectorAll("button,input")
       .forEach((el) => (el.disabled = true));

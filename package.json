@@ -109,7 +109,17 @@
     "base:test:unit": "node --import tsx --test ui/src/revenue/event-cache.test.ts ui/src/revenue/public-rpc.test.ts",
     "base:test:public": "node scripts/test-base-sepolia.mjs",
     "base:verify:sourcify": "node scripts/verify-base-sourcify.mjs",
-    "base:test:browser": "node scripts/test-base-rabby.mjs"
+    "base:test:browser": "node scripts/test-base-rabby.mjs",
+    "unified:init": "node scripts/revenue-unified.mjs init",
+    "unified:start": "node scripts/revenue-unified.mjs start",
+    "unified:tunnel": "node scripts/revenue-unified.mjs tunnel",
+    "unified:status": "node scripts/revenue-unified.mjs status",
+    "unified:stop": "node scripts/revenue-unified.mjs stop",
+    "unified:test": "node --test infra/multinetwork/gateway.test.mjs",
+    "unified:test:api": "node scripts/test-unified-api.mjs",
+    "unified:test:ui": "node scripts/test-unified-ui.mjs",
+    "unified:test:rabby": "node scripts/test-unified-rabby.mjs",
+    "unified:test:pages": "node scripts/test-unified-pages.mjs"
   },
   "devDependencies": {
     "js-yaml": "4.1.0"

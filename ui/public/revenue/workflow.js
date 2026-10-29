@@ -1,5 +1,6 @@
+function workflowStorageKey(k) { return globalThis.RevenueNetworks?.storageKey(k) || k; }
 "use strict";
-let wfSelected = sessionStorage.getItem("revenue.application") || "";
+let wfSelected = sessionStorage.getItem(workflowStorageKey("revenue.application")) || "";
 let wfQuery = "",
   wfFilter = "all";
 const wfDrafts = new Map(),
@@ -7,7 +8,7 @@ const wfDrafts = new Map(),
   wfEditing = new Set();
 try {
   for (const [id, draft] of JSON.parse(
-    sessionStorage.getItem("revenue.quote-drafts") || "[]"
+    sessionStorage.getItem(workflowStorageKey("revenue.quote-drafts")) || "[]"
   ))
     wfDrafts.set(id, draft);
 } catch {}
@@ -23,11 +24,11 @@ function wfWarningText(value, language = typeof lang === "undefined" ? "en" : la
 }
 function wfSaveDraft(id, draft) {
   wfDrafts.set(id, draft);
-  sessionStorage.setItem("revenue.quote-drafts", JSON.stringify([...wfDrafts]));
+  sessionStorage.setItem(workflowStorageKey("revenue.quote-drafts"), JSON.stringify([...wfDrafts]));
 }
 function wfForgetDraft(id) {
   wfDrafts.delete(id);
-  sessionStorage.setItem("revenue.quote-drafts", JSON.stringify([...wfDrafts]));
+  sessionStorage.setItem(workflowStorageKey("revenue.quote-drafts"), JSON.stringify([...wfDrafts]));
 }
 
 const wfStages = [
@@ -222,7 +223,7 @@ const wfKv = (entries) =>
     .join("")}</dl>`;
 function wfSelect(id) {
   wfSelected = id;
-  sessionStorage.setItem("revenue.application", id);
+  sessionStorage.setItem(workflowStorageKey("revenue.application"), id);
 }
 function wfList(mode) {
   const items = state.applications;

@@ -2,15 +2,21 @@
 
 ## Purpose and entry points
 
-This environment checks deployment, wallet authentication, permissions and stablecoin transactions on a public EVM testnet. The existing public private-chain demonstration remains available for the complete lifecycle. Its products, balances and financial clock are unaffected by these tests. Launch App continues to open that demonstration. The separate Base Sepolia button opens the public-chain application.
+This environment checks deployment, wallet authentication, permissions and stablecoin transactions on a public EVM testnet. The existing public private-chain demonstration remains available for the complete lifecycle. Its products, balances and financial clock are unaffected by these tests. Both chains now share one website. Select the network before clicking Launch App, or use the current-network button in the upper-right corner of the application to switch between the private demonstration and Base Sepolia.
 
 Base Sepolia uses Chain ID 84532 and test ETH for gas. The application backend still runs on the Mac, while external services provide the public chain and explorer. This environment does not run Anvil or use the original demonstration RPC tunnel. Confirmed transactions remain accessible through [Base Sepolia Blockscout](https://base-sepolia.blockscout.com) when the application is offline.
+
+## Unified entry and network switching
+
+The current [business application](https://necessity-magnificent-aids-lan.trycloudflare.com/app/) serves both networks. The private demonstration uses Chain ID 20261008 and Base Sepolia uses Chain ID 84532. Each network retains its own backend, store and deployed contracts. The shared entry does not merge assets or copy subscription orders.
+
+Use the current-network button in the upper-right corner, choose the destination, confirm the network in your wallet and sign in again. The sign-in dialog also provides network selection. Page preferences and pending-operation records remain scoped to their chain, and unresolved operations must be reconciled before switching. A rejected switch or unavailable destination keeps the original application network. Switching is not a bridge. Private-chain balances do not appear on Base Sepolia, and each actual investor address needs test ETH and Circle USDC on the selected chain.
 
 ## Wallets and test funds
 
 The owner, intermediary, two trustees and two dedicated investor accounts retain their existing public-demo addresses. An address remains the same when the wallet switches networks, but ETH, USDC and deployed products are separate on each chain. Ordinary wallets must apply for investor eligibility and receive intermediary approval. Selecting a role does not grant authority.
 
-Open the independent application with Rabby, select the role, connect its wallet, check the network and sign the login message. Login establishes a session without transferring tokens. Token approvals, subscriptions, refunds and on-chain decisions require their own transaction confirmations. Check the Chain ID, sending account, destination contract and amount before confirming.
+Open the unified application with Rabby, select the role, connect its wallet, check the network and sign the login message. Login establishes a session without transferring tokens. Token approvals, subscriptions, refunds and on-chain decisions require their own transaction confirmations. Check the Chain ID, sending account, destination contract and amount before confirming.
 
 Payments use [Circle's official Base Sepolia test USDC](https://developers.circle.com/stablecoins/usdc-contract-addresses) at `0x036CbD53842c5426634e7929541eC2318f3dCF7e`, with six decimals. This is separate from the private-chain mUSDC. Test tokens have no monetary value. The test-funds entry links to the [ETH faucet](https://portal.cdp.coinbase.com/products/faucet) and [Circle USDC faucet](https://faucet.circle.com/). The application cannot mint Circle USDC. Select Base Sepolia at the faucet and refresh the application balance after confirmation. Faucet providers may require login or apply claim limits.
 

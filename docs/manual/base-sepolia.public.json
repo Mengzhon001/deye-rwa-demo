@@ -1,7 +1,7 @@
 {
   "chainId": 84532,
   "localApp": "http://127.0.0.1:4194",
-  "app": "https://icq-attorneys-frontpage-weekends.trycloudflare.com",
+  "app": "https://necessity-magnificent-aids-lan.trycloudflare.com/networks/base-sepolia",
   "explorer": "https://base-sepolia.blockscout.com",
   "rpc": "https://sepolia.base.org",
   "usdc": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
@@ -26,5 +26,6 @@
     "vault": "0x3c759f1ee0282aabd941a8729392a0de37e7d87a22cf246b3a221fe6e16b5836",
     "billing": "0xaeba25317b5a06a5809dba7a879333262133f8e8bf7e694aef1f23603532d03f"
   },
-  "sourceVerification": "Sourcify exact_match"
+  "sourceVerification": "Sourcify exact_match",
+  "unifiedApp": "https://necessity-magnificent-aids-lan.trycloudflare.com"
 }

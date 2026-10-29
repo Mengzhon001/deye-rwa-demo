@@ -362,7 +362,7 @@ export function auditPublic(out) {
       const stat=require("node:fs").lstatSync(file);
       if(stat.isSymbolicLink())throw Error("Symlink in public artifact");
       if(stat.isDirectory()){if(!/^(site-assets|contracts|docs|manual)(\/|$)/.test(rel))throw Error(`Unexpected public directory ${rel}`);walk(file,rel+"/");continue;}
-      if(!prefix && !["index.html",".nojekyll","remote.json","base-sepolia.json","README.md"].includes(name))throw Error(`Unexpected public file ${name}`);
+      if(!prefix && !["index.html",".nojekyll","remote.json","base-sepolia.json", "networks.json","README.md"].includes(name))throw Error(`Unexpected public file ${name}`);
       if(/(^|\/)(\.env|private\.json|station\.json|wallets.*\.json|.*\.map)$/.test(rel))throw Error(`Private file in public output: ${rel}`);
       if(rel.startsWith("manual/") && !["manual/index.html","manual/manual.zh.pdf","manual/manual.en.pdf"].includes(rel))throw Error(`Unexpected manual file ${rel}`);
       const bytes=readFileSync(file);if(forbidden.some(v=>bytes.includes(Buffer.from(v))))throw Error(`Secret detected in ${rel}`);

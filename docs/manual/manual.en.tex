@@ -230,7 +230,7 @@ The demo operator supplies the private key through an internal channel. It is ex
 \subsection{Public homepage}
 \url{https://mengzhon001.github.io/deye-rwa-demo}\par
 \subsection{Business application}
-\url{https://ski-june-reached-oldest.trycloudflare.com/app/}\par
+\url{https://necessity-magnificent-aids-lan.trycloudflare.com/networks/private/app/}\par
 \subsection{Blockchain explorer}
 \url{https://polyphonic-reduction-gratuit-pic.trycloudflare.com}\par
 \subsection{Wallet RPC}
@@ -239,14 +239,20 @@ The test network Chain ID is 20261008 and its gas token is DETH. Check the curre
 
 Click a confirmed transaction hash to open its Blockscout page. Alternatively, paste a full hash, account or contract into the explorer search field. Check status, sender, target and block, followed by token transfers and events. Login and agreement message signatures are off-chain and do not create transaction records.
 
-\clearpage\section{Independent Base Sepolia public-chain testing}
+\subsection{Network selection and session isolation}
+One business website now provides access to the private demonstration and Base Sepolia. Select a network on the GitHub homepage and click Launch App. The network button in the upper-right corner shows the current chain. Its menu explains each chain and its Chain ID. Network selection is also available in the sign-in dialog, before authentication.
+
+To switch, confirm the destination network in Rabby and sign in again with the intended role. Role addresses remain unchanged, while sessions, products, pending operations and page selections are isolated by chain. Switching does not convert or bridge private-chain mUSDC into Circle USDC. Reconcile any pending operation on its original page or in the transaction log before switching. A rejected wallet request or unavailable destination leaves the application on its original network.
+
+\begin{center}\includegraphics[width=\linewidth,height=.42\textheight,keepaspectratio]{assets/network-menu.en.png}\par Network selection in the unified application. Select the chain, verify it in the wallet and sign in again.\end{center}
+\clearpage\section{Base Sepolia public-chain testing}
 The original public demonstration remains the environment for the full accelerated lifecycle. Base Sepolia is a separate environment for public-chain contracts and wallet transactions. Role addresses are shared, but contracts, balances and workflow records are independent. The complete lifecycle screenshots later in this manual illustrate the private-chain demonstration. Public-chain testing follows the real-time and funding restrictions in this section.
 
-\subsection{Independent entry and network configuration}
-Public-chain application\par\url{https://icq-attorneys-frontpage-weekends.trycloudflare.com/app/}\par
+\subsection{Entry and network configuration}
+Public-chain application\par\url{https://necessity-magnificent-aids-lan.trycloudflare.com/networks/base-sepolia/app/}\par
 Public-chain explorer\par\url{https://base-sepolia.blockscout.com}\par
 Wallet RPC\par\url{https://sepolia.base.org}\par
-The Chain ID is 84532, gas is paid in test ETH, and payments use Circle test USDC. Launch App still opens the original demonstration. Use the separate Base Sepolia entry and verify the wallet network before signing in.
+The Chain ID is 84532, gas is paid in test ETH, and payments use Circle test USDC. The homepage and application share one network-selection entry. Select Base Sepolia and verify the wallet network before signing in.
 
 \nolinkurl{0x036CbD53842c5426634e7929541eC2318f3dCF7e}\par
 The address above identifies the official Circle test USDC used here, with six decimals. It is separate from private-chain mUSDC. Test tokens have no monetary value, and balances on another chain cannot pay for subscriptions here.
@@ -254,7 +260,7 @@ The address above identifies the official Circle test USDC used here, with six d
 \subsection{Environment components and data flow}
 \begin{center}\begin{tikzpicture}[>=Latex,node distance=1cm,box/.style={draw,align=center,text width=4.5cm,minimum height=1.3cm}]
 \node[box] (web) at (0,0) {GitHub homepage and documentation};
-\node[box] (app) at (6,0) {Independent Mac application};
+\node[box] (app) at (6,0) {Unified entry and Base backend};
 \node[box] (wallet) at (6,-2.5) {Rabby wallet};
 \node[box] (chain) at (0,-5) {Base Sepolia public chain};
 \node[box] (explorer) at (6,-5) {Public Blockscout};
@@ -264,7 +270,7 @@ The address above identifies the official Circle test USDC used here, with six d
 \draw[->] (app)--(chain);
 \draw[->] (chain)--(explorer);
 \end{tikzpicture}\end{center}
-The HTTPS application connects to its independent backend. The wallet signs transactions for Base Sepolia, the backend checks receipts and events, and the public explorer indexes the results. This environment does not run Anvil or depend on the private-chain RPC tunnel.
+The shared HTTPS application routes network-specific paths to the corresponding independent backend. The wallet signs transactions for Base Sepolia, the backend checks receipts and events, and the public explorer indexes the results. This environment does not run Anvil or depend on the private-chain RPC tunnel.
 
 \subsection{Funding and subscription steps}
 Open the official faucets from the test-funds entry, select Base Sepolia and request test ETH and Circle test USDC for the current role address. Providers may require login or limit claims. The application cannot mint Circle USDC. After confirmation, return and refresh the balance. Enter private keys only inside the wallet extension, never in a faucet or the application.
@@ -287,7 +293,7 @@ Station credential\par\nolinkurl{0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176}\par
 Revenue-rights vault\par\nolinkurl{0xB84F6E2EB3b9e63bBE447190dF268c49D617A445}\par
 Monthly billing contract\par\nolinkurl{0xa2748E730069A38913b5E2e09a45C5aB546a0908}\par
 \clearpage\begin{landscape}
-\begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-product.en.png}\par Independent public-chain product and network. Markers identify the product, subscription navigation and test-funds entry.\end{center}
+\begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-product.en.png}\par Public-chain product and network. Markers identify the product, subscription navigation and test-funds entry.\end{center}
 \end{landscape}
 \clearpage\begin{landscape}
 \begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-wallet.en.png}\par Wallet balances and official-faucet instructions. The backend does not mint Circle USDC.\end{center}
@@ -852,6 +858,6 @@ Check whether the current period was declared, then distinguish claimable amount
 After rejection, review and retry the original action. If a hash exists, inspect its receipt before sending another payment. Refresh and backend restart should recover the original operation. A complete test-chain rebuild requires the operator to notify users about clearing stale test-network transaction caches.
 
 \subsection{Remote environment unavailable}
-The GitHub homepage remains readable, but the app, RPC and Blockscout depend on the Mac, Docker and tunnels. The operator checks remote:status, uses remote:start to replace failed endpoints and remote:publish to refresh the public configuration.
+The GitHub homepage remains readable, but the app, RPC and Blockscout depend on the Mac, Docker and tunnels. The operator first checks unified:status, then checks the two backend services and tunnels separately. If a tunnel address changes, update the unified entry and GitHub static configuration.
 
 \end{document}

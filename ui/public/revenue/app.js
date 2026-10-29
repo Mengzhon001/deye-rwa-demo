@@ -1,13 +1,14 @@
+function appStorageKey(k) { return globalThis.RevenueNetworks?.storageKey(k) || k; }
 function walletProvider() { return window.RoleLogin ? window.RoleLogin.provider() : window.ethereum; }
 "use strict";
 let lang = localStorage.getItem("revenue.lang") || "zh",
-  role = localStorage.getItem("revenue.role") || "investor",
-  actor = localStorage.getItem("revenue.actor") || role,
-  page = localStorage.getItem("revenue.page") || "product_hall",
+  role = localStorage.getItem(appStorageKey("revenue.role")) || "investor",
+  actor = localStorage.getItem(appStorageKey("revenue.actor")) || role,
+  page = localStorage.getItem(appStorageKey("revenue.page")) || "product_hall",
   state,
   networkConfig,
   walletSession;
-let selectedProduct = sessionStorage.getItem("revenue.selected-product") || "";
+let selectedProduct = sessionStorage.getItem(appStorageKey("revenue.selected-product")) || "";
 function productTitle() { return state?.selectedProduct?.title?.[lang] || t("Solar revenue rights", "光伏收益权"); }
 function productMigrationNotice() {
   const legacy = state.chain.subscriptionReviewRequired === false;
@@ -25,9 +26,9 @@ function retiredRefundView() {
   return card(t("Subscription refund", "认购退款"),`<p>${t("This subscription campaign was withdrawn. Claim the original payment with your wallet; it is not transferred to a new product.", "原认购已撤销，请用原认购钱包领取全额退款。原款不会自动转入新的产品。")}</p><h2>${money(amount)} USDC</h2>${BigInt(amount)>0n && Number(state.chain.phase)===3 ? button("refund",t("Claim full refund", "领取全额退款")) : `<p>${t("No refund is outstanding for this wallet.", "当前钱包没有待领取退款。")}</p>`}${current ? `<button class="btn btn-outline" data-product-vault="${esc(current.vault)}" data-product-target="product_hall">${t("Return to current product", "返回当前产品")} →</button>` : ""}`);
 }
 async function switchProduct(vault, target) {
-  if (sessionStorage.getItem("revenue.pending")) throw new Error(t("Resolve the pending wallet operation before changing products", "请先处理待确认钱包操作，再切换产品"));
+  if (sessionStorage.getItem(appStorageKey("revenue.pending"))) throw new Error(t("Resolve the pending wallet operation before changing products", "请先处理待确认钱包操作，再切换产品"));
   selectedProduct = vault;
-  sessionStorage.setItem("revenue.selected-product", vault);
+  sessionStorage.setItem(appStorageKey("revenue.selected-product"), vault);
   if (target) page = target;
   await refresh();
 }
@@ -282,7 +283,7 @@ function valuation(report) {
     report
   )}`;
 }
-let stationSelection = localStorage.getItem("revenue.station") || "";
+let stationSelection = localStorage.getItem(appStorageKey("revenue.station")) || "";
 const sourceLabel = (source) =>
   source === "synthetic"
     ? t("Synthetic fixture", "合成演示样本")
@@ -503,7 +504,7 @@ function operations() {
           .slice(-25)
           .reverse()
           .map((o) => [
-            `${esc(o.actor)} / ${esc(o.action)}${networkConfig?.recordingEnabled ? `<br><a href="/app/recording/?operation=${encodeURIComponent(o.id)}" target="_blank">${t("Reconcile business & chain", "核对业务与链上记录")} ↗</a>` : ""}`,
+            `${esc(o.actor)} / ${esc(o.action)}${networkConfig?.recordingEnabled ? `<br><a href="${globalThis.RevenueNetworks?.appPath("recording/") || "/app/recording/"}?operation=${encodeURIComponent(o.id)}" target="_blank">${t("Reconcile business & chain", "核对业务与链上记录")} ↗</a>` : ""}`,
             esc(o.status) +
               (o.actor === actor && o.status !== "confirmed" && !Object.values(o.steps).some(step=>step.status==='reverted')
                 ? `<form data-action="${esc(o.action)}" data-retry-id="${esc(
@@ -805,7 +806,7 @@ function content() {
   }
 }
 async function api(path, body, signal) {
-  const r = await fetch(
+  const r = await (globalThis.RevenueNetworks?.fetch || fetch)(
     path,
     body === undefined
       ? { signal, headers: selectedProduct ? { "X-Revenue-Product": selectedProduct } : {} }
@@ -824,9 +825,9 @@ async function api(path, body, signal) {
     // A reset replaces the vault; recover read-only navigation, never replay a transaction.
     if (body === undefined && path === "/api/state" && selectedProduct &&
         /Product not found/.test(data.error || "") &&
-        !sessionStorage.getItem("revenue.pending")) {
+        !sessionStorage.getItem(appStorageKey("revenue.pending"))) {
       selectedProduct = "";
-      sessionStorage.removeItem("revenue.selected-product");
+      sessionStorage.removeItem(appStorageKey("revenue.selected-product"));
       return api(path, undefined, signal);
     }
     if (r.status === 401 && networkConfig?.walletRequired) {
@@ -847,7 +848,7 @@ async function api(path, body, signal) {
   return data;
 }
 async function publicGet(path) {
-  const response = await fetch(path, { cache: "no-store" });
+  const response = await (globalThis.RevenueNetworks?.fetch || fetch)(path, { cache: "no-store" });
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || response.statusText);
   return data;
@@ -974,8 +975,8 @@ async function setRole(next, account = next, destination) {
   actor = account;
   if (!nav[role].some((n) => n[0] === page)) page = nav[role][0][0];
   await api("/api/session", { role: actor });
-  localStorage.setItem("revenue.role", role);
-  localStorage.setItem("revenue.actor", actor);
+  localStorage.setItem(appStorageKey("revenue.role"), role);
+  localStorage.setItem(appStorageKey("revenue.actor"), actor);
   await refresh();
   feedback("");
   return true;
@@ -984,18 +985,18 @@ function applyNetworkLabels(){
   if(!networkConfig?.publicTestnet)return;
   const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
   let node;while(node=walker.nextNode()){
-    if(['SCRIPT','STYLE','TEXTAREA'].includes(node.parentElement?.tagName))continue;
-    node.nodeValue=node.nodeValue.replace(/mUSDC/g,'USDC').replace(/DETH/g,'ETH').replace(/本地演示/g,'Base Sepolia 测试').replace(/LOCAL DEMO/gi,'BASE SEPOLIA TEST').replace(/local demonstration/g,'Base Sepolia test').replace(/Demo funds/g,'Test funds').replace(/本地演示中，须先核对本期账务，再明确确认推进共享财务时间。/g,'公链按真实时间运行，须等待月度截止日。');
+    if(['SCRIPT','STYLE','TEXTAREA'].includes(node.parentElement?.tagName)||node.parentElement?.closest('#network-dialog'))continue;
+    node.nodeValue=node.nodeValue.replace(/mUSDC/g,'USDC').replace(/DETH/g,'ETH').replace(/本地演示/g,'Base Sepolia 测试').replace(/local demonstration/gi,'Base Sepolia test').replace(/\bLOCAL DEMO\b/gi,'BASE SEPOLIA TEST').replace(/Demo funds/g,'Test funds').replace(/本地演示中，须先核对本期账务，再明确确认推进共享财务时间。/g,'公链按真实时间运行，须等待月度截止日。');
   }
 }
 const networkLabelObserver=new MutationObserver(()=>{networkLabelObserver.disconnect();applyNetworkLabels();networkLabelObserver.observe(document.body,{childList:true,subtree:true});});
 networkLabelObserver.observe(document.body,{childList:true,subtree:true});
 function renderBusiness() {
-  const pendingApproval=JSON.parse(sessionStorage.getItem('revenue.pending')||'null');
-  if(pendingApproval&&state.operations.some(o=>o.id===pendingApproval.id&&o.action==='approve-valuation'&&Object.values(o.steps).some(step=>step.status==='reverted')))sessionStorage.removeItem('revenue.pending');
+  const pendingApproval=JSON.parse(sessionStorage.getItem(appStorageKey("revenue.pending"))||'null');
+  if(pendingApproval&&state.operations.some(o=>o.id===pendingApproval.id&&o.action==='approve-valuation'&&Object.values(o.steps).some(step=>step.status==='reverted')))sessionStorage.removeItem(appStorageKey("revenue.pending"));
   syncDemoGeneration();
   selectedProduct = state.manifest.addresses.vault;
-  sessionStorage.setItem("revenue.selected-product", selectedProduct);
+  sessionStorage.setItem(appStorageKey("revenue.selected-product"), selectedProduct);
   const picker = document.querySelector("#product-select");
   if (picker) {
     picker.hidden = !!state.selectedProduct?.archived;
@@ -1127,7 +1128,7 @@ function renderBusiness() {
     )}</span><span>${t("Financial clock (UTC)", "财务时钟 (UTC)")}: ${date(
       state.financialTime
     )}</span></div>${state.selectedProduct?.archived ? retiredRefundView() : productMigrationNotice()+content()}`;
-    localStorage.setItem("revenue.page", page);
+    localStorage.setItem(appStorageKey("revenue.page"), page);
     return;
   }
   document.querySelector("#main").innerHTML = `<h1 class="page-title">${esc(
@@ -1145,7 +1146,7 @@ function renderBusiness() {
     "Observed telemetry and modeled financial assumptions are separate. Returns depend on collected cash; the equipment belongs to the household.",
     "遥测观测与财务模拟假设分别记录。回报取决于实际回款；设备归业主所有。"
   )}</div>${state.selectedProduct?.archived ? retiredRefundView() : content()}`;
-  localStorage.setItem("revenue.page", page);
+  localStorage.setItem(appStorageKey("revenue.page"), page);
 }
 function render() {
   renderBusiness();
@@ -1189,7 +1190,7 @@ function render() {
       if (ready!==false) { page = task.page; wfSelect(task.applicationId || ""); render(); }
     },
     advanceMonth: async cutoff => {
-      const pending=JSON.parse(sessionStorage.getItem('revenue.pending')||'null');
+      const pending=JSON.parse(sessionStorage.getItem(appStorageKey("revenue.pending"))||'null');
       if(!networkConfig?.guidanceEnabled||!(Number(networkConfig.chainId)===20261014&&['127.0.0.1','localhost'].includes(location.hostname)||Number(networkConfig.chainId)===20261008&&networkConfig.demoTimeAdvanceEnabled===true)||role!=='agent'||!walletSession||walletSession.role!=='agent'||Number(state?.chain.phase)!==2||Number(state.chain.nextFeeAt)!==cutoff||cutoff<=state.financialTime||window.RevenueGuide?.isProcessing()||pending&&JSON.parse(pending.canonical).action!=='advance')throw new Error(t('The monthly target or session changed. Refresh and confirm again.','月度目标或登录状态已变化，请刷新后重新确认。'));
       return runBusinessAction('advance',{by:'month',expectedCutoff:cutoff});
     },
@@ -1197,13 +1198,13 @@ function render() {
 }
 async function refresh() {
   state = await api("/api/state");
-  if (state.selectedProduct?.archived && !sessionStorage.getItem("revenue.pending") &&
+  if (state.selectedProduct?.archived && !sessionStorage.getItem(appStorageKey("revenue.pending")) &&
       BigInt(state.accounts[actor]?.subscription.amount || "0") === 0n) {
     const next = role === "investor" ? state.products?.find(p => [1,2].includes(p.phase))
       : state.productOptions?.slice().reverse().find(p => p.phase === 0);
     if (next) {
       selectedProduct = next.vault;
-      sessionStorage.setItem("revenue.selected-product", selectedProduct);
+      sessionStorage.setItem(appStorageKey("revenue.selected-product"), selectedProduct);
       state = await api("/api/state");
     }
   }
@@ -1249,7 +1250,7 @@ async function walletAction(action, payload) {
   if (!walletProvider())
     throw new Error(t("Selected wallet is not installed", "未安装所选钱包"));
   const idempotencyKey =
-    JSON.parse(sessionStorage.getItem("revenue.pending") || "null")?.id ||
+    JSON.parse(sessionStorage.getItem(appStorageKey("revenue.pending")) || "null")?.id ||
     crypto.randomUUID();
   const prepared = await api("/api/wallet/prepare", {
     action,
@@ -1401,12 +1402,12 @@ document.addEventListener("click", async (e) => {
 document.addEventListener("change", async (e) => {
   if (e.target.id === "station-select") {
     stationSelection = e.target.value;
-    localStorage.setItem("revenue.station", stationSelection);
+    localStorage.setItem(appStorageKey("revenue.station"), stationSelection);
     render();
   }
   if (e.target.id === "account") await setRole(role, e.target.value);
   if (e.target.id === "wallet-mode")
-    sessionStorage.setItem("revenue.wallet", e.target.checked);
+    sessionStorage.setItem(appStorageKey("revenue.wallet"), e.target.checked);
 });
 document.addEventListener("submit", async (e) => {
   const f = e.target;
@@ -1473,13 +1474,13 @@ document.addEventListener("submit", async (e) => {
 async function runBusinessAction(action,payload,retryId) {
   const canonical = JSON.stringify({ actor, action, payload });
   const pending = JSON.parse(
-    sessionStorage.getItem("revenue.pending") || "null"
+    sessionStorage.getItem(appStorageKey("revenue.pending")) || "null"
   );
   const idempotencyKey =
     retryId ||
     (pending?.canonical === canonical ? pending.id : crypto.randomUUID());
   sessionStorage.setItem(
-    "revenue.pending",
+    appStorageKey("revenue.pending"),
     JSON.stringify({ canonical, id: idempotencyKey })
   );
   const originalDisabled = new WeakMap();
@@ -1503,13 +1504,13 @@ async function runBusinessAction(action,payload,retryId) {
     if (networkConfig?.walletRequired && walletChainActions.has(action))
       result = await walletAction(action, payload);
     else if (
-      sessionStorage.getItem("revenue.wallet") === "true" &&
+      sessionStorage.getItem(appStorageKey("revenue.wallet")) === "true" &&
       walletChainActions.has(action)
     )
       result = await walletAction(action, payload);
     else
       result = await api("/api/actions", { action, payload, idempotencyKey });
-    sessionStorage.removeItem("revenue.pending");
+    sessionStorage.removeItem(appStorageKey("revenue.pending"));
     wfAfter(action, payload, result);
     if(action==="distribute"&&["agent","trustee"].includes(role))page="agent_product";
     await refresh();
@@ -1561,7 +1562,7 @@ async function runBusinessAction(action,payload,retryId) {
       walletLanding();
       const session = await window.RoleLogin.resume(networkConfig);
       if (session) await acceptWalletSession(session);
-      else await connectWallet();
+      else await connectWallet(globalThis.RevenueNetworks?.requestedRole || undefined);
     } else {
       state = await api("/api/state");
       await setRole(role, actor);

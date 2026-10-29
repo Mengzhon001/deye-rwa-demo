@@ -1,3 +1,4 @@
+function guidanceStorageKey(k) { return globalThis.RevenueNetworks?.storageKey(k) || k; }
 (function(){
 'use strict';
 let redrawVersion=0,headerObserver,refreshError='',polling=false,pollToken=0;
@@ -21,7 +22,7 @@ function readLatest(){
  refreshJob=job;job.promise=Promise.resolve().then(()=>refresh?.()).finally(()=>{if(refreshJob===job)refreshJob=null;});return job.promise;
 }
 function hookPolling(){clearInterval(timer);timer=null;if(!prefs.open||prefs.paused||!model.some(x=>x.status==='waiting-role'||x.status==='waiting-time')||busy)return;
- timer=setInterval(()=>{if(document.visibilityState!=='visible'||busy||polling||manualRefresh||notice?.open||sessionStorage.getItem('revenue.pending'))return;const id=identity,token=++pollToken;polling=true;readLatest().catch(error=>{if(context&&identity===id){refreshError=error.message;render();}}).finally(()=>{if(pollToken===token)polling=false;});},15000);
+ timer=setInterval(()=>{if(document.visibilityState!=='visible'||busy||polling||manualRefresh||notice?.open||sessionStorage.getItem(guidanceStorageKey("revenue.pending")))return;const id=identity,token=++pollToken;polling=true;readLatest().catch(error=>{if(context&&identity===id){refreshError=error.message;render();}}).finally(()=>{if(pollToken===token)polling=false;});},15000);
 }
 function update(c){
  const previousTour=driver&&!locating?{id:active,index:driver.getActiveIndex(),identity}:null;
@@ -31,7 +32,7 @@ function update(c){
  if(identity!==nextIdentity){refreshJob=null;manualRefresh=null;lastCheck=null;locateVersion++;locating=false;dismissNotice();clearHighlight();dismissIntro();busy=null;active='';identity=nextIdentity;key=`${RevenueGuideModel.version}:${identity}`;prefs=read(key,{open:true,paused:false,mode:'participant',selected:'',entity:'',selectedExplicit:false});}
  context=c;refreshError='';
  // A staff handoff is acknowledged only after an investor actually opens this product's holdings.
- try{const handoff=JSON.parse(sessionStorage.getItem('revenue.guide-investor-handoff')||'null'),account=c.state.accounts?.[c.actor];if(handoff&&c.role==='investor'&&c.page==='position'&&handoff.chainId===c.network.chainId&&handoff.vault.toLowerCase()===c.state.manifest.addresses.vault.toLowerCase()&&Date.now()-handoff.at<86400000&&(account?.claims||[]).some(r=>Number(r.id)===handoff.distributionId&&(BigInt(r.amountUSDC6||0)>0n||BigInt(r.paidUSDC6||0)>0n))){const original=read(handoff.preferenceKey,{});original.read||={};original.read[handoff.taskId]=true;localStorage.setItem(handoff.preferenceKey,JSON.stringify(original));sessionStorage.removeItem('revenue.guide-investor-handoff');}}catch{/* Only a presentation preference; business progress never depends on this record. */}
+ try{const handoff=JSON.parse(sessionStorage.getItem(guidanceStorageKey("revenue.guide-investor-handoff"))||'null'),account=c.state.accounts?.[c.actor];if(handoff&&c.role==='investor'&&c.page==='position'&&handoff.chainId===c.network.chainId&&handoff.vault.toLowerCase()===c.state.manifest.addresses.vault.toLowerCase()&&Date.now()-handoff.at<86400000&&(account?.claims||[]).some(r=>Number(r.id)===handoff.distributionId&&(BigInt(r.amountUSDC6||0)>0n||BigInt(r.paidUSDC6||0)>0n))){const original=read(handoff.preferenceKey,{});original.read||={};original.read[handoff.taskId]=true;localStorage.setItem(handoff.preferenceKey,JSON.stringify(original));sessionStorage.removeItem(guidanceStorageKey("revenue.guide-investor-handoff"));}}catch{/* Only a presentation preference; business progress never depends on this record. */}
 
  document.body.classList.add('guide-enabled');
  if(!headerObserver){const header=document.querySelector('.topbar');const measure=()=>{if(context)document.documentElement.style.setProperty('--guide-header-height',header.getBoundingClientRect().height+'px');};headerObserver=new ResizeObserver(measure);headerObserver.observe(header);measure();}
@@ -43,7 +44,7 @@ function update(c){
  const revision=++redrawVersion;
  if(previousTour&&previousTour.identity===identity&&!busy&&prefs.open&&!prefs.paused){const task=model.find(t=>t.id===previousTour.id);if(task&&task.page===c.page&&task.role===c.role&&task.status==='ready')queueMicrotask(()=>{if(redrawVersion===revision)locate({navigate:false,index:previousTour.index});});}
  const introKey=`${RevenueGuideModel.version}:intro:${c.network.chainId}:${wallet.toLowerCase()}:${c.role}`;
- if(!localStorage.getItem(introKey)&&!busy&&!sessionStorage.getItem('revenue.pending')&&!$('#wallet-login')?.open&&!document.querySelector('.wallet-login[open]'))showIntro(introKey);
+ if(!localStorage.getItem(introKey)&&!busy&&!sessionStorage.getItem(guidanceStorageKey("revenue.pending"))&&!$('#wallet-login')?.open&&!document.querySelector('.wallet-login[open]'))showIntro(introKey);
 }
 function tasks(){const all=model.filter(x=>!prefs.entity||x.entity===prefs.entity||!x.applicationId);if(prefs.mode==='demo')return all;const own=all.filter(x=>x.role===context.role);const waiting=all.filter(x=>x.role!==context.role&&x.status!=='complete'&&(!x.actor||context.role!=='investor'||x.actor===context.actor));return own.some(x=>x.status==='ready'&&!x.optional&&!x.informational)?own:[...own,...waiting.slice(0,2)];}
 function current(){return RevenueGuideModel.selectCurrent(tasks(),prefs,context.role);}
@@ -84,7 +85,7 @@ function showIntro(storageKey){
  const finish=start=>{if(storageKey)localStorage.setItem(storageKey,'seen');prefs.open=true;prefs.paused=!start;save();dismissIntro();render();hookPolling();focus?.focus?.();};
  intro.querySelector('[data-guide-start]').onclick=()=>finish(true);intro.querySelector('[data-guide-later]').onclick=()=>finish(false);intro.addEventListener('cancel',e=>{e.preventDefault();finish(false);});
 }
-async function investorHandoff(){if(!context)return;const task=model.find(t=>t.handoff);if(task)sessionStorage.setItem('revenue.guide-investor-handoff',JSON.stringify({preferenceKey:key,taskId:task.id,distributionId:task.distributionId,chainId:context.network.chainId,vault:context.state.manifest.addresses.vault,at:Date.now()}));clearHighlight();dismissNotice();await context.handoff?.({role:'investor',page:'position'});}
+async function investorHandoff(){if(!context)return;const task=model.find(t=>t.handoff);if(task)sessionStorage.setItem(guidanceStorageKey("revenue.guide-investor-handoff"),JSON.stringify({preferenceKey:key,taskId:task.id,distributionId:task.distributionId,chainId:context.network.chainId,vault:context.state.manifest.addresses.vault,at:Date.now()}));clearHighlight();dismissNotice();await context.handoff?.({role:'investor',page:'position'});}
 function handoffMarkup(task){return `<section class="guide-notice-next"><h3>${tr('Investor viewing and claiming','投资者查看与领取')}</h3><p>${tr('Connect the investor’s own wallet. This opens their position; no claim is submitted until they confirm it.','请连接投资者自己的钱包。进入持仓页不会自动领取，仍须投资者核对并确认交易。')}</p><button type="button" class="btn btn-primary" data-guide-investor-handoff data-guide-ui>${tr('Switch to investor · view / claim','切换到投资者 · 查看或领取')} →</button><button type="button" class="btn btn-outline" data-guide-handoff-later data-guide-ui>${tr('Review later; continue operations','稍后查看，继续运营')}</button></section>`;}
 async function clicked(e){const button=e.target.closest('button');if(!button)return;e.stopPropagation();
  if(button.hasAttribute('data-guide-investor-handoff')){await investorHandoff();return;}

@@ -1,5 +1,7 @@
 # Access and complete walkthrough
 
+This walkthrough uses the private demonstration for the full lifecycle. The upper-right network selector switches between the private demo (20261008) and Base Sepolia (84532). Sign in again after switching. Funding, eligibility, products and records remain separate. See the Base Sepolia chapter for official faucets, real block time and public-testnet limitations.
+
 Remote testers open the GitHub homepage and do not need to install or start a backend on their own computers. The local deployment section is for the operator who runs the services.
 
 ## Remote testing with colleagues

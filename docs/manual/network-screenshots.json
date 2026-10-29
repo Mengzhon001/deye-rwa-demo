@@ -1,0 +1,18 @@
+{
+  "origin": "https://necessity-magnificent-aids-lan.trycloudflare.com",
+  "capturedAt": "2026-10-29T08:31:05.228Z",
+  "images": {
+    "zh": {
+      "file": "docs/manual/assets/network-menu.zh.png",
+      "language": "zh",
+      "sha256": "bf7a18bd1e6dbee9c98af4218e257af3c702b00c1b7ede8c4e582304903c9ec0",
+      "source": "Actual application dialog, hidden Chromium browser capture"
+    },
+    "en": {
+      "file": "docs/manual/assets/network-menu.en.png",
+      "language": "en",
+      "sha256": "3dbf26180e346d093c35b20c2645ea31310e465918f19f54bd2b6d3189196f97",
+      "source": "Actual application dialog, hidden Chromium browser capture"
+    }
+  }
+}

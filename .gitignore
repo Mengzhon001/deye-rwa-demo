@@ -74,3 +74,6 @@ materials_from_Deye/
 
 # Ignore dependency directories and temporary verification symlinks.
 node_modules
+
+# Shared gateway build; no private deployment state.
+ui/unified-dist/

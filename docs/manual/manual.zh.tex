@@ -230,7 +230,7 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 \subsection{公开首页}
 \url{https://mengzhon001.github.io/deye-rwa-demo}\par
 \subsection{业务应用}
-\url{https://ski-june-reached-oldest.trycloudflare.com/app/}\par
+\url{https://necessity-magnificent-aids-lan.trycloudflare.com/networks/private/app/}\par
 \subsection{区块链浏览器}
 \url{https://polyphonic-reduction-gratuit-pic.trycloudflare.com}\par
 \subsection{钱包 RPC}
@@ -239,14 +239,20 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 
 在业务交易确认后点击交易哈希，即可打开对应的Blockscout页面。也可以将完整交易哈希、钱包地址或合约地址粘贴到浏览器顶部的搜索框。先核对状态、发送者、目标合约和区块，再检查代币转账与事件。登录和协议消息签名属于链下步骤，不会产生交易记录。
 
-\clearpage\section{Base Sepolia 独立公链测试}
+\subsection{网络选择与会话隔离}
+现在可以通过同一个业务网站使用私有演示链和 Base Sepolia。进入 GitHub 首页后，选择需要测试的网络并点击 Launch App。业务页面右上角的网络按钮显示当前网络。点击按钮后，可以查看两条链各自的用途和 Chain ID，并选择另一条链。登录窗口也提供切换网络入口，因此无需先完成登录。
+
+切换时，请先在 Rabby 确认目标网络，然后使用同一角色钱包重新签名登录。角色地址保持不变，但登录会话、产品、待确认操作和页面选择按链分别保存。切换不会把私链 mUSDC 兑换或转移为 Circle USDC。如果当前仍有待确认交易，系统会要求先在原页面或交易日志核对结果。拒绝钱包请求或目标服务不可用时，页面仍保留原网络。
+
+\begin{center}\includegraphics[width=\linewidth,height=.42\textheight,keepaspectratio]{assets/network-menu.zh.png}\par 统一入口的网络选择窗口。请选择需要测试的链，再在钱包核对网络并重新登录。\end{center}
+\clearpage\section{Base Sepolia 公链测试}
 原公网演示继续用于完整生命周期演练。Base Sepolia 是另一个独立环境，用于检验公共链的合约和钱包交易。两者沿用同一组角色地址，但合约、余额和业务记录相互独立。后文的完整生命周期操作图以私链演示为例，公链测试应遵循本节的实际时间和资金限制。
 
-\subsection{独立入口与网络配置}
-公链测试应用\par\url{https://icq-attorneys-frontpage-weekends.trycloudflare.com/app/}\par
+\subsection{入口与网络配置}
+公链测试应用\par\url{https://necessity-magnificent-aids-lan.trycloudflare.com/networks/base-sepolia/app/}\par
 公链浏览器\par\url{https://base-sepolia.blockscout.com}\par
 钱包 RPC\par\url{https://sepolia.base.org}\par
-Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USDC。首页的 Launch App 仍然打开原演示。请点击独立的 Base Sepolia 入口，并在钱包中核对网络后登录。
+Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USDC。首页和业务应用共用网络选择入口。请选择 Base Sepolia，再在钱包中核对网络并登录。
 
 \nolinkurl{0x036CbD53842c5426634e7929541eC2318f3dCF7e}\par
 上述地址是本环境使用的官方 Circle 测试 USDC，精度为六位。它与私链 mUSDC 不同。测试币没有货币价值，不能将其他链上的余额直接用于本链认购。
@@ -254,7 +260,7 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \subsection{环境构成与数据流}
 \begin{center}\begin{tikzpicture}[>=Latex,node distance=1cm,box/.style={draw,align=center,text width=4.5cm,minimum height=1.3cm}]
 \node[box] (web) at (0,0) {GitHub 首页与文档};
-\node[box] (app) at (6,0) {独立 Mac 业务应用};
+\node[box] (app) at (6,0) {统一入口与公链后端};
 \node[box] (wallet) at (6,-2.5) {Rabby 钱包};
 \node[box] (chain) at (0,-5) {Base Sepolia 公共链};
 \node[box] (explorer) at (6,-5) {公共 Blockscout};
@@ -264,7 +270,7 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \draw[->] (app)--(chain);
 \draw[->] (chain)--(explorer);
 \end{tikzpicture}\end{center}
-业务页面通过 HTTPS 连接独立后端。钱包签署交易后将其广播到 Base Sepolia，后端核对回执和事件，公共浏览器随后索引记录。本环境没有部署 Anvil，也不依赖原私链的 RPC 隧道。
+统一业务页面通过按网络划分的 HTTPS 路径连接相应的独立后端。钱包签署交易后将其广播到 Base Sepolia，后端核对回执和事件，公共浏览器随后索引记录。本环境没有部署 Anvil，也不依赖原私链的 RPC 隧道。
 
 \subsection{资金准备与认购操作}
 请先使用页面的测试资金入口打开官方水龙头，选择 Base Sepolia，并向当前角色地址领取测试 ETH 和 Circle 测试 USDC。领取可能需要服务方登录或受到频率限制。系统本身不能增发 Circle USDC。确认到账后，返回页面并刷新余额。私钥只应输入钱包扩展，不应输入水龙头或业务网站。
@@ -287,7 +293,7 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 收益权资产池\par\nolinkurl{0xB84F6E2EB3b9e63bBE447190dF268c49D617A445}\par
 月度缴费合约\par\nolinkurl{0xa2748E730069A38913b5E2e09a45C5aB546a0908}\par
 \clearpage\begin{landscape}
-\begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-product.zh.png}\par 独立公链产品与网络信息。编号指向本次测试的产品、认购入口和测试资金入口。\end{center}
+\begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-product.zh.png}\par 公链产品与网络信息。编号指向本次测试的产品、认购入口和测试资金入口。\end{center}
 \end{landscape}
 \clearpage\begin{landscape}
 \begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-wallet.zh.png}\par 钱包余额与官方水龙头说明。此页面不会通过后台增发 Circle USDC。\end{center}
@@ -941,6 +947,6 @@ NFT铸造应核对站点Token ID和业主地址。授权应核对被授权Vault�
 钱包拒签后可修改原操作并重试。已有交易哈希时先查询回执，不要再次支付。页面刷新和后台重启后应恢复原操作。测试链完全重建后，演示负责人需通知用户清理该测试网络的旧交易缓存。
 
 \subsection{远程入口不可用}
-GitHub静态首页仍可阅读，但业务、RPC和Blockscout依赖Mac、Docker及隧道运行。负责人使用remote:status检查，使用remote:start更新失效入口，再使用remote:publish更新公开配置。
+GitHub静态首页仍可阅读，但业务、RPC和Blockscout依赖Mac、Docker及隧道运行。负责人先使用 unified:status 检查统一入口，再分别检查两套环境的服务和隧道。隧道地址变化后应更新统一入口配置和 GitHub 静态配置。
 
 \end{document}

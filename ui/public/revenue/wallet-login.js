@@ -73,7 +73,7 @@
         }[c])
     );
   async function request(path, body) {
-    const response = await fetch(path, {
+    const response = await (window.RevenueNetworks?.fetch || fetch)(path, {
       method: body ? "POST" : "GET",
       cache: "no-store",
       headers: body ? { "Content-Type": "application/json" } : {},
@@ -159,7 +159,7 @@
       "Switch wallet account"
     )}</button></div><p class="wl-foot">${escape(
       config?.chainName || "Deye RWA Local"
-    )} · ${tr("本地演示 · 测试资金", "Local demo · Test funds")}</p>`;
+    )} · ${tr("测试资金", "Test funds")}${window.RevenueNetworks?.active ? `<br><button type="button" data-wl-network ${busy?'disabled':''}>${tr('切换网络','Switch network')} ▾</button>`:''}</p>`;
   }
   async function ensureNetwork(p) {
     const target = config.chainIdHex.toLowerCase();
@@ -296,8 +296,8 @@
       };
       const session = await Promise.race([work(), timeout]);
       guard();
-      localStorage.setItem("revenue.role", session.role);
-      localStorage.setItem("revenue.actor", session.actor);
+      localStorage.setItem(window.RevenueNetworks?.storageKey("revenue.role") || "revenue.role", session.role);
+      localStorage.setItem(window.RevenueNetworks?.storageKey("revenue.actor") || "revenue.actor", session.actor);
       localStorage.setItem("revenue.wallet", selectedWallet);
       dialog.close();
       await onSuccess(session);
@@ -328,7 +328,7 @@
     onSuccess =
       options.onSuccess ||
       (() => {
-        location.href = "/app/";
+        location.href = window.RevenueNetworks?.appPath() || "/app/";
       });
     onCancel = options.onCancel;
     chosen = options.role || "";
@@ -356,6 +356,7 @@
       dialog.addEventListener("click", async (e) => {
         const b = e.target.closest("button");
         if (!b) return;
+        if(b.hasAttribute('data-wl-network')&&!busy)window.RevenueNetworks.open();
         if (b.hasAttribute("data-wl-close")) {
           epoch++;
           loginId++;
@@ -431,5 +432,5 @@
     }
     return session;
   }
-  window.RoleLogin = { open, resume, provider, walletName };
+  window.RoleLogin = { open, resume, provider, walletName, selectedRole:()=>chosen };
 })();

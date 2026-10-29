@@ -1,5 +1,5 @@
 {
-  "app": "https://ski-june-reached-oldest.trycloudflare.com",
+  "app": "https://necessity-magnificent-aids-lan.trycloudflare.com/networks/private",
   "rpc": "https://sarah-reggae-calling-pat.trycloudflare.com",
   "explorer": "https://polyphonic-reduction-gratuit-pic.trycloudflare.com",
   "chainId": 20261008,
@@ -13,5 +13,6 @@
     "investor2": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
     "trustee": "0x2641feCc09b01C7C482F51deDB28372daa41326a",
     "trustee2": "0xfcf63f6E1100C4dD1bd0630C358848d990E33e64"
-  }
+  },
+  "unifiedApp": "https://necessity-magnificent-aids-lan.trycloudflare.com"
 }

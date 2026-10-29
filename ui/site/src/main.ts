@@ -7,6 +7,7 @@ import "../../public/revenue/period-timeline.css";
 
 declare global {
   interface Window {
+    RevenueNetworks?: { appPath(suffix?: string): string };
     RoleLogin: { open(options?: any): Promise<void> };
     RevenueTimeline: {
       owner(report: unknown, price: string, currency: string, lang: string): unknown;
@@ -35,11 +36,23 @@ const remoteConfig: Promise<RemoteConfig | null> = pagesMode
       return c;
     }).catch(() => null)
   : Promise.resolve(null);
+type UnifiedConfig = { app: string; version: number; networks: {id: string; chainId: number}[] };
+const unifiedConfig: Promise<UnifiedConfig | null> = pagesMode
+  ? fetch(sitePath("networks.json"), {cache:"no-store"}).then(r=>r.ok?r.json():null).then(c=>{
+      if(!c)return null;const u=new URL(c.app);
+      if(c.version!==1 || u.protocol!=="https:" || !u.hostname.endsWith(".trycloudflare.com") || u.pathname!=="/" || u.username || u.password || u.port || u.search || u.hash || c.networks?.length!==2 || !c.networks.some((n:any)=>n.id==="private"&&n.chainId===20261008) || !c.networks.some((n:any)=>n.id==="base-sepolia"&&n.chainId===84532))throw Error("Invalid unified network entry");
+      return c;
+    }).catch(()=>null) : Promise.resolve(null);
+let selectedNetwork=new URLSearchParams(location.search).get("network") || localStorage.getItem("revenue.preferred-network") || "private";
+if(!["private","base-sepolia"].includes(selectedNetwork))selectedNetwork="private";
 async function publicRead(path: string, timeout = 10000) {
-  const c = await remoteConfig;
-  if (pagesMode && !c) throw new Error("Remote environment unavailable");
-  return fetch((c?.app || "") + path, { credentials: "omit", signal: AbortSignal.timeout(timeout), cache: "no-store" });
+  if(pagesMode){
+    const c=await unifiedConfig;if(!c)throw Error("Remote environment unavailable");
+    return fetch(c.app+`/networks/${selectedNetwork}`+path,{credentials:"omit",signal:AbortSignal.timeout(timeout),cache:"no-store"});
+  }
+  return (window as any).RevenueNetworks?.fetch(path,{credentials:"omit",signal:AbortSignal.timeout(timeout),cache:"no-store"}) || fetch(path,{credentials:"omit",signal:AbortSignal.timeout(timeout),cache:"no-store"});
 }
+
 function showLaunchError(walletStatus?: string) {
   let message = document.querySelector<HTMLElement>("#remote-unavailable");
   if (!message) {
@@ -79,7 +92,7 @@ function header() {
   )}</a><a class="nav-secondary" href="${link()}">Documentation ↗</a><button class="language" data-language>${tr(
     "EN",
     "中文"
-  )}</button>${pagesMode?'<button class="language" data-base-launch>Base Sepolia ↗</button>':''}${launch}</nav></header>`;
+  )}</button>${pagesMode?`<label class="site-network-label"><span class="sr-only">${tr('当前网络','Current network')}</span><select class="language" data-site-network aria-label="${tr('当前网络','Current network')}"><option value="private" ${selectedNetwork==='private'?'selected':''}>${tr('私有演示链','Private demo')}</option><option value="base-sepolia" ${selectedNetwork==='base-sepolia'?'selected':''}>Base Sepolia</option></select></label>`:''}${launch}</nav></header>`;
 }
 function footer() {
   return `<footer class="site-footer"><a class="wordmark" href="${siteBase}"><strong>Deye</strong><span>RWA</span></a><span>${tr(
@@ -118,8 +131,8 @@ function home() {
   root.innerHTML =
     header() +
     `<div class="demo-strip"><span class="dot"></span>${tr(
-      "能源收益权协议 / 本地演示网络 / 测试资金",
-      "ENERGY REVENUE RIGHTS / LOCAL DEMONSTRATION NETWORK / TEST FUNDS"
+      "能源收益权协议 / 私链与 Base Sepolia / 测试资金",
+      "ENERGY REVENUE RIGHTS / PRIVATE DEMO + BASE SEPOLIA / TEST FUNDS"
     )}</div><main id="main"><section class="hero"><div class="hero-copy"><p class="eyebrow">REAL ENERGY. VERIFIABLE VALUE.</p><h1>${tr(
       "让清洁能源的收益<br><em>看得见，可验证。</em>",
       "Clean energy.<br><em>Verifiable value.</em>"
@@ -567,32 +580,16 @@ function documentation() {
 }
 document.addEventListener("click", async (e) => {
   const el = (e.target as HTMLElement).closest("button");
-  if(el?.hasAttribute("data-base-launch")){
-    el.setAttribute("disabled","");
-    try{
-      const response=await fetch(sitePath("base-sepolia.json"),{cache:"no-store"});
-      const c=await response.json();const u=new URL(c.app);
-      if(c.chainId!==84532||u.protocol!=="https:"||!u.hostname.endsWith(".trycloudflare.com")||u.pathname!=="/"||u.username||u.password||u.search||u.hash)throw new Error();
-      const ready=await fetch(c.app+"/api/public/overview",{credentials:"omit",signal:AbortSignal.timeout(20000)});
-      if(!ready.ok)throw new Error();const status=await ready.json();if(!status.chainAvailable||status.chainId!==84532)throw new Error();
-      location.href=`${c.app}/app/?lang=${lang}&wallet=rabby`;
-    }catch{const note=document.createElement("p");note.setAttribute("role","alert");note.textContent=tr("Base Sepolia 独立测试入口暂不可用。原演示入口仍通过 Launch App 访问。","The independent Base Sepolia test entry is unavailable. Launch App still opens the original demonstration.");document.querySelector(".site-header")?.after(note);}
-    finally{el.removeAttribute("disabled");}
-  }
   if (el?.hasAttribute("data-launch")) {
-    if (!pagesMode) void window.RoleLogin.open();
-    else {
-      el.setAttribute("disabled", "");
-      try {
-        const c = await remoteConfig;
-        if(c && c.walletEntryStatus !== "verified") { showLaunchError(c.walletEntryStatus === "blocked" ? "blocked" : "unverified"); return; }
-        const r = await publicRead("/api/public/overview", 12000);
-        if (!r.ok || !(await r.json()).chainAvailable || !c) throw new Error();
-        const wallet = ["rabby","metamask"].includes(c.preferredWallet || "") ? `&wallet=${c.preferredWallet}` : "";
-        location.href = `${c.app}/app/?lang=${lang}${wallet}`;
-      } catch { showLaunchError(); }
-      finally { el.removeAttribute("disabled"); }
-    }
+    el.setAttribute("disabled", "");
+    try {
+      if(!pagesMode){location.href=window.RevenueNetworks?.appPath() || "/app/";return;}
+      const c=await unifiedConfig;if(!c)throw Error("Unified entry unavailable");
+      const path=`/networks/${selectedNetwork}`;
+      const r=await fetch(c.app+path+"/api/public/overview",{credentials:"omit",signal:AbortSignal.timeout(20000),cache:"no-store"});
+      const status=await r.json();if(!r.ok||!status.chainAvailable||status.chainId!==(selectedNetwork==="private"?20261008:84532))throw Error("Selected network unavailable");
+      location.href=`${c.app}${path}/app/?lang=${lang}&wallet=rabby`;
+    }catch{showLaunchError();}finally{el.removeAttribute("disabled");}
   }
   if (el?.hasAttribute("data-language")) {
     lang = lang === "zh" ? "en" : "zh";
@@ -601,6 +598,12 @@ document.addEventListener("click", async (e) => {
       ? link(localPath.split("/")[3] || "overview")
       : siteBase;
   }
+});
+document.addEventListener("change",event=>{
+  const select=event.target as HTMLSelectElement;
+  if(!select.matches("[data-site-network]")||!["private","base-sepolia"].includes(select.value))return;
+  selectedNetwork=select.value;localStorage.setItem("revenue.preferred-network",selectedNetwork);
+  if(localPath.startsWith("/docs"))documentation();else home();
 });
 const localPath = "/" + location.pathname.slice(siteBase.length);
 if (localPath.startsWith("/docs")) documentation();
