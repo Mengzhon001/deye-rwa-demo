@@ -2,7 +2,7 @@ import hre from "hardhat";
 import {assertPublicConfiguration,assertLocalCapability,publicTestnet,ERC20_ABI} from "../../../onchain/scripts/revenue-network";
 import {EventCache} from "./event-cache";
 import {PublicReadProvider} from "./public-rpc";
-import {readTogether,ViewCall,MULTICALL3} from "./multiread";
+import {readTogether,readNativeBalances,ViewCall,MULTICALL3} from "./multiread";
 import { paymentAmounts } from "./household-billing";
 import {
   Contract,
@@ -413,7 +413,7 @@ export class RevenueRuntime {
     }
   }
   async now() {
-    return (await hre.ethers.provider.getBlock("latest"))!.timestamp;
+    return (await (this.publicProvider||hre.ethers.provider).getBlock("latest"))!.timestamp;
   }
   private checkScenario(expectedVault?: string) {
     if (
@@ -2304,7 +2304,6 @@ export class RevenueRuntime {
   readTogether(calls:ViewCall[]){return readTogether(this.publicProvider,calls);}
   async state() {
     await this.queue;
-    await this.queue;
     const s = this.repo.read();
     const v = this.vault;
     const names = [
@@ -2338,7 +2337,12 @@ export class RevenueRuntime {
       "distributionMonths",
       "newReceipts",
     ];
-    const values = await this.readTogether(names.map(method=>({contract:v,method})));
+    const primary = await this.readTogether([
+      ...names.map(method=>({contract:v,method})),
+      {contract:v,method:"valuation"},{contract:v,method:"proposed"},
+      {contract:this.usdc,method:"balanceOf",args:[await v.getAddress()]},
+    ]);
+    const values = primary.slice(0,names.length);
     const chain = Object.fromEntries(
       names.map((n, i) => [
         n,
@@ -2348,7 +2352,7 @@ export class RevenueRuntime {
     chain.subscriptionReviewRequired = ["RevenueShareVaultV3", "RevenueShareVaultV4", "RevenueShareVaultV5"].includes(s.manifest?.contractName || "");
     chain.subscriptionTopUpsAllowed = ["RevenueShareVaultV4", "RevenueShareVaultV5"].includes(s.manifest?.contractName || "");
     chain.distributionIntervalMonths=s.manifest?.contractName==="RevenueShareVaultV5"?1:3;
-    const [approvedValuation,proposedValuation] = await this.readTogether([{contract:v,method:"valuation"},{contract:v,method:"proposed"}]);
+    const [approvedValuation,proposedValuation,vaultCash] = primary.slice(names.length);
     Object.assign(chain, {
       proposedValuationOutdated: await this.proposalOutdated(proposedValuation.report),
       proposedValuationReport: proposedValuation.report,
@@ -2361,7 +2365,7 @@ export class RevenueRuntime {
       rightsPV: String(approvedValuation.rightsPV),
       receivables: String(approvedValuation.receivables),
       futureFees: String(approvedValuation.futureFees),
-      vaultCash: String(await this.usdc.balanceOf(await v.getAddress())),
+      vaultCash: String(vaultCash),
     });
     const cachedEvents=await this.eventCache.read(await v.getAddress(),s.manifest!.deployedBlock);
     const logs=cachedEvents.logs;
@@ -2389,14 +2393,32 @@ export class RevenueRuntime {
         (address) => `investor:${address.toLowerCase()}` as Actor
       ),
     ];
-    await Promise.all(accountActors.map(async who => {
-      const address = this.address(who),
-        [subscription,redemption] = await this.readTogether([{contract:v,method:"subscriptions",args:[address]},{contract:v,method:"redemptions",args:[address]}]);
+    const fixedAccountReads=chain.subscriptionReviewRequired?8:6;
+    const readsPerAccount=fixedAccountReads+Number(chain.distributionCount);
+    const [allAccountReads,nativeBalances,financialTime]=await Promise.all([
+      this.readTogether(accountActors.flatMap(who=>{
+        const address=this.address(who);
+        return [
+          {contract:v,method:"subscriptions",args:[address]},{contract:v,method:"redemptions",args:[address]},
+          {contract:v,method:"economicBalance",args:[address]},{contract:this.usdc,method:"balanceOf",args:[address]},
+          {contract:v,method:"balanceOf",args:[address]},{contract:v,method:"eligible",args:[address]},
+          ...(chain.subscriptionReviewRequired?[{contract:v,method:"subscriptionApproved",args:[address]},{contract:v,method:"subscriptionNonce",args:[address]}]:[]),
+          ...Array.from({length:Number(chain.distributionCount)},(_,i)=>({contract:v,method:"claimable",args:[i+1,address]})),
+        ];
+      })),
+      this.publicProvider?readNativeBalances(this.publicProvider,accountActors.map(who=>this.address(who)))
+        :Promise.all(accountActors.map(who=>hre.ethers.provider.getBalance(this.address(who)))),
+      this.now(),
+    ]);
+    await Promise.all(accountActors.map(async (who,accountIndex) => {
+      const address = this.address(who);
+      const reads=allAccountReads.slice(accountIndex*readsPerAccount,(accountIndex+1)*readsPerAccount);
+      const [subscription,redemption,econ,cash,shareBalance,eligible,approved=false,nonce=0n]=reads.slice(0,fixedAccountReads);
       const claims = [];
       for (let id = 1; id <= Number(chain.distributionCount); id++)
         claims.push({
           id,
-          amountUSDC6: String(await v.claimable(id, address)),
+          amountUSDC6: String(reads[fixedAccountReads+id-1]),
           paidUSDC6: events
             .filter(
               (e) =>
@@ -2447,11 +2469,6 @@ export class RevenueRuntime {
           }
         }
       }
-      const [reads,native]=await Promise.all([this.readTogether([
-        {contract:v,method:"economicBalance",args:[address]},{contract:this.usdc,method:"balanceOf",args:[address]},{contract:v,method:"balanceOf",args:[address]},{contract:v,method:"eligible",args:[address]},
-        ...(chain.subscriptionReviewRequired?[{contract:v,method:"subscriptionApproved",args:[address]},{contract:v,method:"subscriptionNonce",args:[address]}]:[])]),
-        (this.publicProvider||hre.ethers.provider).getBalance(address)]);
-      const [econ,cash,shareBalance,eligible,approved=false,nonce=0n]=reads;
       const economic=BigInt(econ);
       const remaining = (economic * BigInt(chain.price as string)) / 1000000n;
       const unclaimed = claims.reduce(
@@ -2461,7 +2478,7 @@ export class RevenueRuntime {
       const profit = remaining + unclaimed + received - invested;
       if (unclaimed > 0n)
         cashflows.push({
-          at: await this.now(),
+          at: financialTime,
           value: Number(unclaimed) / 1e6,
         });
       if (
@@ -2479,7 +2496,7 @@ export class RevenueRuntime {
       accounts[who] = {
         address,
         usdc: String(cash),
-        nativeBalanceWei: String(native),
+        nativeBalanceWei: String(nativeBalances[accountIndex]),
         faucetClaim: s.faucetClaims?.[address.toLowerCase()] || null,
         shares: String(shareBalance),
         economicShares: economic.toString(),
@@ -2542,7 +2559,6 @@ export class RevenueRuntime {
         };
       })
     );
-    const financialTime = await this.now();
     const trades = await Promise.all(
       s.trades.map(async (trade) => ({
         ...trade,

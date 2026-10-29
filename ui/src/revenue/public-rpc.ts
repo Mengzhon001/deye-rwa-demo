@@ -2,6 +2,14 @@ import {JsonRpcProvider,JsonRpcPayload,JsonRpcResult,JsonRpcError} from 'ethers'
 /** Respect the anonymous Base RPC's per-method rate limit even when calls are batched. */
 export class PublicReadProvider extends JsonRpcProvider {
   private reads:Promise<unknown>=Promise.resolve();
+  override _getConnection(){
+    const request=super._getConnection();
+    // A stalled request must not occupy the serialized read queue for the
+    // library's five-minute default, even after the browser has timed out.
+    request.timeout=Math.min(request.timeout,10000);
+    request.retryFunc=async()=>false;
+    return request;
+  }
   override _send(payload:JsonRpcPayload|JsonRpcPayload[]):Promise<JsonRpcResult[]>{
     const list=Array.isArray(payload)?payload:[payload];
     const readOnly=list.every(p=>/^eth_(call|get|blockNumber|chainId)/.test(p.method));

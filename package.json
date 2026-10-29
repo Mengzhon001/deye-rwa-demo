@@ -106,7 +106,7 @@
     "base:stop": "node scripts/revenue-base-sepolia.mjs stop",
     "base:logs": "node scripts/revenue-base-sepolia.mjs logs",
     "base:verify": "node scripts/revenue-base-sepolia.mjs verify",
-    "base:test:unit": "node --import tsx --test ui/src/revenue/event-cache.test.ts ui/src/revenue/public-rpc.test.ts",
+    "base:test:unit": "node --import tsx --test ui/src/revenue/event-cache.test.ts ui/src/revenue/public-rpc.test.ts ui/src/revenue/multiread.test.ts",
     "base:test:public": "node scripts/test-base-sepolia.mjs",
     "base:verify:sourcify": "node scripts/verify-base-sourcify.mjs",
     "base:test:browser": "node scripts/test-base-rabby.mjs",

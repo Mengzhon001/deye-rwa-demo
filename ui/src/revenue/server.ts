@@ -267,10 +267,11 @@ export async function startRevenueServer(
               title:catalog.entry(other).title,amountUSDC6:String(subscription.amount),phase,
               canRefund:phase === 3 || ["RevenueShareVaultV3", "RevenueShareVaultV4"].includes(other.repo.read().manifest?.contractName || "") || current.financialTime < Number(subscription.coolingEnd)});
           }
+          const productOptions=await catalog.rows("all",viewer?.requestedRole!=="investor");
           json(res, 200, {
             ...current,
-            products: await catalog.rows("all"),
-            productOptions: await catalog.rows("all", viewer?.requestedRole !== "investor"),
+            products: productOptions.filter(product=>[1,2,3,4].includes(Number(product.phase))),
+            productOptions,
             selectedProduct: catalog.entry(runtime),
             otherSubscriptions,
             monitoring: catalog.monitor.read(),
