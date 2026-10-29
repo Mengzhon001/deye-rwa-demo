@@ -115,7 +115,23 @@ function target(task){
  return form||(forms.length>1?null:document.querySelector(task.selector));
 }
 let assets;
-function loadDriver(){if(assets)return assets;return assets=(async()=>{const css=document.createElement('link');css.rel='stylesheet';css.href='/guidance-driver.css';document.head.append(css);if(!window.driver){await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='/guidance-driver.js';script.onload=resolve;script.onerror=reject;document.head.append(script);});}return window.driver.js.driver;})().catch(()=>{assets=null;throw Error(tr('Local guide resources could not load. Retry after the service recovers.','本地引导资源未能加载，请在服务恢复后重试。'));});}
+function loadDriver(){
+ if(assets)return assets;
+ const nodes=[],timers=[];
+ const load=(tag,path)=>new Promise((resolve,reject)=>{
+  const node=document.createElement(tag);nodes.push(node);
+  if(tag==='link'){node.rel='stylesheet';node.href=path;}else node.src=path;
+  const timeout=setTimeout(()=>reject(Error('Guide resource timed out')),12000);timers.push(timeout);
+  node.onload=()=>{clearTimeout(timeout);resolve();};node.onerror=()=>{clearTimeout(timeout);reject(Error('Guide resource unavailable'));};document.head.append(node);
+ });
+ return assets=Promise.all([load('link','/guidance-driver.css'),window.driver?.js?.driver?Promise.resolve():load('script','/guidance-driver.js')]).then(()=>{
+  if(typeof window.driver?.js?.driver!=='function')throw Error('Guide component unavailable');
+  return window.driver.js.driver;
+ }).catch(()=>{
+  timers.forEach(clearTimeout);nodes.forEach(node=>node.remove());assets=null;
+  throw Error(tr('The operation guide could not load. You can return to the page and use the marked control directly, or retry locating it.','操作引导组件暂时未能加载。你可以返回页面直接使用已标出的控件，或重试定位。'));
+ });
+}
 function remedyFor(task){
  if(!task||task.handoff)return null;
  const next=context.product?.operations?.next;
@@ -199,6 +215,7 @@ async function locate({navigate=true,index=0}={}){
  if(locating){showNotice(task,{title:tr('Opening the operation','正在定位操作'),reason:tr('The guide is reading the latest state and opening the related record.','引导正在读取最新状态并打开相关记录。'),loading:true});return;}
  prefs.entity=task.applicationId||prefs.entity;prefs.selectedExplicit=prefs.selected===task.id&&!!prefs.selectedExplicit;prefs.selected=task.id;save();dismissNotice();clearHighlight();locating=true;
  const token=++locateVersion,originalIdentity=identity,taskId=task.id;
+ let locatedElement;
  const valid=()=>token===locateVersion&&identity===originalIdentity&&!!context;
  try{
   if(navigate){
@@ -216,6 +233,7 @@ async function locate({navigate=true,index=0}={}){
   if(!element)throw Error(tr('This operation is not available on the current record. Refresh its status or open its detail.','当前记录未提供该操作，请刷新状态或打开记录详情。'));
   for(let parent=element;parent;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
   if(!element.getClientRects().length||getComputedStyle(element).visibility==='hidden')throw Error(tr('The related page is open, but its control is not visible. Review the current task conditions or refresh this record.','已打开相关页面，但当前控件尚未显示，请核对任务条件或刷新记录。'));
+  locatedElement=element;
   const submit=element.matches('form')?[...element.querySelectorAll('button[type=submit],button:not([type])')].at(-1):element;
   if(!task.readOnly&&(task.status==='blocked'||task.status==='waiting-time'||task.status==='waiting-role'||submit?.disabled)){
    element.scrollIntoView({block:'center',behavior:'instant'});element.classList.add('guide-blocked-target');
@@ -242,7 +260,7 @@ async function locate({navigate=true,index=0}={}){
   if(task.readOnly){const next=document.querySelector('[data-investor-next-step]');if(next)steps.push({element:next,popover:{title:tr('Who acts next and where','下一步由谁处理、在哪里处理'),description:task.result}});}
   focus=$('#guide-panel [data-guide-locate]')||document.activeElement;
   driver=driverFactory({animate:!matchMedia('(prefers-reduced-motion: reduce)').matches,allowClose:true,overlayClickBehavior:'close',showProgress:true,progressText:'{{current}} / {{total}}',nextBtnText:tr('Read next tip','查看下一提示'),prevBtnText:tr('Previous tip','上一提示'),doneBtnText:tr('Return to task','返回任务'),showButtons:['next','previous','close'],steps,onDestroyed:()=>{document.body.classList.remove('guide-spotlight');driver=null;(focus?.isConnected?focus:$('#guide-launch'))?.focus?.();}});driver.drive(Math.min(index,steps.length-1));
- }catch(error){if(valid())showNotice(task,{title:tr('This operation could not be highlighted','暂时无法高亮此操作'),reason:error.message,remedy:task?remedyFor(task):null});}finally{if(token===locateVersion)locating=false;}
+ }catch(error){if(valid()){if(locatedElement?.isConnected){locatedElement.scrollIntoView({block:'center',behavior:'instant'});locatedElement.classList.add('guide-blocked-target');}showNotice(task,{title:tr('This operation could not be highlighted','暂时无法高亮此操作'),reason:error.message,remedy:task?remedyFor(task):null});}}finally{if(token===locateVersion)locating=false;}
 }
 function operation(event){if(!context)return;locateVersion++;locating=false;dismissNotice();if(event.stage==='done'){prefs.selected='';prefs.selectedExplicit=false;prefs.reviewComplete=false;save();}clearHighlight();dismissIntro();busy=event.stage==='done'?null:event;render();hookPolling();if(event.stage==='done'&&event.action==='distribute'&&prefs.open&&!prefs.paused){const task=current();if(task?.handoff)showNotice(task,{title:tr('Distribution confirmed · investor handoff','分配已确认，请交接投资者'),reason:tr('The distribution is confirmed. Open investor holdings to inspect the amount and claim any available cash; the next NAV update does not block claiming.','分配交易已确认。请通过下方入口打开投资者持仓，核对金额并领取可用余额。后续净值更新不会阻止领取。'),retry:false});}}
 window.addEventListener('revenue-wallet-invalidated',clear);

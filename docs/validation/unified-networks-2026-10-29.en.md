@@ -35,3 +35,11 @@ The homepage native select has been replaced with an icon-based rounded button a
 A real Rabby test confirmed that product, balance and transaction reads can take about ten seconds after the Base Sepolia login signature has already been verified. The application now immediately identifies the signed-in wallet and shows a loading indicator and the selected network. After eight seconds it explains that the network is responding slowly, and a query exceeding forty-five seconds offers a retry. Retrying a failed data read does not require another signature; an expired session still requires sign-in.
 
 Hidden browser checks cover first sign-in, slow responses, session restoration, both languages, mobile layout, timeouts, failed-read recovery, duplicate clicks and wallet changes during loading. Delays and failed responses are browser fixtures, while authentication uses real signatures and backend sessions. The actual Rabby extension separately passed public Base Sepolia sign-in and session restoration, with visible loading before the workspace appears. These checks perform authentication and reads only; they do not submit business transactions or reset scenarios.
+
+## Guide resources at the unified entry
+
+The unified gateway previously omitted the static aliases for `/guidance-driver.js` and `/guidance-driver.css`, causing resource errors when signed-in users selected “Locate the operation”. Both URLs now serve the locally bundled, fixed Driver.js version. The loader checks both script and stylesheet completion, cleans up failed resources for retry, and outlines the business control already located if the spotlight cannot load.
+
+Gateway regression checks cover GET, HEAD and content types for both resources while retaining network, cookie and origin isolation checks. Public browser checks cover the eligibility-application target on both chains, both languages, repeated location, and recovery from simulated script or stylesheet failures. Eligibility is adjusted only in browser response fixtures; no actual eligibility or application is changed.
+
+The real Rabby extension separately verified the public Base Sepolia page, highlighting the cashflow timeline, subscription amount field and subscription button in sequence. Both resources returned 200, no JavaScript exceptions occurred, and no subscription transaction was submitted.

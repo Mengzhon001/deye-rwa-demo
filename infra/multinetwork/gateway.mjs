@@ -4,6 +4,7 @@ import {resolve, join, extname, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.pdf':'application/pdf','.zip':'application/zip','.woff2':'font/woff2'};
+const assetAliases={'/guidance-driver.js':'vendor/driver-1.9.0.js','/guidance-driver.css':'vendor/driver-1.9.0.css'};
 export function createGateway(config) {
   const networks=config.networks;
   if(networks.length!==2 || networks.some(n=>!['private','base-sepolia'].includes(n.id)) || new Set(networks.map(n=>n.chainId)).size!==2)throw Error('Two distinct, configured test networks required');
@@ -48,6 +49,7 @@ export function createGateway(config) {
     }
     let root,file;
     if(match && /^\/app\/(?:recording\/)?$/.test(localPath)){root=assets;file=localPath.includes('recording')?'recording.html':'index.html';}
+    else if(!match && assetAliases[path]){root=assets;file=assetAliases[path];}
     else if(!match && /^[\w.-]+\.(js|css)$/.test(path.slice(1))){root=assets;file=path.slice(1);}
     else if(!match){root=site;try{file=path==='/'||path.startsWith('/docs/')?'index.html':decodeURIComponent(path).slice(1);}catch{return json(400,{error:'Invalid path'});}}
     else return json(404,{error:'Not found'});

@@ -118,6 +118,7 @@
     "unified:test": "node --test infra/multinetwork/gateway.test.mjs",
     "unified:test:api": "node scripts/test-unified-api.mjs",
     "unified:test:ui": "node scripts/test-unified-ui.mjs",
+    "unified:test:guidance": "node scripts/test-unified-guidance.mjs",
     "unified:test:rabby": "node scripts/test-unified-rabby.mjs",
     "unified:test:pages": "node scripts/test-unified-pages.mjs"
   },
