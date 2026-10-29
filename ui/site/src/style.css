@@ -192,6 +192,7 @@ button:disabled {
 }
 .hero-visual {
   position: absolute;
+  isolation: isolate;
   right: -2%;
   top: 2%;
   width: 64%;
@@ -207,6 +208,7 @@ button:disabled {
 .hero-visual canvas {
   position: absolute;
   inset: 0;
+  z-index: 0;
 }
 .hero-fallback {
   width: 100%;
@@ -218,9 +220,12 @@ button:disabled {
 }
 .visual-tag {
   position: absolute;
+  z-index: 1;
   font: 10px monospace;
   letter-spacing: 1.7px;
   color: #9fc3b5;
+  background: #071820e6;
+  white-space: nowrap;
   padding: 8px 12px;
   border-left: 1px solid #89af8b66;
 }
