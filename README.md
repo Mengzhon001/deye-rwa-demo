@@ -1,5 +1,3 @@
 # Deye RWA public website
 
-[Website](https://mengzhon001.github.io/deye-rwa-demo/) · [Application source](https://github.com/Mengzhon001/deye-rwa-demo/tree/main) · [中文操作手册](manual/manual.zh.pdf) · [English operating manual](manual/manual.en.pdf)
-
-This branch contains the static website, bilingual documentation, reviewed operating manuals and the MIT contract source package. Full application source is on main. Credentials, private wallet keys, private station evidence and runtime state are excluded. The backend, RPC and Blockscout run separately on the demonstration host.
+The main branch contains application source. This branch serves the public homepage, bilingual documentation, reviewed contract package and key-free operating manuals. Launch App retains the original demonstration; Base Sepolia opens the independent public-chain test.
