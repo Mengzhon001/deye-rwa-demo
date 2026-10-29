@@ -19,4 +19,4 @@ const original=readFileSync(old);if(JSON.parse(original).chainId!==20261008)thro
 const publicConfig=Object.fromEntries(['app','explorer','rpc','chainId','usdc'].map(k=>[k,config[k]]));Object.assign(publicConfig,{preferredWallet:'rabby',walletEntryStatus:'verified',updatedAt:new Date().toISOString()});writeFileSync(join(out,'base-sepolia.json'),JSON.stringify(publicConfig,null,2)+'\n');
 writeFileSync(join(out,'README.md'),'# Deye RWA public website\n\nThe main branch contains application source. This branch serves the public homepage, bilingual documentation, reviewed contract package and key-free operating manuals. Launch App opens one application with a network selector for the private demonstration and Base Sepolia. Each chain retains separate business state.\n');
 publishManuals(root,out);auditPublic(out);
-console.log('Staged Pages deep links and independent Base entry; original remote.json preserved byte for byte.');
+console.log('Staged Pages deep links and unified network entry; original remote.json preserved byte for byte.');

@@ -21,3 +21,7 @@ The ETH transaction is `0x6589c49e5523f45da20f333e1ff2ee2fa2b02ca440ca9efff6ae01
 ## Scope
 
 This validation covers the unified entry, network switching, authentication and data isolation, and Base USDC subscription/refund. It does not repeat the entire private-chain lifecycle or claim fully funded settlement and monthly distributions on the public chain. Funding, eligibility and products remain chain-specific. Real public-chain time and Circle token supply restrictions are unchanged.
+
+## Live publication checks
+
+After GitHub Pages deployment, a hidden browser selected each network from the homepage and opened the shared application. Checks passed for English documentation deep links and reload, both PDF checksums, mobile layout and static documentation with the backend unavailable. The business API returned 20000000 smallest units, or 20 USDC, for the actual investor account, matching its on-chain balance.
