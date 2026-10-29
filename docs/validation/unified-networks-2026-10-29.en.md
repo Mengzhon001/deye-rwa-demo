@@ -25,3 +25,7 @@ This validation covers the unified entry, network switching, authentication and 
 ## Live publication checks
 
 After GitHub Pages deployment, a hidden browser selected each network from the homepage and opened the shared application. Checks passed for English documentation deep links and reload, both PDF checksums, mobile layout and static documentation with the backend unavailable. The business API returned 20000000 smallest units, or 20 USDC, for the actual investor account, matching its on-chain balance.
+
+## Network picker visual update
+
+The homepage native select has been replaced with an icon-based rounded button and a custom popover. The popover identifies the selected chain, describes each environment and explains that switching does not move funds. The interaction takes inspiration from Aave’s icon-based selection and popover list, using this site’s dark and mint palette. Checks cover arrow keys, Enter, Escape, outside dismissal, focus restoration, mobile layout and both application entries. Selecting a network refreshes metadata without remounting the homepage animation.

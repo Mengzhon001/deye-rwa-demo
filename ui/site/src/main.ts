@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 import "./style.css";
+import { renderNetworkPicker, installNetworkPicker } from "./network-picker";
 import docs from "./docs.generated.json";
 import example from "./cashflow-example.generated.json";
 import "../../public/revenue/period-timeline.js";
@@ -92,7 +93,7 @@ function header() {
   )}</a><a class="nav-secondary" href="${link()}">Documentation ↗</a><button class="language" data-language>${tr(
     "EN",
     "中文"
-  )}</button>${pagesMode?`<label class="site-network-label"><span class="sr-only">${tr('当前网络','Current network')}</span><select class="language" data-site-network aria-label="${tr('当前网络','Current network')}"><option value="private" ${selectedNetwork==='private'?'selected':''}>${tr('私有演示链','Private demo')}</option><option value="base-sepolia" ${selectedNetwork==='base-sepolia'?'selected':''}>Base Sepolia</option></select></label>`:''}${launch}</nav></header>`;
+  )}</button>${pagesMode ? renderNetworkPicker(selectedNetwork as "private" | "base-sepolia", lang) : ""}${launch}</nav></header>`;
 }
 function footer() {
   return `<footer class="site-footer"><a class="wordmark" href="${siteBase}"><strong>Deye</strong><span>RWA</span></a><span>${tr(
@@ -166,9 +167,9 @@ function home() {
     )}</small></div><div class="metric"><span class="metric-label">${tr(
       "网络",
       "Network"
-    )}</span><strong>Deye Local</strong><small data-network>${tr(
-      "正在连接本地节点",
-      "Connecting to local network"
+    )}</span><strong data-network-name>${selectedNetwork==="base-sepolia"?"Base Sepolia":tr("私有演示链","Private demo")}</strong><small data-network>${tr(
+      "正在读取网络状态",
+      "Checking network status"
     )}</small></div></div></section>
   <section class="section section-line" id="how-it-works"><div class="section-heading reveal"><div><p class="eyebrow">01 / FROM ENERGY TO REVENUE RIGHTS</p><h2>${tr(
     "真实资产的收益，<br>清晰可循的路径。",
@@ -328,12 +329,39 @@ function home() {
       "Read Documentation"
     )} ↗</a></div></section></main>` +
     footer();
+  refreshHomeOverview();
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.body.classList.add("motion-ready");
+    const observer = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("entered");
+            observer.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll(".reveal").forEach((e) => observer.observe(e));
+    import("./hero")
+      .then((m) => m.mountHero(document.querySelector("#energy-scene")!))
+      .catch(() => {});
+  }
+}
+let overviewRequest=0;
+function refreshHomeOverview(){
+  const request=++overviewRequest;
+  const name=document.querySelector("[data-network-name]");if(name)name.textContent=selectedNetwork==="base-sepolia"?"Base Sepolia":tr("私有演示链","Private demo");
+  document.querySelectorAll("[data-stat]").forEach(el=>el.textContent="—");
+  document.querySelectorAll("[data-modes], [data-network]").forEach(el=>el.textContent=tr("正在读取网络状态","Checking network status"));
   publicRead("/api/public/overview")
     .then((r) => {
       if (!r.ok) throw new Error();
       return r.json();
     })
     .then((data) => {
+      if(request!==overviewRequest || !document.querySelector("[data-stat]"))return;
+      if(data.chainId!==(selectedNetwork==="base-sepolia"?84532:20261008))throw new Error("Network metadata mismatch");
       document.querySelectorAll<HTMLElement>("[data-stat]").forEach((el) => {
         el.textContent =
           data[el.dataset.stat!] == null
@@ -354,6 +382,7 @@ function home() {
           : tr("节点暂不可用", "Node unavailable");
     })
     .catch(() => {
+      if(request!==overviewRequest)return;
       document
         .querySelectorAll<HTMLElement>(
           "[data-stat], [data-modes], [data-network]"
@@ -362,23 +391,6 @@ function home() {
           el.textContent = tr("暂不可用", "Unavailable");
         });
     });
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    document.body.classList.add("motion-ready");
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("entered");
-            observer.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.1 }
-    );
-    document.querySelectorAll(".reveal").forEach((e) => observer.observe(e));
-    import("./hero")
-      .then((m) => m.mountHero(document.querySelector("#energy-scene")!))
-      .catch(() => {});
-  }
 }
 async function contractPanel() {
   const container = document.querySelector("#contract-runtime");
@@ -599,11 +611,11 @@ document.addEventListener("click", async (e) => {
       : siteBase;
   }
 });
-document.addEventListener("change",event=>{
-  const select=event.target as HTMLSelectElement;
-  if(!select.matches("[data-site-network]")||!["private","base-sepolia"].includes(select.value))return;
-  selectedNetwork=select.value;localStorage.setItem("revenue.preferred-network",selectedNetwork);
-  if(localPath.startsWith("/docs"))documentation();else home();
+installNetworkPicker(id => {
+  selectedNetwork=id;localStorage.setItem("revenue.preferred-network",id);
+  const url=new URL(location.href);url.searchParams.set("network",id);history.replaceState(null,"",url);
+  if(localPath.startsWith("/docs")){if(localPath.includes("/contracts"))void contractPanel();}
+  else refreshHomeOverview();
 });
 const localPath = "/" + location.pathname.slice(siteBase.length);
 if (localPath.startsWith("/docs")) documentation();

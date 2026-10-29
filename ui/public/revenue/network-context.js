@@ -20,7 +20,8 @@
     if(!directory)return;
     const host=document.querySelector('.header-tools')||document.querySelector('.site-nav');if(!host)return;
     let b=document.getElementById('network-select');if(!b){b=document.createElement('button');b.id='network-select';b.className='btn btn-outline btn-sm network-select';b.type='button';host.prepend(b);b.addEventListener('click',open);}
-    const label=(id==='private'?tr('私有演示链','Private demo'): 'Base Sepolia')+' ▾';if(b.textContent!==label)b.textContent=label;b.setAttribute('aria-label',tr('当前网络，点击切换','Current network, click to switch'));b.setAttribute('aria-haspopup','dialog');
+    const label=id==='private'?tr('私有演示链','Private demo'):'Base Sepolia';
+    if(b.dataset.networkLabel!==label){b.dataset.networkLabel=label;const icon=id==='base-sepolia'?'<circle cx="16" cy="16" r="16" fill="#0052ff"/><path d="M6 16h19" stroke="white" stroke-width="3.1"/>':'<rect width="32" height="32" rx="11" fill="#b8f2c8"/><path d="m9 12 7-4 7 4v8l-7 4-7-4v-8Zm0 0 7 4 7-4m-7 4v8" stroke="#173f35" stroke-width="1.5" fill="none" stroke-linejoin="round"/>';b.innerHTML=`<svg class="network-select-icon" viewBox="0 0 32 32" width="24" height="24" aria-hidden="true">${icon}</svg><span>${label}</span><svg class="network-select-chevron" viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;}b.setAttribute('aria-label',tr('当前网络，点击切换','Current network, click to switch'));b.setAttribute('aria-haspopup','dialog');
   }
   function open(){
     if(document.querySelector('#network-dialog[open]'))return;
