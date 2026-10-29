@@ -1609,6 +1609,25 @@ form {
 .wallet-gate p { color: #61738c; line-height: 1.75; }
 .wallet-gate-network { font-family: ui-monospace, monospace; font-size: 12px; }
 .wallet-gate .btn { margin-top: 18px; }
+.layout:has(.wallet-gate) > .sidebar { display: none; }
+.wallet-loading-icon::after {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border: 3px solid #ccdafa;
+  border-top-color: #2453d2;
+  border-radius: 50%;
+  animation: wallet-workspace-spin 1s linear infinite;
+}
+.wallet-workspace .wallet-login-confirmed { color: #287750; font-weight: 600; }
+.wallet-workspace .wallet-load-error { color: #a32929; }
+@keyframes wallet-workspace-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .wallet-loading-icon::after { animation: none; }
+}
+@media (max-width: 600px) {
+  .wallet-workspace { margin: 30px auto; padding: 28px 20px; }
+}
 #feedback {
   position: fixed;
   bottom: 20px;

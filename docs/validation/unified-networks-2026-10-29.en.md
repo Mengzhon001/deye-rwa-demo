@@ -29,3 +29,9 @@ After GitHub Pages deployment, a hidden browser selected each network from the h
 ## Network picker visual update
 
 The homepage native select has been replaced with an icon-based rounded button and a custom popover. The popover identifies the selected chain, describes each environment and explains that switching does not move funds. The interaction takes inspiration from Aave’s icon-based selection and popover list, using this site’s dark and mint palette. Checks cover arrow keys, Enter, Escape, outside dismissal, focus restoration, mobile layout and both application entries. Selecting a network refreshes metadata without remounting the homepage animation.
+
+## Feedback while loading an authenticated workspace
+
+A real Rabby test confirmed that product, balance and transaction reads can take about ten seconds after the Base Sepolia login signature has already been verified. The application now immediately identifies the signed-in wallet and shows a loading indicator and the selected network. After eight seconds it explains that the network is responding slowly, and a query exceeding forty-five seconds offers a retry. Retrying a failed data read does not require another signature; an expired session still requires sign-in.
+
+Hidden browser checks cover first sign-in, slow responses, session restoration, both languages, mobile layout, timeouts, failed-read recovery, duplicate clicks and wallet changes during loading. Delays and failed responses are browser fixtures, while authentication uses real signatures and backend sessions. The actual Rabby extension separately passed public Base Sepolia sign-in and session restoration, with visible loading before the workspace appears. These checks perform authentication and reads only; they do not submit business transactions or reset scenarios.

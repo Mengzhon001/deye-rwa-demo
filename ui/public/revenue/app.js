@@ -7,7 +7,8 @@ let lang = localStorage.getItem("revenue.lang") || "zh",
   page = localStorage.getItem(appStorageKey("revenue.page")) || "product_hall",
   state,
   networkConfig,
-  walletSession;
+  walletSession,
+  walletWorkspaceLoad;
 let selectedProduct = sessionStorage.getItem(appStorageKey("revenue.selected-product")) || "";
 function productTitle() { return state?.selectedProduct?.title?.[lang] || t("Solar revenue rights", "光伏收益权"); }
 function productMigrationNotice() {
@@ -831,6 +832,7 @@ async function api(path, body, signal) {
       return api(path, undefined, signal);
     }
     if (r.status === 401 && networkConfig?.walletRequired) {
+      cancelWalletWorkspaceLoad();
       walletSession = undefined;
       state = undefined;
       document.querySelector("#nav").innerHTML = "";
@@ -884,6 +886,7 @@ async function ensureWalletNetwork() {
 }
 function walletLanding(message = "") {
   window.RevenueGuide?.clear();
+  document.querySelector("#main").classList.remove("dashboard-main");
   document.querySelector("#product-select").hidden = true;
   document.querySelector("#product-create").hidden = true;
   document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
@@ -897,6 +900,8 @@ function walletLanding(message = "") {
   document.querySelector("#account").hidden = true;
   const connect = document.querySelector("#wallet-connect");
   connect.hidden = false;
+  connect.disabled = false;
+  document.querySelector("#refresh").disabled = false;
   connect.textContent = t("Connect wallet", "连接钱包");
   document.querySelector("#wallet-status").textContent = t(
     "Wallet sign-in required",
@@ -919,21 +924,73 @@ function walletLanding(message = "") {
     "选择角色并登录"
   )}</button></section>`;
 }
+function cancelWalletWorkspaceLoad() {
+  walletWorkspaceLoad?.controller.abort();
+  clearTimeout(walletWorkspaceLoad?.slowTimer);
+  walletWorkspaceLoad = undefined;
+}
+function walletWorkspaceGate(session, error = "") {
+  walletLanding();
+  document.querySelector("#nav").innerHTML = "";
+  document.querySelector("#wallet-faucet").hidden = true;
+  document.querySelector("#demo-reset").hidden = true;
+  const address = `${session.address.slice(0, 6)}…${session.address.slice(-4)}`;
+  const connect = document.querySelector("#wallet-connect");
+  connect.textContent = address;
+  connect.disabled = !error;
+  document.querySelector("#refresh").disabled = !error;
+  document.querySelector("#wallet-status").textContent = `${t(...names[session.role])} · ${networkConfig.chainName} · ${t("Signed in", "已登录")}`;
+  document.querySelector("#main").innerHTML = `<section class="wallet-gate wallet-workspace" aria-busy="${!error}" aria-labelledby="wallet-workspace-title">
+    <div class="wallet-gate-icon ${error ? "" : "wallet-loading-icon"}" aria-hidden="true">${error ? "!" : ""}</div>
+    <p class="wallet-login-confirmed">${t("Wallet signature verified", "钱包签名已验证")}</p>
+    <h1 id="wallet-workspace-title">${error ? t("Workspace could not load", "工作台暂时无法加载") : t("Signed in. Loading your workspace…", "已登录，正在加载工作台…")}</h1>
+    <p>${esc(t(`Reading products, wallet balances and transaction records on ${networkConfig.chainName}.`, `正在读取 ${networkConfig.chainName} 上的产品、钱包余额和交易记录。`))}</p>
+    <p class="wallet-gate-network">${esc(t(...names[session.role]))} · ${esc(address)}</p>
+    ${error ? `<p class="wallet-load-error" role="alert">${esc(error)}</p><p>${t("Your sign-in is retained. Retry loading without connecting or signing again.", "登录状态已保留。请重试加载，无需再次连接钱包或签名。")}</p><button type="button" class="btn btn-primary" id="wallet-load-retry">${t("Retry loading workspace", "重新加载工作台")}</button>` : `<p data-wallet-load-detail role="status">${t("Please wait. You do not need to connect or sign again.", "请稍候，无需再次连接钱包或签名。")}</p>`}
+  </section>`;
+}
 async function acceptWalletSession(session) {
+  cancelWalletWorkspaceLoad();
   walletSession = session;
   role = session.role;
   actor = session.actor;
   if (!nav[role].some((item) => item[0] === page)) page = nav[role][0][0];
-  await refresh();
+  state = undefined;
+  const load = { controller: new AbortController(), error: "", pending: true };
+  walletWorkspaceLoad = load;
+  walletWorkspaceGate(session);
   feedback("");
+  load.slowTimer = setTimeout(() => {
+    if (walletWorkspaceLoad !== load) return;
+    const detail = document.querySelector("[data-wallet-load-detail]");
+    if (detail) detail.textContent = t("The network is responding slowly. Your wallet is signed in; chain data is still loading.", "网络响应较慢。钱包已完成登录，仍在加载链上数据，请稍候。");
+  }, 8000);
+  try {
+    const valid = () => walletWorkspaceLoad === load && walletSession === session;
+    const ready = await refresh({ signal: AbortSignal.any([load.controller.signal, AbortSignal.timeout(45000)]), valid });
+    if (!valid() || !ready) return false;
+    walletWorkspaceLoad = undefined;
+    feedback("");
+    return true;
+  } catch (error) {
+    if (walletWorkspaceLoad !== load || walletSession !== session) return false;
+    load.error = ["TimeoutError", "AbortError"].includes(error.name)
+      ? t("The data query timed out. No business transaction was submitted.", "数据查询超时，本次加载没有提交业务交易。")
+      : t("The data service is temporarily unavailable. No business transaction was submitted.", "数据服务暂时不可用，本次加载没有提交业务交易。");
+    walletWorkspaceGate(session, load.error);
+    return false;
+  } finally {
+    clearTimeout(load.slowTimer);
+    load.pending = false;
+  }
 }
 async function connectWallet(selectedRole, destination) {
   await window.RoleLogin.open({
     network: networkConfig,
     role: selectedRole,
     onSuccess: async session => {
-      await acceptWalletSession(session);
-      if (destination && session.role === selectedRole && nav[role].some(n => n[0] === destination.page)) {
+      const ready = await acceptWalletSession(session);
+      if (ready && destination && session.role === selectedRole && nav[role].some(n => n[0] === destination.page)) {
         page = destination.page;
         wfSelect(destination.applicationId || "");
         render();
@@ -942,6 +999,7 @@ async function connectWallet(selectedRole, destination) {
   });
 }
 window.addEventListener("revenue-wallet-invalidated", () => {
+  cancelWalletWorkspaceLoad();
   walletSession = undefined;
   state = undefined;
   document.querySelector("#nav").innerHTML = "";
@@ -1062,6 +1120,8 @@ function renderBusiness() {
     .join("");
   const walletButton = document.querySelector("#wallet-connect");
   walletButton.hidden = !walletRequired;
+  walletButton.disabled = false;
+  document.querySelector("#refresh").disabled = false;
   walletButton.textContent = walletSession
     ? `${walletSession.address.slice(0, 6)}…${walletSession.address.slice(-4)}`
     : t("Connect wallet", "连接钱包");
@@ -1196,19 +1256,23 @@ function render() {
     },
   });
 }
-async function refresh() {
-  state = await api("/api/state");
-  if (state.selectedProduct?.archived && !sessionStorage.getItem(appStorageKey("revenue.pending")) &&
-      BigInt(state.accounts[actor]?.subscription.amount || "0") === 0n) {
-    const next = role === "investor" ? state.products?.find(p => [1,2].includes(p.phase))
-      : state.productOptions?.slice().reverse().find(p => p.phase === 0);
+async function refresh({ signal, valid = () => true } = {}) {
+  let latest = await api("/api/state", undefined, signal);
+  if (!valid()) return false;
+  if (latest.selectedProduct?.archived && !sessionStorage.getItem(appStorageKey("revenue.pending")) &&
+      BigInt(latest.accounts[actor]?.subscription.amount || "0") === 0n) {
+    const next = role === "investor" ? latest.products?.find(p => [1,2].includes(p.phase))
+      : latest.productOptions?.slice().reverse().find(p => p.phase === 0);
     if (next) {
       selectedProduct = next.vault;
       sessionStorage.setItem(appStorageKey("revenue.selected-product"), selectedProduct);
-      state = await api("/api/state");
+      latest = await api("/api/state", undefined, signal);
     }
   }
+  if (!valid()) return false;
+  state = latest;
   render();
+  return true;
 }
 document.addEventListener("change", e => {
   if (e.target.id === "product-select") switchProduct(e.target.value).catch(error => feedback(error.message, true));
@@ -1336,11 +1400,16 @@ document.addEventListener("click", async (e) => {
       lang = lang === "en" ? "zh" : "en";
       localStorage.setItem("revenue.lang", lang);
       if (state) render();
+      else if (walletWorkspaceLoad && walletSession) walletWorkspaceGate(walletSession, walletWorkspaceLoad.error);
       else walletLanding();
     }
     if (el.id === "refresh" || el.id === "wallet-funds-refresh") {
-      await refresh();
+      if (networkConfig?.walletRequired && walletSession && !state) await acceptWalletSession(walletSession);
+      else await refresh();
       feedback("");
+    }
+    if (el.id === "wallet-load-retry" && walletSession && !walletWorkspaceLoad?.pending) {
+      await acceptWalletSession(walletSession);
     }
     if (el.id === "wallet-connect" || el.id === "wallet-connect-main") {
       await connectWallet();
