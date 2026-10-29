@@ -15,7 +15,7 @@
 \begin{document}
 \hypersetup{pdftitle={Deye RWA 平台产品与操作说明书},pdfauthor={Deye RWA}}
 \begin{center}\textbf{Deye RWA 平台产品与操作说明书}\end{center}
-内部测试版　2026年10月22日
+内部测试版　2026年10月29日
 
 本说明书说明四类参与者如何使用钱包完成申请、估值、募集、结算、月度分配和退出。设备所有权始终由业主保留，投资者购买的是有限期限的收益权份额。所有支付均为演示资金，不存在固定票息或保证返还本金。
 
@@ -239,6 +239,59 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 
 在业务交易确认后点击交易哈希，即可打开对应的Blockscout页面。也可以将完整交易哈希、钱包地址或合约地址粘贴到浏览器顶部的搜索框。先核对状态、发送者、目标合约和区块，再检查代币转账与事件。登录和协议消息签名属于链下步骤，不会产生交易记录。
 
+\clearpage\section{Base Sepolia 独立公链测试}
+原公网演示继续用于完整生命周期演练。Base Sepolia 是另一个独立环境，用于检验公共链的合约和钱包交易。两者沿用同一组角色地址，但合约、余额和业务记录相互独立。后文的完整生命周期操作图以私链演示为例，公链测试应遵循本节的实际时间和资金限制。
+
+\subsection{独立入口与网络配置}
+公链测试应用\par\url{https://icq-attorneys-frontpage-weekends.trycloudflare.com/app/}\par
+公链浏览器\par\url{https://base-sepolia.blockscout.com}\par
+钱包 RPC\par\url{https://sepolia.base.org}\par
+Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USDC。首页的 Launch App 仍然打开原演示。请点击独立的 Base Sepolia 入口，并在钱包中核对网络后登录。
+
+\nolinkurl{0x036CbD53842c5426634e7929541eC2318f3dCF7e}\par
+上述地址是本环境使用的官方 Circle 测试 USDC，精度为六位。它与私链 mUSDC 不同。测试币没有货币价值，不能将其他链上的余额直接用于本链认购。
+
+\subsection{环境构成与数据流}
+\begin{center}\begin{tikzpicture}[>=Latex,node distance=1cm,box/.style={draw,align=center,text width=4.5cm,minimum height=1.3cm}]
+\node[box] (web) at (0,0) {GitHub 首页与文档};
+\node[box] (app) at (6,0) {独立 Mac 业务应用};
+\node[box] (wallet) at (6,-2.5) {Rabby 钱包};
+\node[box] (chain) at (0,-5) {Base Sepolia 公共链};
+\node[box] (explorer) at (6,-5) {公共 Blockscout};
+\draw[->] (web)--(app);
+\draw[->] (app)--(wallet);
+\draw[->] (wallet)--(chain);
+\draw[->] (app)--(chain);
+\draw[->] (chain)--(explorer);
+\end{tikzpicture}\end{center}
+业务页面通过 HTTPS 连接独立后端。钱包签署交易后将其广播到 Base Sepolia，后端核对回执和事件，公共浏览器随后索引记录。本环境没有部署 Anvil，也不依赖原私链的 RPC 隧道。
+
+\subsection{资金准备与认购操作}
+请先使用页面的测试资金入口打开官方水龙头，选择 Base Sepolia，并向当前角色地址领取测试 ETH 和 Circle 测试 USDC。领取可能需要服务方登录或受到频率限制。系统本身不能增发 Circle USDC。确认到账后，返回页面并刷新余额。私钥只应输入钱包扩展，不应输入水龙头或业务网站。
+
+\url{https://portal.cdp.coinbase.com/products/faucet}\par\url{https://faucet.circle.com/}\par
+投资者选择募集中产品并申请资格。中介批准资格后，投资者填写金额，先批准对应 USDC 额度，再确认认购交易。募集开放时可以追加认购，每次追加后中介必须重新审核累计金额。结算前取消认购会退回本人全部累计托管款。认购进入托管并不等于已经取得 DRS。
+
+结算继续要求有效估值、订单审批、募集门槛以及足够的购买款和初始留存。合约会自动留存10\%，不需要用户另行转账。少量测试币可以用于检查授权、认购、审核和退款，不能据此声称已经完成需要更多资金的发行结算。
+
+\subsection{真实时间与测试范围}
+公共链不能由应用提前推进时间。月度缴费需要产品已经结算，并到达对应服务期末。六个月转让锁定、赎回通知期和到期时间也保持不变。页面因此不提供重置和时间推进。完整生命周期演示仍应使用原公网私链环境。
+
+业主月度缴费使用 Circle 测试 USDC。售电回款仍作为单独披露的经济模拟，其代币必须由独立资金账户预先持有。电站数据使用固定采集时间的真实记录回放，电价和未来现金流继续属于模型假设。本次部署未加入 Oracle，不能把报告上链解释为 API 数据已获得独立验证。
+
+\clearpage
+\subsection{交易核对与恢复}
+交易提交后，请使用其哈希在公共浏览器核对发送者、目标合约、调用方法、事件和 USDC 转移。后端和钱包使用的 RPC 可能在不同时刻查到同一笔交易。遇到等待提示时应保留原哈希，重试原操作的确认，不要再次付款。浏览器索引稍有延迟并不表示交易失败。
+
+电站凭证合约\par\nolinkurl{0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176}\par
+收益权资产池\par\nolinkurl{0xB84F6E2EB3b9e63bBE447190dF268c49D617A445}\par
+月度缴费合约\par\nolinkurl{0xa2748E730069A38913b5E2e09a45C5aB546a0908}\par
+\clearpage\begin{landscape}
+\begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-product.zh.png}\par 独立公链产品与网络信息。编号指向本次测试的产品、认购入口和测试资金入口。\end{center}
+\end{landscape}
+\clearpage\begin{landscape}
+\begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-wallet.zh.png}\par 钱包余额与官方水龙头说明。此页面不会通过后台增发 Circle USDC。\end{center}
+\end{landscape}
 \clearpage\section{动态引导与交接}
 首次进入角色时，业务介绍说明设备、收益权、资金和参与者之间的关系。右侧操作引导显示当前产品、对象、必要条件、处理人和预期结果。可以暂停或收起引导，再从顶部“操作引导”恢复。完成状态来自业务与链上记录，不由“下一步”按钮决定。
 

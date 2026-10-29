@@ -1,6 +1,6 @@
 # Deye RWA 收益权平台
 
-本仓库公开提供光伏收益权演示系统的源码与操作手册，包含光伏电站收益权平台的智能合约、估值模型、服务端、双语网站、钱包业务应用和部署工具。本次于 2026 年 10 月 27 日发布，包含截至目前的最新业务实现，包括业主月度 USDC 缴费、独立售电回款、中介确认入池及按月分配。仓库不包含原工作目录的 Git 历史和运行数据。
+本仓库公开提供光伏收益权演示系统的源码与操作手册，包含光伏电站收益权平台的智能合约、估值模型、服务端、双语网站、钱包业务应用和部署工具。本次于 2026 年 10 月 29 日更新，包含截至目前的最新业务实现，包括业主月度 USDC 缴费、独立售电回款、中介确认入池及按月分配。仓库不包含原工作目录的 Git 历史和运行数据。
 
 平台将电站收益权凭证托管到资产池，并在认购结算成功后发行投资者份额。设备仍归业主所有。新协议的现金流来自业主按约定折扣支付的光伏用电费与上网售电收入，并归集全部约定净收益。产品没有固定票息，也不保证返还原始本金。
 
@@ -73,3 +73,11 @@ The bilingual operating manual generator is in `scripts/manual/`. Reviewed manua
 月度运营现已区分账单、业主实际缴费、电网售电回款和中介核对入池。中介发布账单后，业主使用自己的钱包授权并支付测试 USDC。只有电网售电部分由独立系统账户模拟。中介核对两笔资金后签署确认交易，净回款才进入资产池。费用、净值审批和月度分配继续按既有权限执行。
 
 公网测试环境已启用这套流程，既有产品、角色地址、认购和历史回款均保留。已完成的旧账期不会重复收费。更新后的中英文操作手册及截图位于 `docs/manual/`，仓库中的手册不包含测试私钥。
+
+## Base Sepolia 独立公链测试
+
+首页新增独立的 Base Sepolia 入口，原 Launch App 和公网私链演示保持不变。公链版本使用 Chain ID `84532` 和 Circle 官方测试 USDC，沿用现有角色地址，采用独立合约及业务存储。它不支持增发、重置和时间推进，适合检查公共链交易，不用于压缩完整生命周期。
+
+部署命令、恢复机制及本机输入说明见 [Base Sepolia 部署说明](infra/base-sepolia/README.md)。双语产品文档见 [中文说明](docs/protocol/zh/base-sepolia.md) 和 [English instructions](docs/protocol/en/base-sepolia.md)。中英文 PDF 手册均增加了独立环境、钱包网络、资金准备、交易核对和真实时间限制的说明。
+
+The independent Base Sepolia environment uses official Circle test USDC and separate contracts, storage and HTTPS access. The existing demonstration remains unchanged. See the deployment guide and bilingual manuals for public-chain test boundaries and recovery instructions.

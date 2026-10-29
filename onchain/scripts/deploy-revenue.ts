@@ -1,7 +1,8 @@
 import hre from "hardhat";
-import { readFileSync, writeFileSync } from "node:fs";
+import {assertPublicConfiguration, publicTestnet, ERC20_ABI} from "./revenue-network";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import { AbiCoder, getAddress } from "ethers";
+import { AbiCoder, getAddress, HDNodeWallet, getCreateAddress, keccak256 } from "ethers";
 export type RevenueManifest = {
   version: "revenue-rights.v2";
   chainId: number;
@@ -10,6 +11,8 @@ export type RevenueManifest = {
   deployedBlockHash: string;
   addresses: { usdc: string; station: string; vault: string; billing?: string };
   accounts: Record<string, string>;
+  paymentToken?: {kind:"circle-test-usdc";symbol:"USDC";decimals:6};
+  deploymentTransactions?: Record<string,string>;
   billingDeployment?: {transaction: string; block: number};
   scenarioId: string;
   localMaintenance?: {kind:"anvil-local-code-maintenance";previousCodeHash:string;codeHash:string;at:string;record:string};
@@ -20,6 +23,8 @@ function configured(name: string, fallback: string) {
   return getAddress(value || fallback);
 }
 export async function deployRevenue(): Promise<RevenueManifest> {
+  const chainId=Number((await hre.ethers.provider.getNetwork()).chainId);
+  assertPublicConfiguration(chainId);
   const signers = await hre.ethers.getSigners();
   if (signers.length < 8) throw new Error("Revenue deployment requires eight funded accounts");
   const [deployer, managerSigner, trusteeSigner, trustee2Signer, treasurySigner] =
@@ -40,35 +45,55 @@ export async function deployRevenue(): Promise<RevenueManifest> {
     new Set([accounts.agent, accounts.trustee, accounts.trustee2]).size !== 3
   )
     throw new Error("Intermediary and both trustees require distinct addresses");
-  const usdc = await (
-    await hre.ethers.getContractFactory("MockUSDC")
-  ).deploy(accounts.admin);
-  await usdc.waitForDeployment();
-  const station = await (
-    await hre.ethers.getContractFactory("DeyeRWA")
-  ).deploy(accounts.admin);
-  await station.waitForDeployment();
+  const deploymentTransactions:Record<string,string>={};
+  async function deployOne(key:string,name:string,args:unknown[]){
+    const factory=await hre.ethers.getContractFactory(name);
+    if(!publicTestnet(chainId)){
+      const contract=await factory.deploy(...args);await contract.waitForDeployment();
+      deploymentTransactions[key]=contract.deploymentTransaction()!.hash;return contract;
+    }
+    const journal=process.env.REVENUE_DEPLOYMENT_JOURNAL;
+    if(!journal)throw new Error("Explicit Base Sepolia deployment journal required");
+    mkdirSync(dirname(journal),{recursive:true});
+    const records=existsSync(journal)?JSON.parse(readFileSync(journal,"utf8")):{};
+    const request=await factory.getDeployTransaction(...args);
+    const inputHash=keccak256(request.data!);
+    let record=records[key];
+    if(record&&(record.inputHash!==inputHash||record.chainId!==chainId||record.sender!==accounts.admin))throw new Error("Deployment journal does not match requested contracts");
+    if(!record){
+      const wallet=HDNodeWallet.fromPhrase(process.env.REVENUE_SYSTEM_MNEMONIC!).connect(hre.ethers.provider);
+      const nonce=Number(BigInt(await hre.ethers.provider.send("eth_getTransactionCount",[wallet.address,"pending"])));
+      const raw=await wallet.signTransaction(await wallet.populateTransaction({...request,nonce}));
+      record={chainId,sender:accounts.admin,inputHash,raw,hash:keccak256(raw),address:getCreateAddress({from:wallet.address,nonce})};
+      records[key]=record;writeFileSync(journal,JSON.stringify(records,null,2),{mode:0o600});
+    }
+    let receipt=await hre.ethers.provider.getTransactionReceipt(record.hash);
+    if(!receipt){
+      if(!await hre.ethers.provider.getTransaction(record.hash))await hre.ethers.provider.broadcastTransaction(record.raw);
+      for(let i=0;i<180&&!receipt;i++){await new Promise(r=>setTimeout(r,1000));receipt=await hre.ethers.provider.getTransactionReceipt(record.hash);}
+    }
+    if(receipt?.status!==1)throw new Error(`Deployment ${key} did not succeed; inspect its journaled transaction`);
+    deploymentTransactions[key]=record.hash;
+    return factory.attach(record.address) as any;
+  }
+  const external = process.env.REVENUE_EXTERNAL_USDC;
+  const usdc = external ? await hre.ethers.getContractAt(ERC20_ABI, getAddress(external)) : await deployOne("usdc","MockUSDC",[accounts.admin]);
+  if(external){
+    if(await hre.ethers.provider.getCode(external)==="0x" || Number(await usdc.decimals())!==6)throw new Error("External USDC must be a deployed six-decimal token");
+  } else await usdc.waitForDeployment();
+
+  const station = await deployOne("station","DeyeRWA",[accounts.admin]);
   const contractName=process.env.REVENUE_DISTRIBUTION_INTERVAL_MONTHS==="1"?"RevenueShareVaultV5":"RevenueShareVaultV4";
-  const vault = await (
-    await hre.ethers.getContractFactory(contractName)
-  ).deploy(
-    accounts.admin,
-    accounts.agent,
-    accounts.trustee,
-    accounts.trustee2,
-    accounts.treasury,
-    await usdc.getAddress(),
-    await station.getAddress()
-  );
-  await vault.waitForDeployment();
-  await (await station.grantRole(await station.ISSUER_ROLE(), accounts.agent)).wait();
+  const vault=await deployOne("vault",contractName,[accounts.admin,accounts.agent,accounts.trustee,accounts.trustee2,accounts.treasury,await usdc.getAddress(),await station.getAddress()]);
+  if(!await station.hasRole(await station.ISSUER_ROLE(),accounts.agent))
+    await (await station.grantRole(await station.ISSUER_ROLE(), accounts.agent)).wait();
   let billingAddress: string | undefined;
   let billingDeployment: RevenueManifest["billingDeployment"];
   if (process.env.REVENUE_HOUSEHOLD_PAYMENTS_ENABLED !== "false") {
-    const billing = await (await hre.ethers.getContractFactory("HouseholdBilling")).deploy(await usdc.getAddress(), await vault.getAddress(), accounts.agent, accounts.treasury);
+    const billing=await deployOne("billing","HouseholdBilling",[await usdc.getAddress(),await vault.getAddress(),accounts.agent,accounts.treasury]);
     await billing.waitForDeployment();billingAddress=await billing.getAddress();
-    const receipt=await billing.deploymentTransaction()!.wait();billingDeployment={transaction:receipt!.hash,block:receipt!.blockNumber};
-    await (await vault.grantRole(await vault.TREASURY(), billingAddress)).wait();
+    const receipt=await hre.ethers.provider.getTransactionReceipt(deploymentTransactions.billing);billingDeployment={transaction:receipt!.hash,block:receipt!.blockNumber};
+    if(!await vault.hasRole(await vault.TREASURY(),billingAddress))await (await vault.grantRole(await vault.TREASURY(), billingAddress)).wait();
   }
   const block = (await hre.ethers.provider.getBlock("latest"))!;
   return {
@@ -88,6 +113,8 @@ export async function deployRevenue(): Promise<RevenueManifest> {
       ...(billingAddress ? {billing:billingAddress}:{}),
     },
     accounts,
+    deploymentTransactions: {...deploymentTransactions,...(billingDeployment?{billing:billingDeployment.transaction}:{})},
+    ...(external?{paymentToken:{kind:"circle-test-usdc" as const,symbol:"USDC" as const,decimals:6 as const}}:{}),
     ...(billingDeployment?{billingDeployment}:{}),
   };
 }
@@ -127,6 +154,8 @@ export async function verifyRevenue(manifest: RevenueManifest) {
   const results: Array<{ address: string; verified: boolean; message: string }> = [];
   const api = process.env.REVENUE_EXPLORER_API_URL?.replace(/\/$/u, "");
   for (const item of items) {
+    if(manifest.chainId===84532)await new Promise(r=>setTimeout(r,2500));
+    if(manifest.paymentToken && item.address===manifest.addresses.usdc) continue;
     if(manifest.localMaintenance&&item.address===manifest.addresses.vault){results.push({address:item.address,verified:false,message:"Local Anvil runtime maintenance; historical deployment verification is not verification of the new runtime. Check the current runtime against its source package."});continue;}
     try {
       if (!api) {
@@ -194,7 +223,7 @@ export async function verifyRevenue(manifest: RevenueManifest) {
             verified = contract.is_verified === true;
           }
           if (!verified)
-            await new Promise((done) => setTimeout(done, 500));
+            await new Promise((done) => setTimeout(done, manifest.chainId===84532?2000:500));
         }
         if (!verified) throw new Error(`Blockscout did not verify: ${text}`);
       }

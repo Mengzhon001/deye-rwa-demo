@@ -69,7 +69,7 @@ export class RevenueCatalog {
     for (const entry of this.entries.filter(e => !e.archived)) {
       const runtime = this.runtimes.get(entry.key)!, s = runtime.repo.read();
       const names = ["phase", "fresh", "target", "totalSubscriptions", "totalSupply", "deadline", "rightCount"];
-      const values = await Promise.all(names.map(n => runtime.vault.getFunction(n)()));
+      const values = await runtime.readTogether(names.map(method=>({contract:runtime.vault,method})));
       const chain = Object.fromEntries(names.map((n, i) => [n, values[i]]));
       const row = publishedProducts(s.manifest!, chain, filter)[0];
       if (!row && !(includeDrafts && Number(chain.phase) === 0)) continue;
@@ -103,6 +103,7 @@ export class RevenueCatalog {
       const dir = join(this.primary.dataDir, "products", key);
       mkdirSync(dir, { recursive: true });
       const runtime = new RevenueRuntime(dir);
+      if(this.primary.repo.read().manifest?.chainId===84532)throw new Error("Deploy additional Base Sepolia products explicitly with base:deploy. The application does not spend deployment ETH from a browser request.");
       await runtime.start();
       runtime.repo.update(s => {
         const latest = this.monitor.read().stations;

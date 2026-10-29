@@ -1,0 +1,6 @@
+import {test}from'node:test';import assert from'node:assert/strict';import{createServer}from'node:http';import{PublicReadProvider}from'./public-rpc';
+test('public reads recover from rate limiting; transaction broadcasts are never retried',async()=>{
+ const counts:Record<string,number>={};const server=createServer(async(req,res)=>{let body='';for await(const part of req)body+=part;const input=JSON.parse(body),list=Array.isArray(input)?input:[input];const result=list.map(p=>{counts[p.method]=(counts[p.method]||0)+1;return p.method==='eth_call'&&counts[p.method]>1?{id:p.id,jsonrpc:'2.0',result:'0x01'}:{id:p.id,jsonrpc:'2.0',error:{code:-32007,message:'25/second request limit reached'}};});res.setHeader('Content-Type','application/json');res.end(JSON.stringify(Array.isArray(input)?result:result[0]));});
+ await new Promise<void>(r=>server.listen(0,'127.0.0.1',r));const address=server.address() as any;const p=new PublicReadProvider(`http://127.0.0.1:${address.port}`,84532,{staticNetwork:true,batchMaxCount:1});
+ try{assert.equal(await p.send('eth_call',[{to:'0x0000000000000000000000000000000000000001',data:'0x'},'latest']),'0x01');assert.equal(counts.eth_call,2);await assert.rejects(p.send('eth_sendRawTransaction',['0x1234']));assert.equal(counts.eth_sendRawTransaction,1);}finally{p.destroy();await new Promise<void>(r=>server.close(()=>r()));}
+});

@@ -79,7 +79,7 @@ function header() {
   )}</a><a class="nav-secondary" href="${link()}">Documentation ↗</a><button class="language" data-language>${tr(
     "EN",
     "中文"
-  )}</button>${launch}</nav></header>`;
+  )}</button>${pagesMode?'<button class="language" data-base-launch>Base Sepolia ↗</button>':''}${launch}</nav></header>`;
 }
 function footer() {
   return `<footer class="site-footer"><a class="wordmark" href="${siteBase}"><strong>Deye</strong><span>RWA</span></a><span>${tr(
@@ -418,6 +418,8 @@ async function contractPanel() {
                       "源码构建与部署字节码及不可变量匹配",
                       "Source build matches runtime bytecode and immutable values"
                     )
+                  : c.status === "external"
+                  ? tr("外部 Circle 测试 USDC，不属于本项目部署的合约源码包。", "External Circle test USDC; not deployed from this project source bundle.")
                   : c.status === "mismatch"
                   ? tr(
                       "当前源码与部署不匹配，请勿将此包视为该部署版本。",
@@ -447,7 +449,7 @@ async function contractPanel() {
         "Deployment information is unavailable. Source remains readable and downloadable."
       );
     const select = document.querySelector<HTMLSelectElement>("#source-file")!;
-    select.value = "contracts/revenue/RevenueShareVault.sol";
+    select.value = "contracts/revenue/RevenueShareVaultV5.sol";
     let version = 0;
     async function show() {
       const v = ++version;
@@ -565,6 +567,18 @@ function documentation() {
 }
 document.addEventListener("click", async (e) => {
   const el = (e.target as HTMLElement).closest("button");
+  if(el?.hasAttribute("data-base-launch")){
+    el.setAttribute("disabled","");
+    try{
+      const response=await fetch(sitePath("base-sepolia.json"),{cache:"no-store"});
+      const c=await response.json();const u=new URL(c.app);
+      if(c.chainId!==84532||u.protocol!=="https:"||!u.hostname.endsWith(".trycloudflare.com")||u.pathname!=="/"||u.username||u.password||u.search||u.hash)throw new Error();
+      const ready=await fetch(c.app+"/api/public/overview",{credentials:"omit",signal:AbortSignal.timeout(20000)});
+      if(!ready.ok)throw new Error();const status=await ready.json();if(!status.chainAvailable||status.chainId!==84532)throw new Error();
+      location.href=`${c.app}/app/?lang=${lang}&wallet=rabby`;
+    }catch{const note=document.createElement("p");note.setAttribute("role","alert");note.textContent=tr("Base Sepolia 独立测试入口暂不可用。原演示入口仍通过 Launch App 访问。","The independent Base Sepolia test entry is unavailable. Launch App still opens the original demonstration.");document.querySelector(".site-header")?.after(note);}
+    finally{el.removeAttribute("disabled");}
+  }
   if (el?.hasAttribute("data-launch")) {
     if (!pagesMode) void window.RoleLogin.open();
     else {

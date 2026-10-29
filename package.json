@@ -95,7 +95,21 @@
     "test:revenue:evidence": "HARDHAT_NETWORK=hardhat HARDHAT_CONFIG=$PWD/onchain/hardhat.config.ts node --import tsx --test ui/src/revenue/recording-evidence.test.ts",
     "web3:wallets": "node scripts/local-wallets.mjs",
     "test:handoff": "node --test scripts/handoff.test.mjs",
-    "test:household-payments": "node scripts/revenue-household-local-test.mjs"
+    "test:household-payments": "node scripts/revenue-household-local-test.mjs",
+    "base:init": "node scripts/revenue-base-sepolia.mjs init",
+    "base:check": "node scripts/revenue-base-sepolia.mjs check",
+    "base:deploy": "node scripts/revenue-base-sepolia.mjs deploy",
+    "base:build": "node scripts/revenue-base-sepolia.mjs build",
+    "base:start": "node scripts/revenue-base-sepolia.mjs start",
+    "base:tunnel": "node scripts/revenue-base-sepolia.mjs tunnel",
+    "base:status": "node scripts/revenue-base-sepolia.mjs status",
+    "base:stop": "node scripts/revenue-base-sepolia.mjs stop",
+    "base:logs": "node scripts/revenue-base-sepolia.mjs logs",
+    "base:verify": "node scripts/revenue-base-sepolia.mjs verify",
+    "base:test:unit": "node --import tsx --test ui/src/revenue/event-cache.test.ts ui/src/revenue/public-rpc.test.ts",
+    "base:test:public": "node scripts/test-base-sepolia.mjs",
+    "base:verify:sourcify": "node scripts/verify-base-sourcify.mjs",
+    "base:test:browser": "node scripts/test-base-rabby.mjs"
   },
   "devDependencies": {
     "js-yaml": "4.1.0"

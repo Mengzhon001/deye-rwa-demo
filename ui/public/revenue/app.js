@@ -980,6 +980,16 @@ async function setRole(next, account = next, destination) {
   feedback("");
   return true;
 }
+function applyNetworkLabels(){
+  if(!networkConfig?.publicTestnet)return;
+  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  let node;while(node=walker.nextNode()){
+    if(['SCRIPT','STYLE','TEXTAREA'].includes(node.parentElement?.tagName))continue;
+    node.nodeValue=node.nodeValue.replace(/mUSDC/g,'USDC').replace(/DETH/g,'ETH').replace(/本地演示/g,'Base Sepolia 测试').replace(/LOCAL DEMO/gi,'BASE SEPOLIA TEST').replace(/local demonstration/g,'Base Sepolia test').replace(/Demo funds/g,'Test funds').replace(/本地演示中，须先核对本期账务，再明确确认推进共享财务时间。/g,'公链按真实时间运行，须等待月度截止日。');
+  }
+}
+const networkLabelObserver=new MutationObserver(()=>{networkLabelObserver.disconnect();applyNetworkLabels();networkLabelObserver.observe(document.body,{childList:true,subtree:true});});
+networkLabelObserver.observe(document.body,{childList:true,subtree:true});
 function renderBusiness() {
   const pendingApproval=JSON.parse(sessionStorage.getItem('revenue.pending')||'null');
   if(pendingApproval&&state.operations.some(o=>o.id===pendingApproval.id&&o.action==='approve-valuation'&&Object.values(o.steps).some(step=>step.status==='reverted')))sessionStorage.removeItem('revenue.pending');
@@ -993,9 +1003,9 @@ function renderBusiness() {
     picker.innerHTML = (state.productOptions || []).map(p => `<option value="${esc(p.vault)}" ${p.vault === selectedProduct ? "selected" : ""}>${esc(p.title[lang])} · ${t(...phaseNames[p.phase])}</option>`).join("");
   }
   const createProduct = document.querySelector("#product-create");
-  if (createProduct) { createProduct.hidden = role !== "agent"; createProduct.textContent = t("New issuance", "创建新一期"); }
+  if (createProduct) { createProduct.hidden = role !== "agent" || networkConfig?.createProductEnabled === false; createProduct.textContent = t("New issuance", "创建新一期"); }
   const resetButton = document.querySelector("#demo-reset");
-  resetButton.hidden = !!state.selectedProduct?.archived;
+  resetButton.hidden = !!state.selectedProduct?.archived || networkConfig?.resetEnabled === false;
   resetButton.textContent = t("Reset demo", "重置 Demo");
   document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
   document.querySelector("#brand").textContent = t(
@@ -1148,7 +1158,7 @@ function render() {
     refresh: async () => {
       const expected = {actor,role,wallet:walletSession?.address,vault:state?.manifest?.addresses.vault,chain:networkConfig?.chainId};
       let latest;
-      try { latest = await api("/api/state",undefined,AbortSignal.timeout(15000)); }
+      try { latest = await api("/api/state",undefined,AbortSignal.timeout(networkConfig?.publicTestnet?45000:15000)); }
       catch(error) {
         if(error.name==="TimeoutError"||error.name==="AbortError")throw new Error(t("The status query timed out. Please retry; no business action was submitted.","状态查询超时，请重新查询。本次查询没有提交业务操作。"));
         if(error instanceof TypeError)throw new Error(t("The status service could not be reached. Check the local service and retry.","暂时无法连接状态服务，请检查本地服务后重新查询。"));
@@ -1257,14 +1267,14 @@ async function walletAction(action, payload) {
       ) + prepared.account
     );
   await ensureWalletNetwork();
+  const sentKey=`revenue.sent.${networkConfig.chainId}.${prepared.account}.${idempotencyKey}`;
+  const sent=JSON.parse(localStorage.getItem(sentKey)||'{}');
   try {
     for (const tx of prepared.transactions) {
       const { step, ...request } = tx;
       window.RevenueGuide?.operation({stage:"wallet",action,message:t("Check your account, chain, target contract and requested amount before signing.","请在签名前核对账户、链、目标合约和请求金额。")+" "+prepared.account+" → "+tx.to});
-      const txHash = await walletProvider().request({
-        method: "eth_sendTransaction",
-        params: [request],
-      });
+      const txHash = sent[step] || await walletProvider().request({method:"eth_sendTransaction",params:[request]});
+      sent[step]=txHash;localStorage.setItem(sentKey,JSON.stringify(sent));
       window.RevenueGuide?.operation({stage:"submitted",action,hash:txHash});
       await api("/api/wallet/submitted", {
         operationId: idempotencyKey,
@@ -1301,7 +1311,8 @@ async function walletAction(action, payload) {
     }).catch(() => {});
     throw error;
   }
-  return api("/api/actions", { action, payload, idempotencyKey });
+  const completed=await api("/api/actions", { action, payload, idempotencyKey });
+  localStorage.removeItem(sentKey);return completed;
 }
 document.addEventListener("click", async (e) => {
   const el = e.target.closest("button");
@@ -1332,6 +1343,11 @@ document.addEventListener("click", async (e) => {
     }
     if (el.id === "wallet-connect" || el.id === "wallet-connect-main") {
       await connectWallet();
+    }
+    if (el.id === "wallet-faucet" && networkConfig?.publicTestnet) {
+      const box=document.createElement('dialog');box.className='wallet-funds-dialog';box.setAttribute('aria-labelledby','base-funds-title');
+      box.innerHTML=`<h2 id="base-funds-title">${t('Base Sepolia test funds','Base Sepolia 测试资金')}</h2><p>${t('Use the official faucets and select Base Sepolia. These tokens have no monetary value. The application cannot mint Circle USDC. Return here and refresh your balance after confirmation.','请在官方水龙头选择 Base Sepolia。测试币没有货币价值，本系统无法增发 Circle USDC。到账后返回本页并刷新余额。')}</p><p>${esc(walletSession?.address||'')}</p><p><a href="${esc(networkConfig.faucets.eth)}" target="_blank" rel="noopener">${t('ETH faucet','ETH 水龙头')} ↗</a></p><p><a href="${esc(networkConfig.faucets.usdc)}" target="_blank" rel="noopener">${t('Circle USDC faucet','Circle USDC 水龙头')} ↗</a></p><button class="btn">${t('Close','关闭')}</button>`;
+      box.querySelector('button').onclick=()=>box.close();box.addEventListener('close',()=>box.remove(),{once:true});document.body.append(box);box.showModal();return;
     }
     if (el.id === "wallet-faucet") {
       el.disabled = true;
@@ -1367,7 +1383,7 @@ document.addEventListener("click", async (e) => {
           type: "ERC20",
           options: {
             address: state.manifest.addresses.usdc,
-            symbol: "mUSDC",
+            symbol: networkConfig?.paymentToken?.symbol || "mUSDC",
             decimals: 6,
           },
         },
@@ -1520,6 +1536,10 @@ async function runBusinessAction(action,payload,retryId) {
   } catch (error) {
     feedback(error.message, true);
     await refresh();
+    if(action==="subscribe"&&payload.amountUSDC6){
+      const field=document.querySelector('form[data-action="subscribe"] [name="amountUSDC6"]');
+      if(field){const amount=BigInt(payload.amountUSDC6);field.value=`${amount/1000000n}.${String(amount%1000000n).padStart(6,"0")}`;}
+    }
     window.RevenueGuide?.operation({stage:"failed",action,message:error.message});
     return {ok:false,error:error.message};
   } finally {

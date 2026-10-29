@@ -26,6 +26,7 @@ for lang in (['zh','en'] if A.language=='both' else [A.language]):
   path=Path(path)
   if not path.exists():raise RuntimeError('Missing manual image '+str(path))
   target=D/'assets'/path.name
+  target.parent.mkdir(parents=True,exist_ok=True)
   if path.resolve()!=target.resolve():shutil.copy2(path,target)
   assets.append(target.name);t(r'\begin{center}\includegraphics[width=\linewidth,height='+height+r',keepaspectratio]{assets/'+target.name+r'}\par '+esc(caption)+r'\end{center}')
  def landscape():t(r'\clearpage\begin{landscape}')
@@ -63,7 +64,7 @@ for lang in (['zh','en'] if A.language=='both' else [A.language]):
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \begin{document}''')
  title=L('Deye RWA 平台产品与操作说明书','Deye RWA Platform Product and Operating Manual');t(r'\hypersetup{pdftitle={'+esc(title)+r'},pdfauthor={Deye RWA}}');t(r'\begin{center}\textbf{'+esc(title)+r'}\end{center}')
- para('内部测试版　2026年10月22日','Internal test edition, 22 October 2026')
+ para('内部测试版　2026年10月29日','Internal test edition, 29 October 2026')
  para('本说明书说明四类参与者如何使用钱包完成申请、估值、募集、结算、月度分配和退出。设备所有权始终由业主保留，投资者购买的是有限期限的收益权份额。所有支付均为演示资金，不存在固定票息或保证返还本金。','This manual explains how the four participant roles use wallets to complete applications, valuation, fundraising, settlement, monthly distributions and exits. Equipment remains the owner’s property. Investors acquire shares in finite revenue rights, with no fixed coupon or guaranteed repayment of their original investment. All payments use demonstration funds.')
  para('正文对应本次上线的动态引导、业主钱包月度缴费及 V5 月度分配版本。当前公网链编号为20261008。截图在隔离测试环境中采集，具体合约、余额和日期可能与同事所在的共享产品不同。操作前应核对产品名称、钱包地址和链编号。','The instructions cover the dynamic guide, household wallet payments and V5 monthly-distribution release. The public test Chain ID is 20261008. Screenshots come from isolated tests and may show different contracts, balances or dates from the shared product. Check the product, account and network before acting.')
  para('本文件保留发行、转让、赎回和到期等完整操作说明。月度缴费及确认步骤使用本次重新采集的中英文截图，其余未改变的操作沿用已核对的对应语言截图。截图不代表共享产品已经到达所示状态。','Every illustrated workflow step uses the English interface. The monthly payment and reconciliation images were captured for this release; unchanged issuance, exit and closure images retain the verified English captures. Station names use English display translations without changing energy observations. These examples do not imply that the shared product has reached the illustrated stage.')
@@ -100,6 +101,41 @@ for lang in (['zh','en'] if A.language=='both' else [A.language]):
   sub(z,e);t(r'\url{'+pub[key].rstrip('/')+suffix+r'}\par')
  para('测试网络Chain ID为20261008，Gas代币为DETH。首次登录时允许添加此网络，并核对当前RPC地址。隧道地址变化时需要更新RPC，但链编号、钱包地址和原链余额不变。127.0.0.1只指向使用者自己的电脑，远程同事不应使用本机端口地址。','The test network Chain ID is 20261008 and its gas token is DETH. Check the current RPC when adding the network. A tunnel change requires a new RPC URL but does not change the chain, accounts or existing balances. The address 127.0.0.1 points to the reader’s own computer and is not a remote access address.')
  para('在业务交易确认后点击交易哈希，即可打开对应的Blockscout页面。也可以将完整交易哈希、钱包地址或合约地址粘贴到浏览器顶部的搜索框。先核对状态、发送者、目标合约和区块，再检查代币转账与事件。登录和协议消息签名属于链下步骤，不会产生交易记录。','Click a confirmed transaction hash to open its Blockscout page. Alternatively, paste a full hash, account or contract into the explorer search field. Check status, sender, target and block, followed by token transfers and events. Login and agreement message signatures are off-chain and do not create transaction records.')
+ section('Base Sepolia 独立公链测试','Independent Base Sepolia public-chain testing')
+ base_file=ROOT/'docs/manual/base-sepolia.public.json'
+ if not base_file.exists():raise RuntimeError('Base Sepolia public configuration is required')
+ base_cfg=json.loads(base_file.read_text())
+ para('原公网演示继续用于完整生命周期演练。Base Sepolia 是另一个独立环境，用于检验公共链的合约和钱包交易。两者沿用同一组角色地址，但合约、余额和业务记录相互独立。后文的完整生命周期操作图以私链演示为例，公链测试应遵循本节的实际时间和资金限制。','The original public demonstration remains the environment for the full accelerated lifecycle. Base Sepolia is a separate environment for public-chain contracts and wallet transactions. Role addresses are shared, but contracts, balances and workflow records are independent. The complete lifecycle screenshots later in this manual illustrate the private-chain demonstration. Public-chain testing follows the real-time and funding restrictions in this section.')
+ sub('独立入口与网络配置','Independent entry and network configuration')
+ for z,e,value in [('公链测试应用','Public-chain application',base_cfg['app']+'/app/'),('公链浏览器','Public-chain explorer',base_cfg['explorer']),('钱包 RPC','Wallet RPC',base_cfg['rpc'])]:
+  t(esc(L(z,e))+r'\par\url{'+value+r'}\par')
+ para('Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USDC。首页的 Launch App 仍然打开原演示。请点击独立的 Base Sepolia 入口，并在钱包中核对网络后登录。','The Chain ID is 84532, gas is paid in test ETH, and payments use Circle test USDC. Launch App still opens the original demonstration. Use the separate Base Sepolia entry and verify the wallet network before signing in.')
+ t(r'\nolinkurl{'+base_cfg['usdc']+r'}\par')
+ para('上述地址是本环境使用的官方 Circle 测试 USDC，精度为六位。它与私链 mUSDC 不同。测试币没有货币价值，不能将其他链上的余额直接用于本链认购。','The address above identifies the official Circle test USDC used here, with six decimals. It is separate from private-chain mUSDC. Test tokens have no monetary value, and balances on another chain cannot pay for subscriptions here.')
+ sub('环境构成与数据流','Environment components and data flow')
+ t(r'\begin{center}\begin{tikzpicture}[>=Latex,node distance=1cm,box/.style={draw,align=center,text width=4.5cm,minimum height=1.3cm}]')
+ for name,x,y,z,e in [('web',0,0,'GitHub 首页与文档','GitHub homepage and documentation'),('app',6,0,'独立 Mac 业务应用','Independent Mac application'),('wallet',6,-2.5,'Rabby 钱包','Rabby wallet'),('chain',0,-5,'Base Sepolia 公共链','Base Sepolia public chain'),('explorer',6,-5,'公共 Blockscout','Public Blockscout')]:
+  t(f'\\node[box] ({name}) at ({x},{y}) {{{esc(L(z,e))}}};')
+ for a,b in [('web','app'),('app','wallet'),('wallet','chain'),('app','chain'),('chain','explorer')]:t(f'\\draw[->] ({a})--({b});')
+ t(r'\end{tikzpicture}\end{center}')
+ para('业务页面通过 HTTPS 连接独立后端。钱包签署交易后将其广播到 Base Sepolia，后端核对回执和事件，公共浏览器随后索引记录。本环境没有部署 Anvil，也不依赖原私链的 RPC 隧道。','The HTTPS application connects to its independent backend. The wallet signs transactions for Base Sepolia, the backend checks receipts and events, and the public explorer indexes the results. This environment does not run Anvil or depend on the private-chain RPC tunnel.')
+ sub('资金准备与认购操作','Funding and subscription steps')
+ para('请先使用页面的测试资金入口打开官方水龙头，选择 Base Sepolia，并向当前角色地址领取测试 ETH 和 Circle 测试 USDC。领取可能需要服务方登录或受到频率限制。系统本身不能增发 Circle USDC。确认到账后，返回页面并刷新余额。私钥只应输入钱包扩展，不应输入水龙头或业务网站。','Open the official faucets from the test-funds entry, select Base Sepolia and request test ETH and Circle test USDC for the current role address. Providers may require login or limit claims. The application cannot mint Circle USDC. After confirmation, return and refresh the balance. Enter private keys only inside the wallet extension, never in a faucet or the application.')
+ t(r'\url{https://portal.cdp.coinbase.com/products/faucet}\par\url{https://faucet.circle.com/}\par')
+ para('投资者选择募集中产品并申请资格。中介批准资格后，投资者填写金额，先批准对应 USDC 额度，再确认认购交易。募集开放时可以追加认购，每次追加后中介必须重新审核累计金额。结算前取消认购会退回本人全部累计托管款。认购进入托管并不等于已经取得 DRS。','Select a fundraising product and apply for eligibility. After intermediary approval, enter an amount, approve the corresponding USDC allowance and confirm the subscription transaction. Additional subscriptions are allowed while fundraising remains open, and the intermediary reviews the new accumulated amount. Cancellation before settlement refunds the full accumulated escrow for that address. Escrow does not mean DRS has been issued.')
+ para('结算继续要求有效估值、订单审批、募集门槛以及足够的购买款和初始留存。合约会自动留存10%，不需要用户另行转账。少量测试币可以用于检查授权、认购、审核和退款，不能据此声称已经完成需要更多资金的发行结算。','Settlement still requires a current valuation, order approvals, the fundraising threshold and sufficient purchase funding and reserve. The contract automatically retains 10%; no separate reserve transfer is needed. Small test balances support approvals, subscriptions, review and refunds, but do not establish that a larger funded settlement has completed.')
+ sub('真实时间与测试范围','Real time and testing scope')
+ para('公共链不能由应用提前推进时间。月度缴费需要产品已经结算，并到达对应服务期末。六个月转让锁定、赎回通知期和到期时间也保持不变。页面因此不提供重置和时间推进。完整生命周期演示仍应使用原公网私链环境。','The application cannot advance public-chain time. Monthly billing requires a settled product and the end of the relevant service period. The six-month transfer lock, redemption notice period and expiry remain unchanged. Reset and time-advance controls are therefore unavailable. Use the original public private-chain environment for the complete accelerated lifecycle.')
+ para('业主月度缴费使用 Circle 测试 USDC。售电回款仍作为单独披露的经济模拟，其代币必须由独立资金账户预先持有。电站数据使用固定采集时间的真实记录回放，电价和未来现金流继续属于模型假设。本次部署未加入 Oracle，不能把报告上链解释为 API 数据已获得独立验证。','Household monthly payments use Circle test USDC. Grid-export receipts remain a separately disclosed economic simulation, funded from a prefunded independent treasury. Station observations use fixed recorded evidence; tariffs and future cashflows remain modeling assumptions. No oracle is added by this deployment, so anchoring a report does not independently validate API data.')
+ t(r'\clearpage')
+ sub('交易核对与恢复','Transaction checks and recovery')
+ para('交易提交后，请使用其哈希在公共浏览器核对发送者、目标合约、调用方法、事件和 USDC 转移。后端和钱包使用的 RPC 可能在不同时刻查到同一笔交易。遇到等待提示时应保留原哈希，重试原操作的确认，不要再次付款。浏览器索引稍有延迟并不表示交易失败。','After submission, use the hash to check the sender, destination, method, events and USDC transfers in the public explorer. The wallet and backend RPC may see the same transaction at different times. Retain the original hash and retry confirmation rather than paying again. Explorer indexing can lag without a transaction having failed.')
+ for key,label in [('station',L('电站凭证合约','Station credential')),('vault',L('收益权资产池','Revenue-rights vault')),('billing',L('月度缴费合约','Monthly billing contract'))]:
+  t(esc(label)+r'\par\nolinkurl{'+base_cfg['contracts'][key]+r'}\par')
+ for image_name,z,e in [('base-product','独立公链产品与网络信息。编号指向本次测试的产品、认购入口和测试资金入口。','Independent public-chain product and network. Markers identify the product, subscription navigation and test-funds entry.'),('base-wallet','钱包余额与官方水龙头说明。此页面不会通过后台增发 Circle USDC。','Wallet balances and official-faucet instructions. The backend does not mint Circle USDC.')]:
+  shot=ROOT/'docs/manual/assets'/(image_name+'.'+lang+'.png')
+  if shot.exists():
+   landscape();figure(shot,L(z,e),'.90\\textheight');endland()
  section('动态引导与交接','Dynamic guidance and handoffs')
  para('首次进入角色时，业务介绍说明设备、收益权、资金和参与者之间的关系。右侧操作引导显示当前产品、对象、必要条件、处理人和预期结果。可以暂停或收起引导，再从顶部“操作引导”恢复。完成状态来自业务与链上记录，不由“下一步”按钮决定。','The first-entry introduction explains equipment, rights, money and participant responsibilities. The guide panel identifies the product, object, prerequisites, handler and expected result. Pause or collapse it and reopen Operation guide from the top bar. Completion comes from business and chain state rather than a Next button.')
  para('参与者模式关注本人任务及交接等待。四角色演示模式可查看其他角色的待办，并打开角色登录入口，但仍需要切换到对应钱包并重新签名。它不是代签模式，也不会让投资者钱包获得中介权限。','Participant mode focuses on the connected participant’s tasks and handoffs. Four-role demonstration mode can inspect other roles’ tasks and open their login entry. The correct wallet and a new signature are still required. It does not sign on behalf of another role or grant intermediary authority to an investor.')
@@ -178,5 +214,5 @@ for lang in (['zh','en'] if A.language=='both' else [A.language]):
  ('拒签、等待与恢复','Rejection, pending transactions and recovery','钱包拒签后可修改原操作并重试。已有交易哈希时先查询回执，不要再次支付。页面刷新和后台重启后应恢复原操作。测试链完全重建后，演示负责人需通知用户清理该测试网络的旧交易缓存。','After rejection, review and retry the original action. If a hash exists, inspect its receipt before sending another payment. Refresh and backend restart should recover the original operation. A complete test-chain rebuild requires the operator to notify users about clearing stale test-network transaction caches.'),
  ('远程入口不可用','Remote environment unavailable','GitHub静态首页仍可阅读，但业务、RPC和Blockscout依赖Mac、Docker及隧道运行。负责人使用remote:status检查，使用remote:start更新失效入口，再使用remote:publish更新公开配置。','The GitHub homepage remains readable, but the app, RPC and Blockscout depend on the Mac, Docker and tunnels. The operator checks remote:status, uses remote:start to replace failed endpoints and remote:publish to refresh the public configuration.')]:sub(z,e);para(zp,ep)
  t(r'\end{document}');source=''.join(parts);(D/('manual.'+lang+'.tex')).write_text(source);(D/('manual.'+lang+'.tex')).chmod(0o600)
- (D/('manifest.'+lang+'.json')).write_text(json.dumps({'date':'2026-10-22','language':lang,'internalTestKeys':bool(keys),'assets':sorted(set(assets)),'sourceSha256':hashlib.sha256(source.encode()).hexdigest()},indent=2))
+ (D/('manifest.'+lang+'.json')).write_text(json.dumps({'date':'2026-10-29','language':lang,'internalTestKeys':bool(keys),'assets':sorted(set(assets)),'sourceSha256':hashlib.sha256(source.encode()).hexdigest()},indent=2))
 print('Generated requested LaTeX manual(s). Private account values omitted from output.')

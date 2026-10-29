@@ -1,0 +1,3233 @@
+{
+  "at": "2026-10-29T07:34:29.004Z",
+  "chainId": 84532,
+  "contracts": {
+    "usdc": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    "station": "0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176",
+    "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+    "billing": "0xa2748E730069A38913b5E2e09a45C5aB546a0908"
+  },
+  "proofs": [
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-6dfa59e3a7db2592dacdcdc95e19874f",
+      "action": "apply",
+      "actor": "owner",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793256969,
+      "businessReferences": {},
+      "transactions": [],
+      "matched": false,
+      "offchain": true
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-54154b1d38a9bf1624c840855aa6ba01",
+      "action": "review",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793256980,
+      "businessReferences": {
+        "applicationId": "0xfe818e52b7f952d1bed1a5fa5c25c85f76ce072aef65a72e14986f26a2232b27",
+        "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd"
+      },
+      "transactions": [],
+      "matched": false,
+      "offchain": true
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-04af5e7a4561fa7a6e2475ae9f180989",
+      "action": "offer",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793256991,
+      "businessReferences": {
+        "applicationId": "0xfe818e52b7f952d1bed1a5fa5c25c85f76ce072aef65a72e14986f26a2232b27",
+        "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd"
+      },
+      "transactions": [],
+      "matched": false,
+      "offchain": true
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-38999298d742a32dbbfaa0dac7c4d0d5",
+      "action": "approve-offer",
+      "actor": "trustee",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257002,
+      "businessReferences": {
+        "applicationId": "0xfe818e52b7f952d1bed1a5fa5c25c85f76ce072aef65a72e14986f26a2232b27",
+        "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd"
+      },
+      "transactions": [],
+      "matched": false,
+      "offchain": true
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-799ce4a10e4a8d88a5afc8a1eb617cd1",
+      "action": "accept",
+      "actor": "owner",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257002,
+      "businessReferences": {
+        "applicationId": "0xfe818e52b7f952d1bed1a5fa5c25c85f76ce072aef65a72e14986f26a2232b27",
+        "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd"
+      },
+      "transactions": [],
+      "matched": false,
+      "offchain": true
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-fd392ca9488257cd44e5f735350b2ade",
+      "action": "sign",
+      "actor": "owner",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257013,
+      "businessReferences": {
+        "applicationId": "0xfe818e52b7f952d1bed1a5fa5c25c85f76ce072aef65a72e14986f26a2232b27",
+        "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd"
+      },
+      "transactions": [],
+      "matched": false,
+      "offchain": true
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-ad09a01344247661463d71bf2970d10a",
+      "action": "mint-station",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257023,
+      "businessReferences": {
+        "applicationId": "0xfe818e52b7f952d1bed1a5fa5c25c85f76ce072aef65a72e14986f26a2232b27",
+        "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd"
+      },
+      "transactions": [
+        {
+          "step": "mint",
+          "hash": "0x98ddfbbad5dbdd90de86a47f2e1d087d7861376bec86dd5456ff9d3e026eb344",
+          "chainId": 84532,
+          "from": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+          "to": "0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176",
+          "method": "mintFacility",
+          "parameters": {
+            "facilityId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd",
+            "admin": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b",
+            "serialHash": "0xaf86158f61cc5cf53784640193e8bd5499a30a11b0c2be880026668bbc079e1b",
+            "siteHash": "0x76488c71212bc1a80d19148cdf803ace4f7422b8a07b60f50c9d0c8a67a57d3b",
+            "metadataHash": "0x7f9614d89c9be579e14f2d2d18d44c897c78ea256609b2c6fcccce32bc23211f",
+            "acquisitionCostUSDC6": "13293101106",
+            "commissionedAt": "1793257023",
+            "activateOnMint": true
+          },
+          "blockNumber": 51675783,
+          "blockHash": "0x9e106d77bed747a856f2cca95948953c7402b7bfef1c76b0657f69239deb4287",
+          "at": 1793257025,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0x0000000000000000000000000000000000000000",
+                "to": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b",
+                "tokenId": "105544452051442144119910961452946697151396629752018745652579284541699858495421"
+              }
+            },
+            {
+              "contract": "0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176",
+              "name": "FacilityMinted",
+              "logIndex": 1,
+              "args": {
+                "facilityId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd",
+                "tokenId": "105544452051442144119910961452946697151396629752018745652579284541699858495421",
+                "admin": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b"
+              }
+            },
+            {
+              "contract": "0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176",
+              "name": "FacilityStatusChanged",
+              "logIndex": 2,
+              "args": {
+                "facilityId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd",
+                "oldStatus": "1",
+                "newStatus": "1"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0x0000000000000000000000000000000000000000",
+                "to": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b",
+                "tokenId": "105544452051442144119910961452946697151396629752018745652579284541699858495421"
+              },
+              "asset": "station-NFT",
+              "decimals": 0
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x98ddfbbad5dbdd90de86a47f2e1d087d7861376bec86dd5456ff9d3e026eb344"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-8668bc7b1d2b105847eb1b0ff3942df9",
+      "action": "custody-consent",
+      "actor": "owner",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257596,
+      "businessReferences": {
+        "applicationId": "0xfe818e52b7f952d1bed1a5fa5c25c85f76ce072aef65a72e14986f26a2232b27",
+        "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd"
+      },
+      "transactions": [
+        {
+          "step": "custody-consent",
+          "hash": "0xbae481eb653859295e3b5a4a7ebdea13885b18a1f99af56b0ecc1e59530dfd30",
+          "chainId": 84532,
+          "from": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b",
+          "to": "0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176",
+          "method": "approve",
+          "parameters": {
+            "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+            "tokenId": "105544452051442144119910961452946697151396629752018745652579284541699858495421"
+          },
+          "blockNumber": 51678645,
+          "blockHash": "0xc038e4c7b1095b9794bac323b373c0c15007459da40c5c4cbbff5643d3c82ab4",
+          "at": 1793257597,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176",
+              "name": "Approval",
+              "logIndex": 12,
+              "args": {
+                "owner": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b",
+                "approved": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "tokenId": "105544452051442144119910961452946697151396629752018745652579284541699858495421"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xbae481eb653859295e3b5a4a7ebdea13885b18a1f99af56b0ecc1e59530dfd30"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-324b24e881248787ad5c00bb9096b3ae",
+      "action": "admit",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257605,
+      "businessReferences": {
+        "applicationId": "0xfe818e52b7f952d1bed1a5fa5c25c85f76ce072aef65a72e14986f26a2232b27",
+        "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd"
+      },
+      "transactions": [
+        {
+          "step": "admit",
+          "hash": "0x6904d2079b79d9c9c1092d0d486d2ed987af0ebcdbf24d9350f9acb451111129",
+          "chainId": 84532,
+          "from": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "admit",
+          "parameters": {
+            "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd",
+            "owner": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b",
+            "purchasePrice": "13293101106",
+            "agreement": "0x7f9614d89c9be579e14f2d2d18d44c897c78ea256609b2c6fcccce32bc23211f"
+          },
+          "blockNumber": 51678691,
+          "blockHash": "0x98b9e580108d3beb074242adf3e4048a8411be34ce32da51a985ff9b3af5b5de",
+          "at": 1793257607,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176",
+              "name": "Transfer",
+              "logIndex": 15,
+              "args": {
+                "from": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "tokenId": "105544452051442144119910961452946697151396629752018745652579284541699858495421"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "StationAdmitted",
+              "logIndex": 16,
+              "args": {
+                "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd",
+                "agreement": "0x7f9614d89c9be579e14f2d2d18d44c897c78ea256609b2c6fcccce32bc23211f",
+                "purchasePrice": "13293101106"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0xf17FFEAb245CebCd260a2E6aFAe90A43F2749176",
+              "name": "Transfer",
+              "logIndex": 15,
+              "args": {
+                "from": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "tokenId": "105544452051442144119910961452946697151396629752018745652579284541699858495421"
+              },
+              "asset": "station-NFT",
+              "decimals": 0
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "stationId",
+              "matched": true
+            },
+            {
+              "field": "agreementHash",
+              "matched": true
+            },
+            {
+              "field": "purchasePrice",
+              "matched": true
+            },
+            {
+              "field": "custody from household",
+              "matched": true
+            },
+            {
+              "field": "custody to vault",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x6904d2079b79d9c9c1092d0d486d2ed987af0ebcdbf24d9350f9acb451111129"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-ef9ddb012fab188f0c9735d57bec8d89",
+      "action": "prepare-valuation",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257922,
+      "businessReferences": {},
+      "transactions": [
+        {
+          "step": "propose",
+          "hash": "0x387440191d372565ed7c056b5d00ef7dcc2388aeb577bef699c8fb5d371072c2",
+          "chainId": 84532,
+          "from": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "proposeValuation",
+          "parameters": {
+            "report": "0x997e6cea28726fb5a7f2e1040144e0a58f9babc5d9f3465326474c174a45667d",
+            "rightsPV": "13293101106",
+            "receivables": "0",
+            "futureFees": "269948927",
+            "asOf": "1793257922",
+            "validUntil": "1795936322"
+          },
+          "blockNumber": 51680292,
+          "blockHash": "0x4f0c20a99b3ef54fcaf6447c47b5a789b05aa433c9be0c0aa388cedcca9dc85b",
+          "at": 1793257927,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "ValuationProposed",
+              "logIndex": 17,
+              "args": {
+                "report": "0x997e6cea28726fb5a7f2e1040144e0a58f9babc5d9f3465326474c174a45667d",
+                "nonce": "1",
+                "rightsPV": "13293101106",
+                "receivables": "0",
+                "futureFees": "269948927",
+                "asOf": "1793257922",
+                "validUntil": "1795936322"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "valuationEvidence": {
+            "reportHash": "0x997e6cea28726fb5a7f2e1040144e0a58f9babc5d9f3465326474c174a45667d",
+            "cutoff": 1793257922,
+            "projectionHash": "0x751aeb054a0eb28c66fd5bf8bc2305385ae499d4c9c9a4a517e54a13181f78fc",
+            "stations": [
+              {
+                "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd",
+                "sourceHash": "0xe7784886c12ff9226226ff22dbd0ddb1f494a100969281f757a60f343793ebf9",
+                "modelVersion": "household-export.2",
+                "assumptionsHash": "0x0f8b345b798c360f3da41d5ca5eb077a956a01b0f78dec06b221c3171f5eed68",
+                "reportHash": "0x168d8e47a029e3f7729bf21f8439fa91a680955f3c6dfbe49ae493753f65c48a"
+              }
+            ]
+          },
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "archived aggregate report",
+              "matched": true
+            },
+            {
+              "field": "pool projection content",
+              "matched": true
+            },
+            {
+              "field": "forecast rights PV",
+              "matched": true
+            },
+            {
+              "field": "forecast pool expenses",
+              "matched": true
+            },
+            {
+              "field": "station report content",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x387440191d372565ed7c056b5d00ef7dcc2388aeb577bef699c8fb5d371072c2"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-390d208c2deaf10e1fb25dab572fbb6e",
+      "action": "approve-valuation",
+      "actor": "trustee",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257948,
+      "businessReferences": {},
+      "transactions": [
+        {
+          "step": "approve",
+          "hash": "0xb57ffd1864053fadb2551707d76d1ae6cdb7a406495c2eac803a4717aded83ea",
+          "chainId": 84532,
+          "from": "0x2641feCc09b01C7C482F51deDB28372daa41326a",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "approveValuation",
+          "parameters": {
+            "nonce": "1"
+          },
+          "blockNumber": 51680415,
+          "blockHash": "0xa82628b61cb2ffc8cc759e97ad1264981e18eff48f64ab3b00bf67404d963411",
+          "at": 1793257951,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "ValuationApproved",
+              "logIndex": 34,
+              "args": {
+                "report": "0x997e6cea28726fb5a7f2e1040144e0a58f9babc5d9f3465326474c174a45667d",
+                "nonce": "1",
+                "nav": "0"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "valuationEvidence": {
+            "reportHash": "0x997e6cea28726fb5a7f2e1040144e0a58f9babc5d9f3465326474c174a45667d",
+            "cutoff": 1793257922,
+            "projectionHash": "0x751aeb054a0eb28c66fd5bf8bc2305385ae499d4c9c9a4a517e54a13181f78fc",
+            "stations": [
+              {
+                "stationId": "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd",
+                "sourceHash": "0xe7784886c12ff9226226ff22dbd0ddb1f494a100969281f757a60f343793ebf9",
+                "modelVersion": "household-export.2",
+                "assumptionsHash": "0x0f8b345b798c360f3da41d5ca5eb077a956a01b0f78dec06b221c3171f5eed68",
+                "reportHash": "0x168d8e47a029e3f7729bf21f8439fa91a680955f3c6dfbe49ae493753f65c48a"
+              }
+            ]
+          },
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "archived aggregate report",
+              "matched": true
+            },
+            {
+              "field": "pool projection content",
+              "matched": true
+            },
+            {
+              "field": "station report content",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xb57ffd1864053fadb2551707d76d1ae6cdb7a406495c2eac803a4717aded83ea"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-5787dc70a5b6f724ada06b538f2a5eb4",
+      "action": "publish",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257970,
+      "businessReferences": {},
+      "transactions": [
+        {
+          "step": "publish",
+          "hash": "0xd4f3170a56a781311631584d1177cce9087ef4bce7fc2bb79b4502b5c2fb4c54",
+          "chainId": 84532,
+          "from": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "publish",
+          "parameters": {
+            "target_": "14770112340",
+            "deadline_": "1795849970",
+            "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+          },
+          "blockNumber": 51680519,
+          "blockHash": "0xa8f971f9e9c999f4cd8e51a9476c89b40af33c7baeaac3a97d9fe2cffcb1c5a6",
+          "at": 1793257972,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "ProductPublished",
+              "logIndex": 0,
+              "args": {
+                "target": "14770112340",
+                "deadline": "1795849970",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xd4f3170a56a781311631584d1177cce9087ef4bce7fc2bb79b4502b5c2fb4c54"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-6121f4b97435e3d6f1e0fd9dc4dd1831",
+      "action": "apply-eligibility",
+      "actor": "investor",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257990,
+      "businessReferences": {},
+      "transactions": [],
+      "matched": false,
+      "offchain": true
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-3eae9eda31fd83fe5936b1b0e5d5c971",
+      "action": "eligible",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793257991,
+      "businessReferences": {
+        "investor": "investor",
+        "applicationId": "base-public-6121f4b97435e3d6f1e0fd9dc4dd1831"
+      },
+      "transactions": [
+        {
+          "step": "eligibility",
+          "hash": "0x136e0215a45d1757dc33495297b775601a1d079a4c087343aa3979ae89b8c5ee",
+          "chainId": 84532,
+          "from": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "setEligible",
+          "parameters": {
+            "who": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+            "value": true
+          },
+          "blockNumber": 51680619,
+          "blockHash": "0xd79db2e91d28d02189dffabb69cbbfb889051d5de7fe67f407e5d1e2a0190f74",
+          "at": 1793257992,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "EligibilityChanged",
+              "logIndex": 10,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "eligible": true
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x136e0215a45d1757dc33495297b775601a1d079a4c087343aa3979ae89b8c5ee"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-276067d5dd6766fdbd701f4a36854e6e",
+      "action": "apply-eligibility",
+      "actor": "investor2",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258011,
+      "businessReferences": {},
+      "transactions": [],
+      "matched": false,
+      "offchain": true
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-7bc8af535db52480cc497259dc3d8a5b",
+      "action": "eligible",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258012,
+      "businessReferences": {
+        "investor": "investor2",
+        "applicationId": "base-public-276067d5dd6766fdbd701f4a36854e6e"
+      },
+      "transactions": [
+        {
+          "step": "eligibility",
+          "hash": "0x005bab1c072168257a779b8ce93f935492e6b838c3812d8ac35379af3ae8be41",
+          "chainId": 84532,
+          "from": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "setEligible",
+          "parameters": {
+            "who": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+            "value": true
+          },
+          "blockNumber": 51680725,
+          "blockHash": "0x8617233550dba41e7686a6dad1cccb4e60dbdc2e4265060945bbb6bc0dcb9265",
+          "at": 1793258013,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "EligibilityChanged",
+              "logIndex": 1,
+              "args": {
+                "investor": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "eligible": true
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x005bab1c072168257a779b8ce93f935492e6b838c3812d8ac35379af3ae8be41"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-dab8eb9d218f43e250f0170c4c764b06",
+      "action": "subscribe",
+      "actor": "investor",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258179,
+      "businessReferences": {
+        "amountUSDC6": "1000000"
+      },
+      "transactions": [
+        {
+          "step": "approve-usdc",
+          "hash": "0xc7e291ff2b74942d46bf950f78a2d9f2cf891ac8870642b1f26f8fd67047f2c9",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          "method": "approve",
+          "parameters": {
+            "0": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+            "1": "1000000"
+          },
+          "blockNumber": 51681577,
+          "blockHash": "0x39d38e4eb54aefed7c9ebecc82833d7a42a8e6e6924ee41566a773376246bfb3",
+          "at": 1793258184,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Approval",
+              "logIndex": 3,
+              "args": {
+                "owner": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "spender": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xc7e291ff2b74942d46bf950f78a2d9f2cf891ac8870642b1f26f8fd67047f2c9"
+        },
+        {
+          "step": "subscribe",
+          "hash": "0x514221c827043fd366920037d950ee0da562fbccd0dbd8e6c81f2d07fd644f19",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "subscribe",
+          "parameters": {
+            "amount": "1000000",
+            "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+          },
+          "blockNumber": 51681591,
+          "blockHash": "0x6a57d2c36cc702b6cb94b1558dad2922cee8684e164ab46a9341da4e0fb6cb4b",
+          "at": 1793258187,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 16,
+              "args": {
+                "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Subscribed",
+              "logIndex": 17,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "amount": "1000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 16,
+              "args": {
+                "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscriber",
+              "matched": true
+            },
+            {
+              "field": "subscription.amount",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x514221c827043fd366920037d950ee0da562fbccd0dbd8e6c81f2d07fd644f19"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-c635cb335fd41ae6da206bc8a2ffe077",
+      "action": "review-subscription",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258199,
+      "businessReferences": {
+        "investor": "investor",
+        "amountUSDC6": "1000000"
+      },
+      "transactions": [
+        {
+          "step": "review-order",
+          "hash": "0x0190c8f3323fbf099bebcdb38b3392ffa662ce5b2390a99fbbe0736e944c976a",
+          "chainId": 84532,
+          "from": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "reviewSubscription",
+          "parameters": {
+            "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+            "expectedNonce": "1",
+            "expectedAmount": "1000000",
+            "expectedTerms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b",
+            "approved": true,
+            "evidence": "0x1281247dfab8613d8b61f7b94c8030033c3df90281979b97870bacaf70b3a368"
+          },
+          "blockNumber": 51681658,
+          "blockHash": "0xbb062efc3c2030546b9f87fa8654ee14a6b5c4ba5f2a35ed828ad19439802255",
+          "at": 1793258200,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "SubscriptionReviewed",
+              "logIndex": 20,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "orderNonce": "1",
+                "amount": "1000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b",
+                "approved": true,
+                "evidence": "0x1281247dfab8613d8b61f7b94c8030033c3df90281979b97870bacaf70b3a368"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscription review investor",
+              "matched": true
+            },
+            {
+              "field": "subscription review orderNonce",
+              "matched": true
+            },
+            {
+              "field": "subscription review amount",
+              "matched": true
+            },
+            {
+              "field": "subscription review terms",
+              "matched": true
+            },
+            {
+              "field": "subscription review approved",
+              "matched": true
+            },
+            {
+              "field": "subscription review evidence",
+              "matched": true
+            },
+            {
+              "field": "review manager",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x0190c8f3323fbf099bebcdb38b3392ffa662ce5b2390a99fbbe0736e944c976a"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-7535056c03cc49d0253813dee17cbe45",
+      "action": "subscribe",
+      "actor": "investor",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258201,
+      "businessReferences": {
+        "amountUSDC6": "2000000"
+      },
+      "transactions": [
+        {
+          "step": "approve-usdc",
+          "hash": "0x43d218a46c6cbb03d2c6ec1b8176ac03b9b0506febb4f0f62470521bfe818e96",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          "method": "approve",
+          "parameters": {
+            "0": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+            "1": "2000000"
+          },
+          "blockNumber": 51681688,
+          "blockHash": "0x589326d6b368271c5a42965e38f003ca5de66365e5f013107ce86db7d6d3d5f9",
+          "at": 1793258206,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Approval",
+              "logIndex": 0,
+              "args": {
+                "owner": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "spender": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "2000000"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x43d218a46c6cbb03d2c6ec1b8176ac03b9b0506febb4f0f62470521bfe818e96"
+        },
+        {
+          "step": "subscribe",
+          "hash": "0x2f5f337a2ddd154b7f9e223969e8da2f90d56f4fb7858de3d86d7cd84f8f79f8",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "subscribe",
+          "parameters": {
+            "amount": "2000000",
+            "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+          },
+          "blockNumber": 51681703,
+          "blockHash": "0x587c3becb540b9688d07f5a724994834d48bddcfd2469385c43d0970fa41891a",
+          "at": 1793258209,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 3,
+              "args": {
+                "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "2000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Subscribed",
+              "logIndex": 4,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "amount": "2000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 3,
+              "args": {
+                "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "2000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscriber",
+              "matched": true
+            },
+            {
+              "field": "subscription.amount",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x2f5f337a2ddd154b7f9e223969e8da2f90d56f4fb7858de3d86d7cd84f8f79f8"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-c488b4148fd84c6f33fa75c9eb5d13ae",
+      "action": "review-subscription",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258222,
+      "businessReferences": {
+        "investor": "investor",
+        "amountUSDC6": "3000000"
+      },
+      "transactions": [
+        {
+          "step": "review-order",
+          "hash": "0xa7638d9439c799758071067648c3779e542e7800798e9473cc7276497af09123",
+          "chainId": 84532,
+          "from": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "reviewSubscription",
+          "parameters": {
+            "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+            "expectedNonce": "2",
+            "expectedAmount": "3000000",
+            "expectedTerms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b",
+            "approved": true,
+            "evidence": "0x84805f867ee341d4d8ff3dfd0d157805ef9e9d7257541360083d1931a52832e9"
+          },
+          "blockNumber": 51681777,
+          "blockHash": "0x7ca0680628c4d3c60d192d9199f6648952e5db99e69e1287721fe4c22fc755f6",
+          "at": 1793258224,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "SubscriptionReviewed",
+              "logIndex": 4,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "orderNonce": "2",
+                "amount": "3000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b",
+                "approved": true,
+                "evidence": "0x84805f867ee341d4d8ff3dfd0d157805ef9e9d7257541360083d1931a52832e9"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscription review investor",
+              "matched": true
+            },
+            {
+              "field": "subscription review orderNonce",
+              "matched": true
+            },
+            {
+              "field": "subscription review amount",
+              "matched": true
+            },
+            {
+              "field": "subscription review terms",
+              "matched": true
+            },
+            {
+              "field": "subscription review approved",
+              "matched": true
+            },
+            {
+              "field": "subscription review evidence",
+              "matched": true
+            },
+            {
+              "field": "review manager",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xa7638d9439c799758071067648c3779e542e7800798e9473cc7276497af09123"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-8d9f45ef1917c86addd5adbfae031529",
+      "action": "refund",
+      "actor": "investor",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258226,
+      "businessReferences": {},
+      "transactions": [
+        {
+          "step": "refund",
+          "hash": "0x31e00933fdf5b6bfa8a0d36278bcdcbe793d5fa1d68e897b3efddf43275c3e67",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "withdrawSubscription",
+          "parameters": {},
+          "blockNumber": 51681794,
+          "blockHash": "0xbd66835fdcd39a5a06ae4a563fbc323d7fb18b69b271ded37997c05ca5711ea8",
+          "at": 1793258227,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 25,
+              "args": {
+                "from": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "to": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "value": "3000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Refunded",
+              "logIndex": 26,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "amount": "3000000"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 25,
+              "args": {
+                "from": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "to": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "value": "3000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "recipient",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x31e00933fdf5b6bfa8a0d36278bcdcbe793d5fa1d68e897b3efddf43275c3e67"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-4e0259abdcfb6271d5372ea4f3cff3fd",
+      "action": "subscribe",
+      "actor": "investor2",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258229,
+      "businessReferences": {
+        "amountUSDC6": "1000000"
+      },
+      "transactions": [
+        {
+          "step": "approve-usdc",
+          "hash": "0x8f884ae36a31e0afc53f571f1eca182b7e3dc7731f7bc1afdb2e95634310e7f5",
+          "chainId": 84532,
+          "from": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+          "to": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          "method": "approve",
+          "parameters": {
+            "0": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+            "1": "1000000"
+          },
+          "blockNumber": 51681827,
+          "blockHash": "0x06ea0f5185bc88c26d1ca3ace842221a9165e578c4dd444333c99dec23542f75",
+          "at": 1793258234,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Approval",
+              "logIndex": 80,
+              "args": {
+                "owner": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "spender": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x8f884ae36a31e0afc53f571f1eca182b7e3dc7731f7bc1afdb2e95634310e7f5"
+        },
+        {
+          "step": "subscribe",
+          "hash": "0x985ad7cbc8c649c1f5dab5089de8c29ef8205ae31c39e72969d36160eb8f2c8f",
+          "chainId": 84532,
+          "from": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "subscribe",
+          "parameters": {
+            "amount": "1000000",
+            "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+          },
+          "blockNumber": 51681842,
+          "blockHash": "0x4d49eb2e111624df737ea9af2e67bbbb56ff7fd38de618b67294c21501fe777f",
+          "at": 1793258237,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 16,
+              "args": {
+                "from": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Subscribed",
+              "logIndex": 17,
+              "args": {
+                "investor": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "amount": "1000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 16,
+              "args": {
+                "from": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscriber",
+              "matched": true
+            },
+            {
+              "field": "subscription.amount",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x985ad7cbc8c649c1f5dab5089de8c29ef8205ae31c39e72969d36160eb8f2c8f"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-9137cbaa7464bf07e47512e37fa38067",
+      "action": "review-subscription",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258250,
+      "businessReferences": {
+        "investor": "investor2",
+        "amountUSDC6": "1000000"
+      },
+      "transactions": [
+        {
+          "step": "review-order",
+          "hash": "0xfe80cc8ac7204aa3ce8d952fac20574f5fb1df81511de3f31c917401f443fc71",
+          "chainId": 84532,
+          "from": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "reviewSubscription",
+          "parameters": {
+            "investor": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+            "expectedNonce": "1",
+            "expectedAmount": "1000000",
+            "expectedTerms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b",
+            "approved": true,
+            "evidence": "0xbfb5933a21d152d1e3c0ab1112c4c655a0b9cde51524898fd57599fb0d7d011a"
+          },
+          "blockNumber": 51681918,
+          "blockHash": "0xc331fa254bb10322079640578bbed3a36a757f5f513af68d33667bfe27e93fb2",
+          "at": 1793258252,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "SubscriptionReviewed",
+              "logIndex": 1,
+              "args": {
+                "investor": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "orderNonce": "1",
+                "amount": "1000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b",
+                "approved": true,
+                "evidence": "0xbfb5933a21d152d1e3c0ab1112c4c655a0b9cde51524898fd57599fb0d7d011a"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscription review investor",
+              "matched": true
+            },
+            {
+              "field": "subscription review orderNonce",
+              "matched": true
+            },
+            {
+              "field": "subscription review amount",
+              "matched": true
+            },
+            {
+              "field": "subscription review terms",
+              "matched": true
+            },
+            {
+              "field": "subscription review approved",
+              "matched": true
+            },
+            {
+              "field": "subscription review evidence",
+              "matched": true
+            },
+            {
+              "field": "review manager",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xfe80cc8ac7204aa3ce8d952fac20574f5fb1df81511de3f31c917401f443fc71"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-00583274f33b3975b72f1e9961e5b7a6",
+      "action": "subscribe",
+      "actor": "investor2",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258254,
+      "businessReferences": {
+        "amountUSDC6": "2000000"
+      },
+      "transactions": [
+        {
+          "step": "approve-usdc",
+          "hash": "0xcd5cceef6f240248ccc4a6150787e33ba20d3d25dbc5183315b8d1f4831f0848",
+          "chainId": 84532,
+          "from": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+          "to": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          "method": "approve",
+          "parameters": {
+            "0": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+            "1": "2000000"
+          },
+          "blockNumber": 51681950,
+          "blockHash": "0x84c140b47caae45924c33d56c03bb9d8f4c610f91271984bc4662731cec3d756",
+          "at": 1793258258,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Approval",
+              "logIndex": 9,
+              "args": {
+                "owner": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "spender": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "2000000"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xcd5cceef6f240248ccc4a6150787e33ba20d3d25dbc5183315b8d1f4831f0848"
+        },
+        {
+          "step": "subscribe",
+          "hash": "0xa220e99ac2f869bb9aa7c0cae6995868c7d43302929a3768198351e967b86196",
+          "chainId": 84532,
+          "from": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "subscribe",
+          "parameters": {
+            "amount": "2000000",
+            "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+          },
+          "blockNumber": 51681961,
+          "blockHash": "0xa0b98d6757a1a41f7fa761391592797c29ce3a1e39c0795ad7b38fc64be5b756",
+          "at": 1793258261,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 27,
+              "args": {
+                "from": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "2000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Subscribed",
+              "logIndex": 28,
+              "args": {
+                "investor": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "amount": "2000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 27,
+              "args": {
+                "from": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "2000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscriber",
+              "matched": true
+            },
+            {
+              "field": "subscription.amount",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xa220e99ac2f869bb9aa7c0cae6995868c7d43302929a3768198351e967b86196"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-7aac384bf32ef56534936e5e638254c4",
+      "action": "review-subscription",
+      "actor": "agent",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258274,
+      "businessReferences": {
+        "investor": "investor2",
+        "amountUSDC6": "3000000"
+      },
+      "transactions": [
+        {
+          "step": "review-order",
+          "hash": "0xb1a44a20bf156f493c9be9c89bc2c733530f171ccd968fd4fa2b0acafecfee69",
+          "chainId": 84532,
+          "from": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "reviewSubscription",
+          "parameters": {
+            "investor": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+            "expectedNonce": "2",
+            "expectedAmount": "3000000",
+            "expectedTerms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b",
+            "approved": true,
+            "evidence": "0x5649e71ac395febfeea3ca977f8bdafc8fd3da24e151b8edf6e490adf09451f1"
+          },
+          "blockNumber": 51682036,
+          "blockHash": "0x35f8a816d28c5db0dbfa69c8827072520f4d0a5faf090ed7b75647454bfce42c",
+          "at": 1793258276,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "SubscriptionReviewed",
+              "logIndex": 11,
+              "args": {
+                "investor": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "orderNonce": "2",
+                "amount": "3000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b",
+                "approved": true,
+                "evidence": "0x5649e71ac395febfeea3ca977f8bdafc8fd3da24e151b8edf6e490adf09451f1"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscription review investor",
+              "matched": true
+            },
+            {
+              "field": "subscription review orderNonce",
+              "matched": true
+            },
+            {
+              "field": "subscription review amount",
+              "matched": true
+            },
+            {
+              "field": "subscription review terms",
+              "matched": true
+            },
+            {
+              "field": "subscription review approved",
+              "matched": true
+            },
+            {
+              "field": "subscription review evidence",
+              "matched": true
+            },
+            {
+              "field": "review manager",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xb1a44a20bf156f493c9be9c89bc2c733530f171ccd968fd4fa2b0acafecfee69"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "base-public-2b5d9efb8f06fb12bf3fc156413ea7ad",
+      "action": "refund",
+      "actor": "investor2",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258278,
+      "businessReferences": {},
+      "transactions": [
+        {
+          "step": "refund",
+          "hash": "0x0997451e7f53511c73146f462b5b5a81565da67762b683b060bd1efdf0bebfa4",
+          "chainId": 84532,
+          "from": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "withdrawSubscription",
+          "parameters": {},
+          "blockNumber": 51682054,
+          "blockHash": "0xa07e69aa51a72ae83e6d5fb0f458163f9290af2bb657965f5891d6d112053326",
+          "at": 1793258279,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 28,
+              "args": {
+                "from": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "to": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "value": "3000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Refunded",
+              "logIndex": 29,
+              "args": {
+                "investor": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "amount": "3000000"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 28,
+              "args": {
+                "from": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "to": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+                "value": "3000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "recipient",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x0997451e7f53511c73146f462b5b5a81565da67762b683b060bd1efdf0bebfa4"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "4fe69528-bb8f-4ade-b0a5-5086b87d9777",
+      "action": "subscribe",
+      "actor": "investor",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258443,
+      "businessReferences": {
+        "amountUSDC6": "5000000"
+      },
+      "transactions": [
+        {
+          "step": "approve-usdc",
+          "hash": "0x7fb7f11204fa6950cc8fcdff8b7918f8ce728c0adbc24179cda67b07ad1b5757",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          "method": "approve",
+          "parameters": {
+            "0": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+            "1": "5000000"
+          },
+          "blockNumber": 51682915,
+          "blockHash": "0x5242eaaf5bff9d2fcd5e37b925895c1e62aa9cd8c9432d1897e0da6b9f9b653a",
+          "at": 1793258451,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Approval",
+              "logIndex": 0,
+              "args": {
+                "owner": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "spender": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "5000000"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x7fb7f11204fa6950cc8fcdff8b7918f8ce728c0adbc24179cda67b07ad1b5757"
+        },
+        {
+          "step": "subscribe",
+          "hash": "0x7f0461f2e8ced1e6d1f0f856d5cc1a1c98cb77a821d45f6c06d9d58567e2319f",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "subscribe",
+          "parameters": {
+            "amount": "5000000",
+            "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+          },
+          "blockNumber": 51682947,
+          "blockHash": "0x8947b3e291c5936d96b4c9110894ca8ea217a65097c2ae6106aaf87f78c59137",
+          "at": 1793258458,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "5000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Subscribed",
+              "logIndex": 1,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "amount": "5000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "5000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscriber",
+              "matched": true
+            },
+            {
+              "field": "subscription.amount",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x7f0461f2e8ced1e6d1f0f856d5cc1a1c98cb77a821d45f6c06d9d58567e2319f"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "89060c39-1804-4f0b-924a-315d73b890d8",
+      "action": "subscribe",
+      "actor": "investor",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258625,
+      "businessReferences": {
+        "amountUSDC6": "1000000"
+      },
+      "transactions": [
+        {
+          "step": "approve-usdc",
+          "hash": "0x9740e26d9a410a5219377dbdb75a91d8f77bdd3372572efecd2fa13a4b52b87a",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          "method": "approve",
+          "parameters": {
+            "0": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+            "1": "1000000"
+          },
+          "blockNumber": 51683878,
+          "blockHash": "0xc3f148c92eef5b1955221b72b089a1ed6dcda32301aa4ea2222bafee7f61465b",
+          "at": 1793258644,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Approval",
+              "logIndex": 0,
+              "args": {
+                "owner": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "spender": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x9740e26d9a410a5219377dbdb75a91d8f77bdd3372572efecd2fa13a4b52b87a"
+        },
+        {
+          "step": "subscribe",
+          "hash": "0xf3e569543f41d71092ef54de0ec9fe36857c18eb1151b469ffc78fcc1ec40ba1",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "subscribe",
+          "parameters": {
+            "amount": "1000000",
+            "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+          },
+          "blockNumber": 51683910,
+          "blockHash": "0xdc6ff22c9346567d8229beaa6cf3bb07129ff837f13661ec0ce2606b97de1387",
+          "at": 1793258650,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Subscribed",
+              "logIndex": 1,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "amount": "1000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscriber",
+              "matched": true
+            },
+            {
+              "field": "subscription.amount",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xf3e569543f41d71092ef54de0ec9fe36857c18eb1151b469ffc78fcc1ec40ba1"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "c0931a95-aa97-4aed-ae24-b57fa3a9770b",
+      "action": "refund",
+      "actor": "investor",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258703,
+      "businessReferences": {},
+      "transactions": [
+        {
+          "step": "refund",
+          "hash": "0xffa094c829b8c1409b66a9d682b1f167e6282f628753066fd72fa8daca060ba5",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "withdrawSubscription",
+          "parameters": {},
+          "blockNumber": 51684203,
+          "blockHash": "0x941f23d506278ea94bc2bd9b74d3aff76d4bae3d6c2cc3f04d0f223f37214f8f",
+          "at": 1793258709,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "to": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "value": "6000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Refunded",
+              "logIndex": 1,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "amount": "6000000"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "to": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "value": "6000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "recipient",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xffa094c829b8c1409b66a9d682b1f167e6282f628753066fd72fa8daca060ba5"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "f19590ef-2bd7-4bad-819a-a2ecc53e5279",
+      "action": "subscribe",
+      "actor": "investor",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258721,
+      "businessReferences": {
+        "amountUSDC6": "1000000"
+      },
+      "transactions": [
+        {
+          "step": "approve-usdc",
+          "hash": "0xe0bf49172be3f20004c47b09ad5a04f69d9fe66c6e7408003868e15fd258f65b",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          "method": "approve",
+          "parameters": {
+            "0": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+            "1": "1000000"
+          },
+          "blockNumber": 51684357,
+          "blockHash": "0xc63ec9cb7bcb962f6bb556c447e0b2d952e0041c80ca53d2fc707e7e8172072b",
+          "at": 1793258740,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Approval",
+              "logIndex": 0,
+              "args": {
+                "owner": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "spender": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              }
+            }
+          ],
+          "movements": [],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xe0bf49172be3f20004c47b09ad5a04f69d9fe66c6e7408003868e15fd258f65b"
+        },
+        {
+          "step": "subscribe",
+          "hash": "0xb8ac1ffbebe7aca69640125b5359bc8199f911a52af948ab716c3316ce1661bd",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "subscribe",
+          "parameters": {
+            "amount": "1000000",
+            "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+          },
+          "blockNumber": 51684389,
+          "blockHash": "0xfece0c5184f342cd00ebadec216b9bfb04fa2f1d4ee8b870ef1c1255c425eec1",
+          "at": 1793258746,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Subscribed",
+              "logIndex": 1,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "amount": "1000000",
+                "terms": "0x9a836f34f97b0bb826b2dd9b782509a2a99a4f0e1293cd0e11a595ccffc86a0b"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "value": "1000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "subscriber",
+              "matched": true
+            },
+            {
+              "field": "subscription.amount",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0xb8ac1ffbebe7aca69640125b5359bc8199f911a52af948ab716c3316ce1661bd"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    },
+    {
+      "version": "recording-evidence.v1",
+      "operationId": "8bd18268-d472-40f8-87dc-9b2ee25fb900",
+      "action": "refund",
+      "actor": "investor",
+      "status": "confirmed",
+      "chainId": 84532,
+      "vault": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+      "startedAt": 1793258770,
+      "businessReferences": {},
+      "transactions": [
+        {
+          "step": "refund",
+          "hash": "0x34c3d77e56da8fc4e234811fd71c269e7b9817899d73c8a61564335c6fda0f4c",
+          "chainId": 84532,
+          "from": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+          "to": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+          "method": "withdrawSubscription",
+          "parameters": {},
+          "blockNumber": 51684534,
+          "blockHash": "0x838626a38206239f4b1020f90c2583243cd58d8094bbc7ac3f5b3b151ad68d57",
+          "at": 1793258775,
+          "status": "confirmed",
+          "indexed": true,
+          "events": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "to": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "value": "1000000"
+              }
+            },
+            {
+              "contract": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+              "name": "Refunded",
+              "logIndex": 1,
+              "args": {
+                "investor": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "amount": "1000000"
+              }
+            }
+          ],
+          "movements": [
+            {
+              "contract": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "name": "Transfer",
+              "logIndex": 0,
+              "args": {
+                "from": "0xB84F6E2EB3b9e63bBE447190dF268c49D617A445",
+                "to": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+                "value": "1000000"
+              },
+              "asset": "mUSDC",
+              "decimals": 6
+            }
+          ],
+          "stateChanges": [],
+          "checks": [
+            {
+              "field": "decoded method",
+              "matched": true
+            },
+            {
+              "field": "chainId",
+              "matched": true
+            },
+            {
+              "field": "receipt.status",
+              "matched": true
+            },
+            {
+              "field": "wallet",
+              "matched": true
+            },
+            {
+              "field": "contract",
+              "matched": true
+            },
+            {
+              "field": "callData",
+              "matched": true
+            },
+            {
+              "field": "nativeValue",
+              "matched": true
+            },
+            {
+              "field": "expectedEvent",
+              "matched": true
+            },
+            {
+              "field": "recipient",
+              "matched": true
+            },
+            {
+              "field": "USDC movement",
+              "matched": true
+            }
+          ],
+          "matched": true,
+          "explorerUrl": "https://base-sepolia.blockscout.com/tx/0x34c3d77e56da8fc4e234811fd71c269e7b9817899d73c8a61564335c6fda0f4c"
+        }
+      ],
+      "matched": true,
+      "offchain": false
+    }
+  ],
+  "balances": [
+    {
+      "role": "admin",
+      "address": "0x28b530b166b32F41BAC503325AB4d7B0CC474758",
+      "usdc6": "20000000",
+      "ethWei": "25946631595978698"
+    },
+    {
+      "role": "agent",
+      "address": "0xcee71e610f50435B8C9B0B25d3D322a5E184423a",
+      "usdc6": "20000000",
+      "ethWei": "1992418393998334"
+    },
+    {
+      "role": "trustee",
+      "address": "0x2641feCc09b01C7C482F51deDB28372daa41326a",
+      "usdc6": "20000000",
+      "ethWei": "1998918679999905"
+    },
+    {
+      "role": "trustee2",
+      "address": "0xfcf63f6E1100C4dD1bd0630C358848d990E33e64",
+      "usdc6": "20000000",
+      "ethWei": "2000000000000000"
+    },
+    {
+      "role": "treasury",
+      "address": "0xFF1d846114E098C5A15000bEb46da3dFe367be1C",
+      "usdc6": "20000000",
+      "ethWei": "2000000000000000"
+    },
+    {
+      "role": "owner",
+      "address": "0xadC4920e9036dadC146ba1aF84fb1475C612E15b",
+      "usdc6": "20000000",
+      "ethWei": "1999705915999903"
+    },
+    {
+      "role": "investor",
+      "address": "0x34cAACf0E56129F461afA460cDa3B220a3bfe2F2",
+      "usdc6": "20000000",
+      "ethWei": "1992412623198657"
+    },
+    {
+      "role": "investor2",
+      "address": "0xcC245B1140F25b91BD8C13B05d9516A85da75605",
+      "usdc6": "20000000",
+      "ethWei": "1997217571999393"
+    }
+  ],
+  "state": {
+    "phase": "1",
+    "escrowUSDC6": "0",
+    "totalSupply": "0"
+  }
+}

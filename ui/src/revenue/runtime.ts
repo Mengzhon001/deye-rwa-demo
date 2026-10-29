@@ -1,4 +1,8 @@
 import hre from "hardhat";
+import {assertPublicConfiguration,assertLocalCapability,publicTestnet,ERC20_ABI} from "../../../onchain/scripts/revenue-network";
+import {EventCache} from "./event-cache";
+import {PublicReadProvider} from "./public-rpc";
+import {readTogether,ViewCall,MULTICALL3} from "./multiread";
 import { paymentAmounts } from "./household-billing";
 import {
   Contract,
@@ -162,7 +166,9 @@ export class RevenueRuntime {
   constructor(readonly dataDir: string) {
     this.repo = new RevenueRepository(join(dataDir, "store.json"));
   }
-  async start() {
+  private publicProvider = publicTestnet() ? new PublicReadProvider(process.env.REVENUE_RPC_URL,84532,{staticNetwork:true,batchMaxCount:10,batchStallTime:30}) : undefined;
+  private eventCache = new EventCache(this.publicProvider||hre.ethers.provider,join(this.dataDir,"events"));
+  async start(options: {allowDeployment?:boolean} = {}) {
     const connectedChainId = Number(
       (await hre.ethers.provider.getNetwork()).chainId
     );
@@ -173,8 +179,10 @@ export class RevenueRuntime {
       throw new Error(
         `Revenue chain mismatch: expected ${configuredChainId}, received ${connectedChainId}`
     );
+    assertPublicConfiguration(connectedChainId);
     let s = this.repo.read();
     if (!s.manifest) {
+      if(publicTestnet(connectedChainId)&&!options.allowDeployment) throw new Error("Base Sepolia deployment is missing. Run base:deploy explicitly; startup never redeploys automatically.");
       s.manifest = await deployRevenue();
       this.repo.write(s);
       writeFileSync(
@@ -231,12 +239,15 @@ export class RevenueRuntime {
       m.contractName || "RevenueShareVault",
       m.addresses.vault
     );
-    this.usdc = await hre.ethers.getContractAt("MockUSDC", m.addresses.usdc);
-    this.station = await hre.ethers.getContractAt(
-      "DeyeRWA",
-      m.addresses.station
-    );
-    if (!m.addresses.billing && process.env.REVENUE_HOUSEHOLD_PAYMENTS_ENABLED === "true" && Number(await this.vault.phase())<=2) {
+    this.usdc = await hre.ethers.getContractAt(m.paymentToken ? ERC20_ABI : "MockUSDC", m.addresses.usdc);
+    this.station = await hre.ethers.getContractAt("DeyeRWA",m.addresses.station);
+    if(this.publicProvider){
+      if(await this.publicProvider.getCode(MULTICALL3)==="0x")throw new Error("Public read aggregation contract is unavailable");
+      this.vault=new Contract(m.addresses.vault,this.vault.interface,this.publicProvider);
+      this.usdc=new Contract(m.addresses.usdc,this.usdc.interface,this.publicProvider);
+      this.station=new Contract(m.addresses.station,this.station.interface,this.publicProvider);
+    }
+    if (!m.addresses.billing && !publicTestnet(connectedChainId) && process.env.REVENUE_HOUSEHOLD_PAYMENTS_ENABLED === "true" && Number(await this.vault.phase())<=2) {
       const journal=join(this.dataDir,"household-billing-install.json");
       let installed: {vault:string;billing:string;transaction?:string;block?:number}|undefined;
       if(existsSync(journal))installed=JSON.parse(readFileSync(journal,"utf8"));
@@ -255,6 +266,7 @@ export class RevenueRuntime {
     }
     if(m.addresses.billing){
       this.billing=await hre.ethers.getContractAt("HouseholdBilling",m.addresses.billing);
+      if(this.publicProvider)this.billing=new Contract(m.addresses.billing,this.billing.interface,this.publicProvider);
       if(getAddress(await this.billing.vault())!==getAddress(m.addresses.vault)||getAddress(await this.billing.usdc())!==getAddress(m.addresses.usdc)||getAddress(await this.billing.manager())!==getAddress(m.accounts.agent)||getAddress(await this.billing.exportTreasury())!==getAddress(m.accounts.treasury))throw new Error("Billing contract does not match this product and roles");
       await this.reconcileHouseholdPayments();
     }
@@ -284,8 +296,10 @@ export class RevenueRuntime {
     const state=this.repo.read();
     for(const r of state.income.filter(i=>i.payment&&!i.collected)){
       const bill=await this.billing.bills(r.id);if(!bill.householdPaid&&!bill.exportPaid&&!bill.confirmed)continue;
-      const events=await this.billing.queryFilter(this.billing.filters.HouseholdPaid(r.id),state.manifest!.deployedBlock);
-      const confirmations=bill.confirmed?await this.billing.queryFilter(this.billing.filters.ReceiptConfirmed(r.id),state.manifest!.deployedBlock):[];
+      const cached=await this.eventCache.read(await this.billing.getAddress(),state.manifest!.deployedBlock);
+      const matching=(name:string)=>cached.logs.filter(l=>{const e=this.billing!.interface.parseLog(l);return e?.name===name&&e.args.id===r.id;});
+      const events=matching("HouseholdPaid");
+      const confirmations=bill.confirmed?matching("ReceiptConfirmed"):[];
       if(bill.confirmed&&BigInt(r.amountUSDC6)>0n&&!await this.vault.receiptUsed(r.id))throw new Error("Confirmed bill is missing its vault receipt");
       this.repo.update(v=>{
         const row=v.income.find(i=>i.id===r.id)!;row.payment!.householdPaid=bill.householdPaid;row.payment!.exportPaid=bill.exportPaid;row.payment!.confirmed=bill.confirmed;
@@ -430,6 +444,7 @@ export class RevenueRuntime {
       idempotencyKey: string;
     }
   ) {
+    assertLocalCapability("Demo reset",this.repo.read().manifest?.chainId);
     if (actor !== "agent")
       throw new Error(
         "Only the local intermediary can reset this demo / 仅中介演示账户可重置"
@@ -723,6 +738,8 @@ export class RevenueRuntime {
     args: unknown[],
     signer = op.actor as string
   ) {
+    if(method==="mint" && this.repo.read().manifest?.paymentToken && getAddress(await contract.getAddress())===getAddress(await this.usdc.getAddress()))
+      throw new Error("Circle test USDC cannot be minted by this application. Use the official Circle faucet.");
     let saved = this.repo.read().operations.find((v) => v.id === op.id)!.steps[
       key
     ];
@@ -781,7 +798,7 @@ export class RevenueRuntime {
     if (!receipt) {
       const existing = await hre.ethers.provider.getTransaction(saved.hash);
       if (!existing) await hre.ethers.provider.broadcastTransaction(saved.raw);
-      for (let i = 0; i < 80; i++) {
+      for (let i = 0; i < (publicTestnet()?240:80); i++) {
         receipt = await hre.ethers.provider.getTransactionReceipt(saved.hash);
         if (receipt) break;
         await new Promise((resolve) => setTimeout(resolve, 250));
@@ -807,6 +824,7 @@ export class RevenueRuntime {
     id: string,
     expectedVault?: string
   ): Promise<unknown> {
+    if(["advance","wallet-fund"].includes(action))assertLocalCapability(action,this.repo.read().manifest?.chainId);
     const work = this.queue.then(async () => {
       this.checkScenario(expectedVault);
       await this.reconcileRevertedApprovals();
@@ -1187,6 +1205,14 @@ export class RevenueRuntime {
       }
       case "mint-station": {
         const a = app();
+        // A valid original mint can be reconciled after a later custody step; never mint again.
+        if(op.steps.mint){
+          await transact("mint",this.station,"mintFacility",[],"agent");
+          const facility=await this.station.getFacility(a.stationId);
+          if(!facility.exists||facility.metadataHash!==a.agreementHash||getAddress(facility.admin)!==getAddress(a.owner)||String(facility.acquisitionCostUSDC6)!==a.priceUSDC6)
+            throw new Error("Recovered mint does not match the signed station agreement");
+          return {recovered:true,stationId:a.stationId};
+        }
         this.assertValuationReady(a, now);
         if (a.status !== "signed")
           throw new Error("Signed agreement required");
@@ -1591,6 +1617,7 @@ export class RevenueRuntime {
         ]);
         return;
       case "advance": {
+        assertLocalCapability("Financial time advance",s.manifest?.chainId);
         const choice = z.enum(["cooling", "month", "day"]).parse(b.by);
         if (choice === "cooling" && ["RevenueShareVaultV3", "RevenueShareVaultV4", "RevenueShareVaultV5"].includes(s.manifest?.contractName || "")) throw new Error("This product has no cooling period / 本产品不设冷静期，无需推进三天时间");
         let target = now + (choice === "cooling" ? 3 * 86400 + 1 : 86400);
@@ -1687,7 +1714,8 @@ export class RevenueRuntime {
         const r=s.income.find(i=>i.id===b.incomeId);if(!r?.payment||!this.billing)throw new Error("Published bill required");
         const bill=await this.billing.bills(r.id);if((bill.exportPaid||bill.confirmed||bill.refunded)&&!op.steps["export-fund"])throw new Error("Export receipt already funded or unavailable / 售电回款已登记，无需重复操作");
         // No household money is minted here. Only the separately disclosed grid-export leg is simulated.
-        await transact("export-demo-cash",this.usdc,"mint",[this.address("treasury"),r.payment.exportUSDC6],"admin");
+        if(!s.manifest?.paymentToken) await transact("export-demo-cash",this.usdc,"mint",[this.address("treasury"),r.payment.exportUSDC6],"admin");
+        else if(BigInt(await this.usdc.balanceOf(this.address("treasury")))<BigInt(r.payment.exportUSDC6))throw new Error("The export simulation treasury needs prefunded Circle test USDC / 售电模拟资金账户的 Circle 测试 USDC 不足，请先补充测试资金。");
         await transact("export-allowance",this.usdc,"approve",[await this.billing.getAddress(),r.payment.exportUSDC6],"treasury");
         await transact("export-fund",this.billing,"fundExport",[r.id],"treasury");
         this.repo.update(v=>{const p=v.income.find(i=>i.id===r.id)!.payment!;p.exportPaid=true;p.exportTransaction=v.operations.find(o=>o.id===op.id)?.steps["export-fund"]?.hash;});
@@ -2085,9 +2113,14 @@ export class RevenueRuntime {
     if (!expected)
       throw new Error("Wallet step is not expected for this operation");
     const hashValue = z.string().regex(/^0x[0-9a-fA-F]{64}$/).parse(txHash);
-    const tx = await hre.ethers.provider.getTransaction(hashValue);
+    let tx = await hre.ethers.provider.getTransaction(hashValue);
+    // A wallet's broadcast RPC and the backend RPC can see the same public transaction at different times.
+    if(publicTestnet(this.repo.read().manifest?.chainId))for(let i=0;i<30&&!tx;i++){
+      await new Promise(r=>setTimeout(r,500));tx=await hre.ethers.provider.getTransaction(hashValue);
+    }
+    if(!tx)throw new Error("Transaction is not visible to the backend RPC yet. Keep this hash and retry registration; do not send another payment. / 后端尚未查询到交易，请保留哈希并重试确认，不要重复付款。");
     if (
-      !tx ||
+      Number(tx.chainId)!==this.repo.read().manifest!.chainId ||
       getAddress(tx.from) !== getAddress(expected.from) ||
       !tx.to ||
       getAddress(tx.to) !== getAddress(expected.to) ||
@@ -2212,6 +2245,7 @@ export class RevenueRuntime {
   }
   faucet(actor: Actor, expectedVault?: string) {
     const work = this.queue.then(async () => {
+      assertLocalCapability("Application faucet",this.repo.read().manifest?.chainId);
       this.checkScenario(expectedVault);
       const recipient = this.address(actor);
       const admin = this.wallets.admin;
@@ -2267,6 +2301,7 @@ export class RevenueRuntime {
     this.queue = work.catch(() => {});
     return work;
   }
+  readTogether(calls:ViewCall[]){return readTogether(this.publicProvider,calls);}
   async state() {
     await this.queue;
     await this.queue;
@@ -2303,7 +2338,7 @@ export class RevenueRuntime {
       "distributionMonths",
       "newReceipts",
     ];
-    const values = await Promise.all(names.map((n) => v.getFunction(n)()));
+    const values = await this.readTogether(names.map(method=>({contract:v,method})));
     const chain = Object.fromEntries(
       names.map((n, i) => [
         n,
@@ -2313,8 +2348,7 @@ export class RevenueRuntime {
     chain.subscriptionReviewRequired = ["RevenueShareVaultV3", "RevenueShareVaultV4", "RevenueShareVaultV5"].includes(s.manifest?.contractName || "");
     chain.subscriptionTopUpsAllowed = ["RevenueShareVaultV4", "RevenueShareVaultV5"].includes(s.manifest?.contractName || "");
     chain.distributionIntervalMonths=s.manifest?.contractName==="RevenueShareVaultV5"?1:3;
-    const approvedValuation = await v.valuation();
-    const proposedValuation = await v.proposed();
+    const [approvedValuation,proposedValuation] = await this.readTogether([{contract:v,method:"valuation"},{contract:v,method:"proposed"}]);
     Object.assign(chain, {
       proposedValuationOutdated: await this.proposalOutdated(proposedValuation.report),
       proposedValuationReport: proposedValuation.report,
@@ -2329,15 +2363,9 @@ export class RevenueRuntime {
       futureFees: String(approvedValuation.futureFees),
       vaultCash: String(await this.usdc.balanceOf(await v.getAddress())),
     });
-    const logs = await v.queryFilter("*", s.manifest!.deployedBlock);
-    const blockTimes = new Map(
-      await Promise.all(
-        [...new Set(logs.map((l) => l.blockNumber))].map(
-          async (n) =>
-            [n, (await hre.ethers.provider.getBlock(n))!.timestamp] as const
-        )
-      )
-    );
+    const cachedEvents=await this.eventCache.read(await v.getAddress(),s.manifest!.deployedBlock);
+    const logs=cachedEvents.logs;
+    const blockTimes = new Map(Object.entries(cachedEvents.times).map(([n,t])=>[Number(n),t]));
     const events = logs
       .map((log) => {
         try {
@@ -2361,10 +2389,9 @@ export class RevenueRuntime {
         (address) => `investor:${address.toLowerCase()}` as Actor
       ),
     ];
-    for (const who of accountActors) {
+    await Promise.all(accountActors.map(async who => {
       const address = this.address(who),
-        subscription = await v.subscriptions(address),
-        redemption = await v.redemptions(address);
+        [subscription,redemption] = await this.readTogether([{contract:v,method:"subscriptions",args:[address]},{contract:v,method:"redemptions",args:[address]}]);
       const claims = [];
       for (let id = 1; id <= Number(chain.distributionCount); id++)
         claims.push({
@@ -2420,7 +2447,12 @@ export class RevenueRuntime {
           }
         }
       }
-      const economic = BigInt(await v.economicBalance(address));
+      const [reads,native]=await Promise.all([this.readTogether([
+        {contract:v,method:"economicBalance",args:[address]},{contract:this.usdc,method:"balanceOf",args:[address]},{contract:v,method:"balanceOf",args:[address]},{contract:v,method:"eligible",args:[address]},
+        ...(chain.subscriptionReviewRequired?[{contract:v,method:"subscriptionApproved",args:[address]},{contract:v,method:"subscriptionNonce",args:[address]}]:[])]),
+        (this.publicProvider||hre.ethers.provider).getBalance(address)]);
+      const [econ,cash,shareBalance,eligible,approved=false,nonce=0n]=reads;
+      const economic=BigInt(econ);
       const remaining = (economic * BigInt(chain.price as string)) / 1000000n;
       const unclaimed = claims.reduce(
         (sum, c) => sum + BigInt(c.amountUSDC6),
@@ -2446,19 +2478,19 @@ export class RevenueRuntime {
       }
       accounts[who] = {
         address,
-        usdc: String(await this.usdc.balanceOf(address)),
-        nativeBalanceWei: String(await hre.ethers.provider.getBalance(address)),
+        usdc: String(cash),
+        nativeBalanceWei: String(native),
         faucetClaim: s.faucetClaims?.[address.toLowerCase()] || null,
-        shares: String(await v.balanceOf(address)),
+        shares: String(shareBalance),
         economicShares: economic.toString(),
-        eligible: await v.eligible(address),
+        eligible,
         subscription: {
           amount: String(subscription.amount),
           coolingEnd: chain.subscriptionReviewRequired ? 0 : Number(subscription.coolingEnd),
           terms: subscription.terms,
-          approved: chain.subscriptionReviewRequired ? await v.subscriptionApproved(address) : false,
+          approved,
           submittedAt: chain.subscriptionReviewRequired ? Number(subscription.submittedAt) : Number(subscription.coolingEnd) - 3 * 86400,
-          nonce: chain.subscriptionReviewRequired ? String(await v.subscriptionNonce(address)) : "0",
+          nonce: String(nonce),
           history: subscriptionHistory,
         },
         redemption: {
@@ -2483,7 +2515,7 @@ export class RevenueRuntime {
               : null,
         },
       };
-    }
+    }));
     const cases = await Promise.all(
       s.servicing.map(async (c) => {
         const onchain = await v.cases(c.id);

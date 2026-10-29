@@ -978,3 +978,7 @@ button:disabled {
 /* Numerical timelines need space for several monthly columns at once. */
 @media(min-width:1100px){.docs-layout:has(.period-timeline){grid-template-columns:220px minmax(0,1fr);gap:32px}.docs-layout:has(.period-timeline) .docs-toc{display:none}}
 .remote-wallet-notice { margin: 0; padding: 12px 24px; text-align: center; color: #b8f5cc; background: #132a2b; font-size: 13px; }
+@media (max-width: 760px) {
+  .site-header:has([data-base-launch]) { height: auto; min-height: 88px; flex-wrap: wrap; gap: 8px; padding: 14px 22px; }
+  .site-header:has([data-base-launch]) .site-nav { flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+}

@@ -1,0 +1,19 @@
+{
+  "capturedAt": "2026-10-29",
+  "origin": "https://icq-attorneys-frontpage-weekends.trycloudflare.com",
+  "chainId": 84532,
+  "browser": "Hidden Chromium with actual Rabby 0.94.11",
+  "screenshots": {
+    "zh": {
+      "product": "assets/base-product.zh.png",
+      "funds": "assets/base-wallet.zh.png",
+      "interfaceLanguage": "zh"
+    },
+    "en": {
+      "product": "assets/base-product.en.png",
+      "funds": "assets/base-wallet.en.png",
+      "interfaceLanguage": "en"
+    }
+  },
+  "secretsIncluded": false
+}

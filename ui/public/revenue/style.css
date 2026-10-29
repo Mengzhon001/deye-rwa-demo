@@ -4100,3 +4100,10 @@ body[data-file-entry] .main {
 @media(max-width:600px) { .iv-operation-metrics,.iv-operation-stages,.metric-row.holding-metrics { display:grid; grid-template-columns:1fr; } }
 
 .billing-period{border:1px solid #dce4f0;border-radius:12px;padding:20px;margin:18px 0;background:#fff}.billing-period>form,.billing-period>button{margin:10px 12px 10px 0}.billing-period details{margin-top:16px}.billing-period .mono{overflow-wrap:anywhere}.billing-period .metric-grid{display:flex;gap:32px;flex-wrap:wrap}
+
+.wallet-funds-dialog { position: fixed; inset: 0; margin: auto; width: min(560px, calc(100vw - 32px)); height: fit-content; max-height: 85vh; overflow: auto; padding: 30px; border: 1px solid #dce4f0; border-radius: 16px; color: #23344b; background: white; box-shadow: 0 18px 70px #10213b30; }
+.wallet-funds-dialog::backdrop { background: #10213b80; }
+.wallet-funds-dialog h2 { font-size: 22px; margin-bottom: 14px; }
+.wallet-funds-dialog p { margin: 12px 0; line-height: 1.7; overflow-wrap: anywhere; }
+.wallet-funds-dialog a { color: #1956df; text-decoration: underline; }
+.wallet-funds-dialog button { margin-top: 12px; }

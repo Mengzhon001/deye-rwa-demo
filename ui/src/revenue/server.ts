@@ -140,6 +140,7 @@ export async function startRevenueServer(
     });
     res.end(JSON.stringify(value));
   };
+  const readRetries=new WeakMap<IncomingMessage,number>();
   const server = createServer(async (req, res) => {
     try {
       const origin = req.headers.origin;
@@ -177,9 +178,14 @@ export async function startRevenueServer(
             chainName: process.env.REVENUE_CHAIN_NAME || "Deye RWA Local",
             rpcUrl: publicRpcUrl,
             explorerUrl,
+            publicTestnet: chainId === 84532,
+            resetEnabled: chainId !== 84532,
+            createProductEnabled: chainId !== 84532,
+            paymentToken: {address:runtime.repo.read().manifest!.addresses.usdc,symbol:chainId===84532?"USDC":"mUSDC",decimals:6,external:chainId===84532},
+            faucets: chainId===84532 ? {eth:"https://portal.cdp.coinbase.com/products/faucet",usdc:"https://faucet.circle.com/"} : null,
             nativeCurrency: {
-              name: "Demo Ether",
-              symbol: "DETH",
+              name: chainId===84532?"Ether":"Demo Ether",
+              symbol: chainId===84532?"ETH":"DETH",
               decimals: 18,
             },
             walletRequired,
@@ -602,6 +608,12 @@ export async function startRevenueServer(
       }
       json(res, 404, { error: "Not found" });
     } catch (e) {
+      const rpcError=e as any;
+      if(chainId===84532&&req.method==="GET"&&req.url?.startsWith("/api/state")&&rpcError.code==="CALL_EXCEPTION"&&rpcError.data==null){
+        const attempt=readRetries.get(req)||0;
+        if(attempt<2){readRetries.set(req,attempt+1);setTimeout(()=>server.emit("request",req,res),750);return;}
+        console.error("Base Sepolia state RPC failure",JSON.stringify({code:rpcError.code,shortMessage:rpcError.shortMessage,transaction:rpcError.transaction,info:rpcError.info}));
+      }
       const message = safeError(e);
       json(
         res,

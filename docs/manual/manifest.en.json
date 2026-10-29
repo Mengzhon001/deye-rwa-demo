@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-22",
+  "date": "2026-10-29",
   "language": "en",
   "internalTestKeys": false,
   "assets": [
@@ -103,10 +103,12 @@
     "H2.en-detail.png",
     "H3.en-context.png",
     "H3.en-detail.png",
+    "base-product.en.png",
+    "base-wallet.en.png",
     "explorer-events.en.png",
     "explorer-transaction.en.png",
     "guide-overview.en.png",
     "wallet-import-3-crop.png"
   ],
-  "sourceSha256": "ceeab064cb28fb51aa1412b2ee1d92ae91972a0b1ba40a343273589602a419fe"
+  "sourceSha256": "5f424cc13005613d877199f854dee4b564da3639383a0b2cc2d0db1d0225e5a2"
 }

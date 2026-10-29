@@ -93,6 +93,7 @@ export async function deploymentSources(
   const provider = hre.ethers.provider;
   const contracts = await Promise.all(
     Object.entries(manifest.addresses).map(async ([key, address]) => {
+      if(key==="usdc" && manifest.paymentToken) return {name:"Circle test USDC (external)",address,explorer:`${explorerUrl}/address/${address}?tab=contract`,status:"external",sourceMatch:null,source:"https://developers.circle.com/stablecoins/usdc-contract-addresses",constructorArguments:[],verificationScope:"External Circle proxy; not part of the RWA source bundle"};
       const name = {
         usdc: "MockUSDC",
         station: "DeyeRWA",
@@ -105,6 +106,7 @@ export async function deploymentSources(
         address,
         explorer: `${explorerUrl}/address/${address}?tab=contract`,
         source: artifact?.source,
+        deploymentTransaction:manifest.deploymentTransactions?.[key],
         constructorArguments:
           key === "billing" ? [manifest.addresses.usdc,manifest.addresses.vault,manifest.accounts.agent,manifest.accounts.treasury] : key === "vault"
             ? [
