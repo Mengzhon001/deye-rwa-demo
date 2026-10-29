@@ -8,7 +8,7 @@ import "../../public/revenue/period-timeline.css";
 
 declare global {
   interface Window {
-    RevenueNetworks?: { appPath(suffix?: string): string };
+    RevenueNetworks?: { active?: boolean; appPath(suffix?: string): string };
     RoleLogin: { open(options?: any): Promise<void> };
     RevenueTimeline: {
       owner(report: unknown, price: string, currency: string, lang: string): unknown;
@@ -361,7 +361,8 @@ function refreshHomeOverview(){
     })
     .then((data) => {
       if(request!==overviewRequest || !document.querySelector("[data-stat]"))return;
-      if(data.chainId!==(selectedNetwork==="base-sepolia"?84532:20261008))throw new Error("Network metadata mismatch");
+      if((pagesMode||window.RevenueNetworks?.active)&&data.chainId!==(selectedNetwork==="base-sepolia"?84532:20261008))throw new Error("Network metadata mismatch");
+      const observedName=document.querySelector("[data-network-name]");if(observedName)observedName.textContent=data.chainId===84532?"Base Sepolia":tr("私有演示链","Private demo");
       document.querySelectorAll<HTMLElement>("[data-stat]").forEach((el) => {
         el.textContent =
           data[el.dataset.stat!] == null
