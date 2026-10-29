@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "app": "https://necessity-magnificent-aids-lan.trycloudflare.com",
+  "networks": [
+    {
+      "id": "private",
+      "chainId": 20261008,
+      "label": {
+        "zh": "私有演示链",
+        "en": "Private demo"
+      }
+    },
+    {
+      "id": "base-sepolia",
+      "chainId": 84532,
+      "label": {
+        "zh": "Base Sepolia",
+        "en": "Base Sepolia"
+      }
+    }
+  ],
+  "updatedAt": "2026-10-29T08:18:26.553Z"
+}
