@@ -6,3 +6,5 @@ body.guide-enabled .topbar{height:auto;min-height:64px;flex-wrap:wrap;padding:12
 
 .guide-notice h2[tabindex="-1"]:focus{outline:none}
 .guide-last-check{font-size:12px;color:#506681;background:#f4f7fb;border-radius:6px;padding:7px 9px;margin:10px 0}.guide-options [aria-busy="true"]{cursor:progress}
+
+.guide-data-status{margin:12px 0;padding:10px 12px;border:1px solid #dbe4ee;border-radius:8px;background:#f8fafc;color:#60718a;font-size:12px}.guide-data-status p{margin:4px 0 8px;line-height:1.6}.guide-data-status button{font-size:12px}.guide-data-status [aria-busy="true"]{cursor:progress}.guide-snapshot-note{font-size:12px;color:#60718a}
