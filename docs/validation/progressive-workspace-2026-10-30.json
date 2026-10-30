@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-30",
+  "change": "Progressive authenticated workspace loading",
+  "description": {
+    "zh": "钱包身份验证完成后即显示角色工作台和导航。产品资料、余额、已发布产品和已保存记录分别加载。完整业务状态确认前不开放交易，查询失败的部分可以重试，账户或产品变化时取消旧请求。",
+    "en": "The role workspace and navigation render as soon as wallet authentication finishes. Metadata, balances, published products and saved records load independently. Transactions remain unavailable until authoritative state is confirmed. Failed sections can be retried and obsolete reads are cancelled when identity or product changes."
+  },
+  "automatedChecks": {
+    "sectionAllowlistAndBalances": 3,
+    "guidance": 29,
+    "businessWorkflow": 38,
+    "gatewayAndHealth": 2,
+    "rpcAndHistory": 8,
+    "progressiveBrowserGroups": 6,
+    "legacyLoadingBrowserGroups": 5,
+    "typecheck": "passed"
+  },
+  "controlledBrowserChecks": [
+    "Immediate shell/navigation; independent balances, metadata, products and records; English switching and selected page retained after sync",
+    "Section-only failure/retry and full-state retry retain successful cards without reconnecting or signing",
+    "Wrong-chain/wrong-wallet partial data rejected; wallet changes cancel all reads and prevent stale protected rendering",
+    "English mobile timeout/recovery, reduced motion, focus retention and no overflow",
+    "All four signed-in roles can browse their own navigation before financial state completes",
+    "Private demo chain supports the same progressive flow"
+  ],
+  "liveBrowserTimings": [
+    {
+      "id": "base-sepolia",
+      "browser": {
+        "shellMs": 1405,
+        "balanceMs": 1774,
+        "completeMs": 9677,
+        "errors": [],
+        "noAdditionalSignature": true
+      }
+    },
+    {
+      "id": "private",
+      "browser": {
+        "shellMs": 653,
+        "balanceMs": 783,
+        "completeMs": 1114,
+        "errors": [],
+        "noAdditionalSignature": true
+      }
+    }
+  ],
+  "liveAPIChecks": {
+    "networks": [
+      84532,
+      20261008
+    ],
+    "roles": [
+      "owner",
+      "agent",
+      "investor",
+      "trustee"
+    ],
+    "endpoints": [
+      "/api/workspace/metadata",
+      "/api/workspace/balances",
+      "/api/workspace/records"
+    ],
+    "unauthenticatedStatus": 401,
+    "crossOriginReadAccess": "not enabled"
+  },
+  "actualWalletCheck": {
+    "extension": "Rabby 0.94.11",
+    "headless": true,
+    "guideLocateMs": 357,
+    "errors": []
+  },
+  "deployment": {
+    "applicationContainersUpdated": true,
+    "chainsReset": false,
+    "contractsRedeployed": false,
+    "businessTransactionsSubmitted": false,
+    "financialTimeAdvanced": false
+  },
+  "limitations": {
+    "zh": "完整业务数据仍取决于 RPC 和索引响应。独立显示余额与产品并不代表订单或分配已经确认。上述耗时为本次实测，不构成固定时延保证。",
+    "en": "Full business data still depends on RPC and indexing responses. Displaying a balance or product does not confirm an order or distribution. Timings describe this run and are not latency guarantees."
+  }
+}

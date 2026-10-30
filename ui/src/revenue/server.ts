@@ -16,6 +16,7 @@ import { Actor } from "./store";
 import { recordingEvidence } from "./recording-evidence";
 import { publishedProducts, publicOverview, deploymentSources } from "./public";
 import { loadDeyeCredentials } from "../../../offchain/src/revenue/deye";
+import { workspaceMetadata, workspaceBalances, workspaceRecords } from "./workspace";
 
 const root = resolve(__dirname, "../../..");
 export async function startRevenueServer(
@@ -177,6 +178,7 @@ export async function startRevenueServer(
             chainIdHex: `0x${chainId.toString(16)}`,
             chainName: process.env.REVENUE_CHAIN_NAME || "Deye RWA Local",
             rpcUrl: publicRpcUrl,
+            progressiveWorkspace: true,
             explorerUrl,
             publicTestnet: chainId === 84532,
             resetEnabled: chainId !== 84532,
@@ -234,6 +236,13 @@ export async function startRevenueServer(
           json(res, 200, await deploymentSources(runtime, root, explorerUrl));
           return;
         }
+        if (["/api/workspace/metadata", "/api/workspace/balances", "/api/workspace/records"].includes(path)) {
+          const account = walletRequired ? decodeSession(req).actor : viewer?.actor || "investor";
+          if (path.endsWith("/metadata")) json(res, 200, workspaceMetadata(runtime, catalog));
+          else if (path.endsWith("/records")) json(res, 200, workspaceRecords(runtime));
+          else json(res, 200, await workspaceBalances(runtime, account));
+          return;
+        }
         if (path === "/api/products") {
           if (walletRequired) decodeSession(req);
           const filter =
@@ -243,9 +252,8 @@ export async function startRevenueServer(
             !["all", "current", "history", "1", "2", "3", "4"].includes(filter)
           )
             throw new Error("Invalid product filter");
-          json(res, 200, {
-            products: await catalog.rows(filter),
-          });
+          const products = await catalog.rows(filter);
+          json(res, 200, { chainId, readAt: Date.now(), products });
           return;
         }
         if (/^\/api\/recording\/operations\/[a-zA-Z0-9-]{8,100}$/.test(path)) {

@@ -71,6 +71,11 @@ async function setup(f, { signedIn = true, language = 'zh', mobile = false, fast
     }
     return route.fallback();
   });
+  // Keep coverage of old-server compatibility. Progressive rendering has its own suite.
+  await context.route('**/api/network', async route => {
+    const response = await route.fetch();
+    await route.fulfill({ response, json: { ...await response.json(), progressiveWorkspace: false } });
+  });
   await context.route('**/api/state', async route => {
     control.reads++;
     if (control.mode === 'hold') await new Promise(resolve => control.held.push(resolve));

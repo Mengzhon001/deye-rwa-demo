@@ -31,6 +31,7 @@ async function switchProduct(vault, target) {
   selectedProduct = vault;
   sessionStorage.setItem(appStorageKey("revenue.selected-product"), vault);
   if (target) page = target;
+  if (!state && walletSession) return acceptWalletSession(walletSession);
   await refresh();
 }
 const t = (en, zh) => (lang === "zh" ? zh : en);
@@ -927,9 +928,67 @@ function walletLanding(message = "") {
 function cancelWalletWorkspaceLoad() {
   walletWorkspaceLoad?.controller.abort();
   clearTimeout(walletWorkspaceLoad?.slowTimer);
+  walletWorkspaceLoad?.headerObserver?.disconnect();
+  document.body.classList.remove('workspace-loading');
+  document.documentElement.style.removeProperty('--workspace-header-height');
   walletWorkspaceLoad = undefined;
 }
+function renderWorkspaceShell(session) {
+  const load = walletWorkspaceLoad;
+  if (!load) return;
+  const focused = document.activeElement;
+  const focusSelector = focused?.id ? `#${CSS.escape(focused.id)}` : ['workspaceSectionRetry','workspaceProduct','page','walletRole'].map(key => focused?.dataset?.[key] ? `[data-${key.replace(/[A-Z]/g,c=>'-'+c.toLowerCase())}="${CSS.escape(focused.dataset[key])}"]` : '').find(Boolean);
+  const chromeKey = JSON.stringify([role,page,lang,load.pending]);
+  if (load.chromeKey !== chromeKey) { renderWorkspaceChrome();load.chromeKey = chromeKey; }
+  document.body.classList.add('workspace-loading');
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.querySelector('#product-select').hidden = true;
+  document.querySelector('#product-create').hidden = true;
+  document.querySelector('#demo-reset').hidden = true;
+  document.querySelector('#main').classList.add('dashboard-main');
+  document.querySelector('#brand').textContent = t('Revenue rights platform','能源收益权平台');
+  const title = nav[role].find(item => item[0] === page) || [page,'Transaction log','交易日志'];
+  const main = document.querySelector('#main'), scroll = main.scrollTop;
+  main.innerHTML = window.RevenueWorkspace.render({lang,role,page,title:t(title[1],title[2]),network:networkConfig,session,load});
+  main.scrollTop = scroll;
+  if (focusSelector && !focused?.isConnected) document.querySelector(focusSelector)?.focus({preventScroll:true});
+  localStorage.setItem(appStorageKey('revenue.page'),page);
+  if (!load.headerObserver) {
+    const header = document.querySelector('.topbar');
+    const measure = () => { if (walletWorkspaceLoad === load && !state) document.documentElement.style.setProperty('--workspace-header-height',header.getBoundingClientRect().height+'px'); };
+    load.headerObserver = new ResizeObserver(measure);load.headerObserver.observe(header);measure();
+  }
+}
+async function requestWorkspaceSection(load, name, force = false) {
+  const section = load.sections?.[name];
+  if (!section || section.request || !force && section.status === 'ready') return;
+  const valid = () => walletWorkspaceLoad === load && walletSession === load.session && !state;
+  if (!valid()) return;
+  section.status = 'pending';
+  const path = name === 'products' ? '/api/products?status=current' : '/api/workspace/'+name;
+  section.request = (async () => {
+    try {
+      const data = await api(path, undefined, AbortSignal.any([load.controller.signal,AbortSignal.timeout(15000)]));
+      if (!valid()) return;
+      if (data.chainId !== networkConfig.chainId || data.vault && load.product && data.vault.toLowerCase() !== load.product.toLowerCase() || name === 'balances' && data.address?.toLowerCase() !== load.session.address.toLowerCase()) throw Error('Workspace section identity changed');
+      if (name === 'balances' && (!/^\d+$/.test(data.usdc) || !/^\d+$/.test(data.nativeBalanceWei))) throw Error('Invalid wallet balance response');
+      if (name === 'metadata' && (!data.product?.title || !Array.isArray(data.stations)) || name === 'products' && !Array.isArray(data.products) || name === 'records' && !Array.isArray(data.records)) throw Error('Incomplete workspace section');
+      if (!load.product && data.vault) load.product = data.vault;
+      section.status = 'ready';section.data = data;
+    } catch (error) {
+      if (valid()) section.status = 'error';
+    } finally {
+      section.request = null;
+      if (valid()) renderWorkspaceShell(load.session);
+    }
+  })();
+  renderWorkspaceShell(load.session);
+  return section.request;
+}
 function walletWorkspaceGate(session, error = "") {
+  if (networkConfig?.progressiveWorkspace && window.RevenueWorkspace && walletWorkspaceLoad?.sections) {
+    renderWorkspaceShell(session);return;
+  }
   walletLanding();
   document.querySelector("#nav").innerHTML = "";
   document.querySelector("#wallet-faucet").hidden = true;
@@ -950,18 +1009,24 @@ function walletWorkspaceGate(session, error = "") {
   </section>`;
 }
 async function acceptWalletSession(session) {
+  const previous = walletWorkspaceLoad;
+  const reusable = previous?.session.address === session.address && previous?.session.role === session.role && previous?.requestedProduct === selectedProduct.toLowerCase() ? previous.sections : null;
   cancelWalletWorkspaceLoad();
+  window.RevenueGuide?.clear();
   walletSession = session;
   role = session.role;
   actor = session.actor;
   if (!nav[role].some((item) => item[0] === page)) page = nav[role][0][0];
   state = undefined;
-  const load = { controller: new AbortController(), error: "", pending: true };
+  const load = { controller: new AbortController(), error: "", pending: true, session, product:selectedProduct, requestedProduct:selectedProduct.toLowerCase(),
+    sections: Object.fromEntries(['metadata','balances','products','records'].map(name=>[name,reusable?.[name]?.status==='ready'?{status:'ready',data:reusable[name].data}:{status:'pending'}])) };
   walletWorkspaceLoad = load;
   walletWorkspaceGate(session);
   feedback("");
+  if (networkConfig?.progressiveWorkspace) for (const name of Object.keys(load.sections)) void requestWorkspaceSection(load,name);
   load.slowTimer = setTimeout(() => {
     if (walletWorkspaceLoad !== load) return;
+    load.slow = true;
     const detail = document.querySelector("[data-wallet-load-detail]");
     if (detail) detail.textContent = t("The network is responding slowly. Your wallet is signed in; chain data is still loading.", "网络响应较慢。钱包已完成登录，仍在加载链上数据，请稍候。");
   }, 8000);
@@ -969,6 +1034,8 @@ async function acceptWalletSession(session) {
     const valid = () => walletWorkspaceLoad === load && walletSession === session;
     const ready = await refresh({ signal: AbortSignal.any([load.controller.signal, AbortSignal.timeout(45000)]), valid });
     if (!valid() || !ready) return false;
+    load.headerObserver?.disconnect();
+    load.controller.abort();
     walletWorkspaceLoad = undefined;
     feedback("");
     return true;
@@ -977,6 +1044,7 @@ async function acceptWalletSession(session) {
     load.error = ["TimeoutError", "AbortError"].includes(error.name)
       ? t("The data query timed out. No business transaction was submitted.", "数据查询超时，本次加载没有提交业务交易。")
       : t("The data service is temporarily unavailable. No business transaction was submitted.", "数据服务暂时不可用，本次加载没有提交业务交易。");
+    load.pending = false;
     walletWorkspaceGate(session, load.error);
     return false;
   } finally {
@@ -989,12 +1057,11 @@ async function connectWallet(selectedRole, destination) {
     network: networkConfig,
     role: selectedRole,
     onSuccess: async session => {
-      const ready = await acceptWalletSession(session);
-      if (ready && destination && session.role === selectedRole && nav[role].some(n => n[0] === destination.page)) {
+      if (destination && session.role === selectedRole && nav[session.role].some(n => n[0] === destination.page)) {
         page = destination.page;
         wfSelect(destination.applicationId || "");
-        render();
       }
+      await acceptWalletSession(session);
     },
   });
 }
@@ -1049,28 +1116,7 @@ function applyNetworkLabels(){
 }
 const networkLabelObserver=new MutationObserver(()=>{networkLabelObserver.disconnect();applyNetworkLabels();networkLabelObserver.observe(document.body,{childList:true,subtree:true});});
 networkLabelObserver.observe(document.body,{childList:true,subtree:true});
-function renderBusiness() {
-  const pendingApproval=JSON.parse(sessionStorage.getItem(appStorageKey("revenue.pending"))||'null');
-  if(pendingApproval&&state.operations.some(o=>o.id===pendingApproval.id&&o.action==='approve-valuation'&&Object.values(o.steps).some(step=>step.status==='reverted')))sessionStorage.removeItem(appStorageKey("revenue.pending"));
-  syncDemoGeneration();
-  selectedProduct = state.manifest.addresses.vault;
-  sessionStorage.setItem(appStorageKey("revenue.selected-product"), selectedProduct);
-  const picker = document.querySelector("#product-select");
-  if (picker) {
-    picker.hidden = !!state.selectedProduct?.archived;
-    picker.setAttribute("aria-label", t("Current product", "当前产品"));
-    picker.innerHTML = (state.productOptions || []).map(p => `<option value="${esc(p.vault)}" ${p.vault === selectedProduct ? "selected" : ""}>${esc(p.title[lang])} · ${t(...phaseNames[p.phase])}</option>`).join("");
-  }
-  const createProduct = document.querySelector("#product-create");
-  if (createProduct) { createProduct.hidden = role !== "agent" || networkConfig?.createProductEnabled === false; createProduct.textContent = t("New issuance", "创建新一期"); }
-  const resetButton = document.querySelector("#demo-reset");
-  resetButton.hidden = !!state.selectedProduct?.archived || networkConfig?.resetEnabled === false;
-  resetButton.textContent = t("Reset demo", "重置 Demo");
-  document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
-  document.querySelector("#brand").textContent = t(
-    "RWA investment platform · revenue rights",
-    "RWA 投融资平台 · 收益权"
-  );
+function renderWorkspaceChrome() {
   const walletRequired = Boolean(networkConfig?.walletRequired);
   document.querySelector("#roles").innerHTML = walletRequired
     ? Object.entries(names)
@@ -1120,16 +1166,17 @@ function renderBusiness() {
     .join("");
   const walletButton = document.querySelector("#wallet-connect");
   walletButton.hidden = !walletRequired;
-  walletButton.disabled = false;
-  document.querySelector("#refresh").disabled = false;
+  walletButton.disabled = !state && !!walletWorkspaceLoad?.pending;
+  document.querySelector("#refresh").disabled = !state && !!walletWorkspaceLoad?.pending;
   walletButton.textContent = walletSession
     ? `${walletSession.address.slice(0, 6)}…${walletSession.address.slice(-4)}`
     : t("Connect wallet", "连接钱包");
   document.querySelector("#wallet-status").textContent = walletRequired
-    ? `${t(...names[role])} · ${networkConfig.chainName}`
+    ? `${t(...names[role])} · ${networkConfig.chainName}${!state && walletSession ? ' · '+t('Signed in','已登录') : ''}`
     : "";
   const faucetButton = document.querySelector("#wallet-faucet");
   faucetButton.hidden = !walletRequired;
+  faucetButton.disabled = !state;
   faucetButton.textContent = t("Demo funds", "领取测试资金");
   document.querySelector("#language").textContent =
     lang === "en" ? "中文" : "English";
@@ -1150,6 +1197,33 @@ function renderBusiness() {
       "Transaction log",
       "交易日志"
     )}</button>`;
+}
+function renderBusiness() {
+  document.body.classList.remove('workspace-loading');
+  walletWorkspaceLoad?.headerObserver?.disconnect();
+  document.documentElement.style.removeProperty('--workspace-header-height');
+  const pendingApproval=JSON.parse(sessionStorage.getItem(appStorageKey("revenue.pending"))||'null');
+  if(pendingApproval&&state.operations.some(o=>o.id===pendingApproval.id&&o.action==='approve-valuation'&&Object.values(o.steps).some(step=>step.status==='reverted')))sessionStorage.removeItem(appStorageKey("revenue.pending"));
+  syncDemoGeneration();
+  selectedProduct = state.manifest.addresses.vault;
+  sessionStorage.setItem(appStorageKey("revenue.selected-product"), selectedProduct);
+  const picker = document.querySelector("#product-select");
+  if (picker) {
+    picker.hidden = !!state.selectedProduct?.archived;
+    picker.setAttribute("aria-label", t("Current product", "当前产品"));
+    picker.innerHTML = (state.productOptions || []).map(p => `<option value="${esc(p.vault)}" ${p.vault === selectedProduct ? "selected" : ""}>${esc(p.title[lang])} · ${t(...phaseNames[p.phase])}</option>`).join("");
+  }
+  const createProduct = document.querySelector("#product-create");
+  if (createProduct) { createProduct.hidden = role !== "agent" || networkConfig?.createProductEnabled === false; createProduct.textContent = t("New issuance", "创建新一期"); }
+  const resetButton = document.querySelector("#demo-reset");
+  resetButton.hidden = !!state.selectedProduct?.archived || networkConfig?.resetEnabled === false;
+  resetButton.textContent = t("Reset demo", "重置 Demo");
+  document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+  document.querySelector("#brand").textContent = t(
+    "RWA investment platform · revenue rights",
+    "RWA 投融资平台 · 收益权"
+  );
+  renderWorkspaceChrome();
   const title = nav[role].find((n) => n[0] === page) || [
     page,
     "Transaction log",
@@ -1209,6 +1283,10 @@ function renderBusiness() {
   localStorage.setItem(appStorageKey("revenue.page"), page);
 }
 function render() {
+  if (!state) {
+    if (walletSession && walletWorkspaceLoad) walletWorkspaceGate(walletSession,walletWorkspaceLoad.error);
+    return;
+  }
   renderBusiness();
   window.RevenueGuide?.update({
     state, role, actor, page, lang, network: networkConfig, session: walletSession,
@@ -1311,6 +1389,7 @@ document.addEventListener("click", async e => {
   };
 });
 async function walletAction(action, payload) {
+  if (!state) throw new Error(t('Wait for business state to load before submitting an operation.', '请等待业务状态加载完成后再提交操作。'));
   if (!walletProvider())
     throw new Error(t("Selected wallet is not installed", "未安装所选钱包"));
   const idempotencyKey =
@@ -1383,6 +1462,14 @@ document.addEventListener("click", async (e) => {
   const el = e.target.closest("button");
   if (!el) return;
   try {
+    if (el.dataset.workspaceSectionRetry && walletWorkspaceLoad) {
+      await requestWorkspaceSection(walletWorkspaceLoad,el.dataset.workspaceSectionRetry,true);
+      return;
+    }
+    if (el.dataset.workspaceProduct && walletSession) {
+      await switchProduct(el.dataset.workspaceProduct,'pool_detail');
+      return;
+    }
     if (el.dataset.walletRole) {
       await requestWalletRole(el.dataset.walletRole);
       return;
@@ -1482,6 +1569,7 @@ document.addEventListener("submit", async (e) => {
   const f = e.target;
   if (!f.dataset.action) return;
   e.preventDefault();
+  if (!state) { feedback(t('Business state is still loading. Please wait before submitting.', '业务状态仍在加载，请稍候再提交。'),true);return; }
   const action = f.dataset.action,
     payload = JSON.parse(f.dataset.payload);
   try {
@@ -1541,6 +1629,7 @@ document.addEventListener("submit", async (e) => {
   await runBusinessAction(action,payload,f.dataset.retryId);
 });
 async function runBusinessAction(action,payload,retryId) {
+  if (!state) { feedback(t('Business state is still loading. Please wait before submitting.', '业务状态仍在加载，请稍候再提交。'),true);return; }
   const canonical = JSON.stringify({ actor, action, payload });
   const pending = JSON.parse(
     sessionStorage.getItem(appStorageKey("revenue.pending")) || "null"

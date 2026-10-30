@@ -24,6 +24,7 @@ try{
   await page.locator('[data-wl-role="investor"]').click();await page.locator('[data-wl-connect]').click();
   await driver.pump('investor',async()=>await page.locator('#nav [data-page]').count()>0,120000);
  }
+ await page.waitForFunction(()=>typeof state!=='undefined',{},{timeout:90000});
  const session=await(await context.request.get(pub.app+'/networks/base-sepolia/api/session/current')).json();assert.equal(session.address.toLowerCase(),keys.wallets.investor.address.toLowerCase());
  if(await page.locator('[data-guide-start]').count())await page.locator('[data-guide-start]').click();
  if(!await page.locator('#guide-panel').count())await page.locator('#guide-launch').click();
