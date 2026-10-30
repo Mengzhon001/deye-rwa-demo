@@ -6,6 +6,7 @@
 \setmainfont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6,BoldFont=Songti.ttc,BoldFeatures={FontIndex=0}]
 \setCJKmainfont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6,BoldFont=Songti.ttc,BoldFeatures={FontIndex=0}]
 \setmonofont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6]
+\setCJKmonofont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6]
 \renewcommand{\normalsize}{\fontsize{12}{18}\selectfont}\normalsize
 \titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
@@ -26,6 +27,34 @@
 本次月度缴费流程在独立测试链上验证了连续两个月的业主付款、确认入池和分配。自动化浏览器使用独立测试密钥签署实际交易，不代表本次重新完成了Rabby扩展认证。高级转让、赎回、服务处置与到期说明沿用已验证的业务规则，并应结合当前窗口条件操作。当前系统是演示软件，真实电价、银行清算、生产身份合规和完整安全审计尚未完成。
 
 \renewcommand{\contentsname}{目录}\clearpage\tableofcontents
+\clearpage\section{测试方式与适用范围}
+本系统提供三种使用方式，分别是通过统一网站访问共享私有演示链、访问 Base Sepolia 公链测试环境，以及在自己的电脑上部署独立本地实例。选择方式时应先确定测试目的，而不是仅根据网页能否打开判断环境是否相同。私有链用于在可控时间内验证完整业务，Base Sepolia 用于验证真实公链条件下的合约和钱包交互，并为后续 Oracle 集成建立基线；本地部署用于开发调试、独立复现和回归测试。
+
+本地部署是一种部署方式，并不是第三条公共区块链。本手册的默认本地方案会创建自己的 Anvil 私有链。共享私链和新建本地链虽然运行相同业务逻辑，但使用不同的链编号、合约、账户配置和存储。相反，在本机打开一个连接 Base Sepolia 的后端，仍然属于公链测试，不能因此使用时间推进或重置功能。
+
+\begin{longtable}{L{2.5cm}L{4.2cm}L{4.5cm}L{3cm}}\toprule 测试方式 & 主要目的 & 建议验证内容 & 时间与资金\\\midrule\endhead
+共享私有演示链 & 完整生命周期演示及多角色业务验收。 & 申请、发行、月度缴费、分配、转让、赎回、处置和关闭。 & 20261008；测试 mUSDC；中介可推进演示时间。\\\addlinespace
+Base Sepolia & 验证公共链兼容性，并为后续 Oracle 接入准备基线。 & 钱包、Gas、Circle USDC、授权、认购、退款、回执和恢复。 & 84532；测试 ETH 与 USDC；使用真实链上时间。\\\addlinespace
+独立本地部署 & 修改代码、复现问题并执行可重复的独立回归。 & 从空白场景建立产品，并验证页面、模型、权限和业务流程。 & 默认20260922；独立测试钱包和本地测试币。\\\addlinespace
+\bottomrule\end{longtable}
+共享私链与 Base Sepolia 沿用同一组业务角色地址，但一个地址在两条链上的余额、资格和持仓互不相通。新同事自行部署时，初始化工具默认生成另一组本地账户，不能直接用手册中共享环境的地址代替。每次开始测试都应记录链编号、钱包地址、产品合约和测试起始状态。
+
+\clearpage
+\subsection{测试路径选择图}
+\begin{center}\begin{tikzpicture}[>=Latex,box/.style={draw,align=center,text width=4.1cm,minimum height=1.5cm,inner sep=5pt}]
+\node[box] (goal) at (5,0) {确认测试目标};
+\node[box] (private) at (0,-2.8) {完整业务与角色交接};
+\node[box] (privateout) at (0,-5.6) {共享私链与后文 A 至 H 操作图};
+\draw[->] (goal.south)--(private.north);\draw[->] (private.south)--(privateout.north);
+\node[box] (base) at (5,-2.8) {真实公链与后续 Oracle 准备};
+\node[box] (baseout) at (5,-5.6) {Base Sepolia 小额交易与链上核对};
+\draw[->] (goal.south)--(base.north);\draw[->] (base.south)--(baseout.north);
+\node[box] (local) at (10,-2.8) {开发、复现与独立回归};
+\node[box] (localout) at (10,-5.6) {本地 Docker、独立链与测试钱包};
+\draw[->] (goal.south)--(local.north);\draw[->] (local.south)--(localout.north);
+\end{tikzpicture}\end{center}
+第一次了解产品或检查角色交接的读者，可以从共享私有链开始。需要修改代码或从零发行产品时，应使用自己的本地实例。只有在验证公共链行为或准备后续 Oracle 集成时，才需要在 Base Sepolia 上准备真实的测试 ETH 和 Circle 测试 USDC。以下章节分别说明三条路径，后面的完整操作图供私链与本地环境按当前状态使用。
+
 \clearpage\section{产品状态与角色交接}
 产品从草稿进入募集，募集满足资金与审批条件后统一结算并发行DRS，随后进入存续期。募集失败的产品提供退款，存续产品在收益权到期后完成清理和关闭。部署合约不等于发布产品，认购款进入托管也不等于已发行份额。
 
@@ -251,8 +280,46 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 切换时，请先在 Rabby 确认目标网络，然后使用同一角色钱包重新签名登录。角色地址保持不变，但登录会话、产品、待确认操作和页面选择按链分别保存。切换不会把私链 mUSDC 兑换或转移为 Circle USDC。如果当前仍有待确认交易，系统会要求先在原页面或交易日志核对结果。拒绝钱包请求或目标服务不可用时，页面仍保留原网络。
 
 \begin{center}\includegraphics[width=\linewidth,height=.42\textheight,keepaspectratio]{assets/network-menu.zh.png}\par 统一入口的网络选择窗口。请选择需要测试的链，再在钱包核对网络并重新登录。\end{center}
+\clearpage\section{私有演示链全流程测试}
+\subsection{测试目的与准备条件}
+共享私有演示链的目标是检查收益权业务能否在各角色之间完整流转。它使用 Anvil、演示 mUSDC 和独立的 Blockscout，允许中介在权限范围内推进财务时间，因此可以演练月度运营、六个月锁定、季度赎回和到期关闭，而不必等待真实日历走完。时间推进不会生成新的电站遥测，也不能代替实际的账单、缴费、审核和分配交易。
+
+开始前，请取得负责人提供的角色测试账户，并与其他测试者确认使用哪个产品。完整演练需要业主、中介、投资者 A/B 和受托人 A/B。只测试投资者路径时，可以使用已经发布且仍在募集的预置产品，不必再次完成业主申请和发行准备。如果产品已经存续，不能再按首次募集方式继续认购，应选择另一个募集中产品，或由负责人准备新的测试场景。
+
+\subsection{进入环境与确认网络}
+\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/private/app/}\par
+从公开首页点击 Launch App，并在右上角选择“私有演示链”。在 Rabby 中核对 Chain ID 为20261008，然后选择角色并签名登录。登录后检查产品名称和资产池地址；钱包余额、托管订单和已发行 DRS 必须分别查看。领取测试资金只增加钱包内的测试余额，不会自动形成认购订单。
+
+\subsection{投资者直接测试路径}
+投资者在产品大厅选择一个募集中产品，查看现金流时间轴和风险说明，并在“投资资格”提交声明。中介批准资格后，投资者领取测试资金，填写不超过剩余额度的认购金额，先完成 mUSDC 授权，再确认认购交易。中介随后审核当前累计订单。募集仍开放且额度允许时，投资者可以继续追加，每次追加后都需要重新审核。
+
+要检查退款，可以在结算前由原投资者取消认购并领取全部累计托管款。要继续检查持仓和分配，应补足页面列明的结算资金差额，再由中介重新审核并完成结算。合约会自动留存约定的10\%现金，不存在单独的“留存”转账步骤。没有完成统一结算时，不能把托管金额解释为已经发行的份额。
+
+\clearpage
+\subsection{完整生命周期与截图索引}
+下表按业务状态组织完整演练。每一阶段都必须确认页面结果与链上记录一致，再交接给下一角色。表中的编号与后文的标注截图对应，点击编号可以跳转到具体操作。已有预置产品的投资者测试从 D 组开始；空白场景则从 B 组开始。
+
+\begin{longtable}{L{2.8cm}L{4.6cm}L{5.1cm}L{1.7cm}}\toprule 业务阶段 & 当前处理人与操作 & 应确认的结果 & 操作图\\\midrule\endhead
+申请与协议 & 业主申请，中介审核报价，受托审批，业主接受并签署。 & 协议、估值与电站证据相互对应。 & \hyperref[step:B3]{B3} / \hyperref[step:B10]{B10}\\\addlinespace
+入池与发布 & 中介铸造凭证，业主授权，中介入池并编制估值，受托批准后发布。 & 产品进入募集，凭证托管和发行条款可核对。 & \hyperref[step:C1]{C1} / \hyperref[step:C6]{C6}\\\addlinespace
+认购与结算 & 投资者申请资格、授权认购，中介审核并结算。 & 托管款用于购买收益权并自动留存，投资者取得 DRS。 & \hyperref[step:D3]{D3} / \hyperref[step:D8]{D8}\\\addlinespace
+月度运营 & 中介发布账单，业主缴费，中介核对售电及入池，受托批准估值。 & 两类回款、费用与批准净值分别有记录。 & \hyperref[step:E1]{E1} / \hyperref[step:E5]{E5}\\\addlinespace
+宣告与领取 & 中介宣告月度分配，投资者切换本人钱包领取。 & 已宣告、可领取与已领取金额可与 USDC 转账核对。 & \hyperref[step:E6]{E6} / \hyperref[step:E7]{E7}\\\addlinespace
+转让与赎回 & 满足锁定和通知条件后，由相关双方与中介处理。 & 份额、付款、部分成交和剩余申请相互一致。 & \hyperref[step:F1]{F1}\\\addlinespace
+处置与关闭 & 按条件取得快照支持与两名受托批准，并完成到期清理。 & 应收款与负债结清，最终分配及凭证返还完成。 & \hyperref[step:G1]{G1} / \hyperref[step:H1]{H1}\\\addlinespace
+\bottomrule\end{longtable}
+\subsection{时间推进、共享状态与验收记录}
+到达等待日期时，由中介进入“产品运营”，展开“演示工具·财务时间推进”，选择下个月度计费截止日并确认。支持该捷径的引导弹窗也可以定位到同一操作。存续期间应逐月完成账单、回款、费用及估值审批后，再推进下一个月；不能通过一次跳过多个月份把未完成账务变成已完成。
+
+共享环境中的多个产品使用同一条链的时间。推进时间可能使其他产品的募集或估值过期，因此应由同一名负责人协调。重置与重新准备预置产品也应由负责人统一执行。测试记录至少保留产品地址、角色地址、关键交易哈希、业务编号以及预期和实际结果；链下审批不应被登记成链上交易。
+
 \clearpage\section{Base Sepolia 公链测试}
 原公网演示继续用于完整生命周期演练。Base Sepolia 是另一个独立环境，用于检验公共链的合约和钱包交易。两者沿用同一组角色地址，但合约、余额和业务记录相互独立。后文的完整生命周期操作图以私链演示为例，公链测试应遵循本节的实际时间和资金限制。
+
+\subsection{测试目标与后续 Oracle 接入}
+Base Sepolia 用于验证同一业务代码在真实公共链上能否正确完成钱包签名、Gas 支付、Circle USDC 授权与转账、合约调用、事件读取和中断恢复。它也是后续 Oracle 集成的测试基础，便于在同一条公共测试链上验证报告接收合约、报告摘要、账期绑定、权限与错误处理，而不影响私链的完整演示。
+
+当前部署尚未接入 Oracle。现阶段能够验证的是公共链交易和现有报告流程，不能据此认定电站数据已获得独立 Oracle 认证。后续实施时，需要按 Oracle 方案增加链下取数与核验、报告签名或认证、链上接收与强制校验，并重新部署和测试受影响的组件。Oracle 认证本身也不能证明业主已经付款，USDC 到账仍须通过独立交易核对。
 
 \subsection{入口与网络配置}
 公链测试应用\par\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/base-sepolia/app/}\par
@@ -286,6 +353,11 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 
 结算继续要求有效估值、订单审批、募集门槛以及足够的购买款和初始留存。合约会自动留存10\%，不需要用户另行转账。少量测试币可以用于检查授权、认购、审核和退款，不能据此声称已经完成需要更多资金的发行结算。
 
+\subsection{公链测试步骤与完成标准}
+建议先用一个投资者账户完成登录、资格、USDC 授权、小额认购及退款，再由中介和受托分别验证自己的权限。每笔交易先确认所在网络与余额，再在公共浏览器核对回执、事件及代币转移。募集开放时可以追加认购，并检查中介是否需要重新审核最新累计金额。对于已经提交但读取较慢的交易，应保留原哈希并重试确认，而不是重新支付。
+
+这一轮的完成标准是实际交易金额与业务记录一致、错误钱包与网络被正确拦截、刷新或重启后可以恢复原记录。若没有达到足额结算或真实月度截止日，应将结算、缴费和分配记录为“本轮未执行”，并说明原因。少量测试币和短时间观察不等于已经完成生命周期验收；完整路径应转到私有演示链或自己的本地实例。
+
 \subsection{真实时间与测试范围}
 公共链不能由应用提前推进时间。月度缴费需要产品已经结算，并到达对应服务期末。六个月转让锁定、赎回通知期和到期时间也保持不变。页面因此不提供重置和时间推进。完整生命周期演示仍应使用原公网私链环境。
 
@@ -304,6 +376,85 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \clearpage\begin{landscape}
 \begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-wallet.zh.png}\par 钱包余额与官方水龙头说明。此页面不会通过后台增发 Circle USDC。\end{center}
 \end{landscape}
+\clearpage\section{本地部署与独立测试}
+\subsection{部署目的与默认环境}
+本地部署供开发人员在自己的电脑上复现问题、修改模型和合约、验证界面，并从空白场景反复演练。它不需要公网隧道，也不依赖演示负责人的 Mac 持续在线。以下命令针对从公开仓库新克隆的独立目录，不应在已经承载共享演示的工作目录中直接执行。
+
+默认 Compose 项目为 deye-rwa-platform，链编号为20260922。应用、Blockscout 和钱包 RPC 使用本机4174、4000和18545端口。请先检查这些端口是否空闲；有冲突时先解决配置，不要停止其他正在使用的演示。127.0.0.1 只代表当前电脑，同事在另一台机器上不能通过你的本机网址访问服务。
+
+当前维护用的4191端口和20261014链属于另一套引导回归环境，依赖单独准备的记录回放。本节的新部署不会自动复制该环境，也不会沿用共享公网钱包、预置产品或真实电站凭证。三者地址不同是环境隔离的结果，读者应以自己部署返回的网络信息为准。
+
+\begin{center}\begin{tikzpicture}[>=Latex,box/.style={draw,align=center,text width=4cm,minimum height=1.3cm}]
+\node[box] (browser) at (0,0) {浏览器与 Rabby};
+\node[box] (app) at (5,0) {本地应用与后端};
+\node[box] (data) at (10,0) {场景与证据存储};
+\node[box] (rpc) at (0,-3) {受限 RPC 网关};
+\node[box] (chain) at (5,-3) {独立 Anvil 链};
+\node[box] (explorer) at (10,-3) {Blockscout 与数据库};
+\draw[->] (browser)--(app);
+\draw[->] (app)--(data);
+\draw[->] (browser)--(rpc);
+\draw[->] (rpc)--(chain);
+\draw[->] (app)--(chain);
+\draw[->] (chain)--(explorer);
+\end{tikzpicture}\end{center}
+\clearpage
+\subsection{安装、启动与健康检查}
+准备 Node.js 22.19 或更新的22.x版本、npm，以及已启动的 Docker 和 Compose。现有脚本调用 docker-compose；只有 docker compose 命令的安装需要先提供兼容命令。完整部署主要在 Apple Silicon Mac 上验证，其他平台应核对镜像架构；源码验证服务使用 amd64 编译器，在 Apple Silicon 上需要相应模拟支持。首次安装还需要下载 npm 依赖、容器镜像和浏览器相关依赖，因此需要网络连接。
+
+在新目录执行以下命令。web3:init 生成本地配置，web3:wallets 导出这一套实例的测试账户，web3:up 构建并启动应用、节点与浏览器。Blockscout 首次迁移可能较慢，应等待健康检查通过后再连接钱包。
+
+\begin{verbatim}
+git clone https://github.com/Mengzhon001/deye-rwa-demo.git deye-rwa-local
+cd deye-rwa-local
+npm ci
+DEYE_LOCAL_SOLC=1 npm run build
+npm run web3:init
+npm run web3:wallets
+npm run web3:up
+npm run web3:health
+\end{verbatim}
+健康检查应分别确认 RPC 的链编号、应用接口、首页、业务页面、文档以及 Blockscout 界面和接口。检查失败时先运行 web3:status 查看容器状态，再用 web3:logs 查看启动过程；不要反复初始化钱包或删除数据卷来处理索引延迟。健康检查通过也不等于所有合约源码都已验证，仍须在 Blockscout 中检查对应合约页。
+
+\begin{verbatim}
+npm run web3:status
+npm run web3:logs
+\end{verbatim}
+\subsection{访问入口与本地钱包}
+品牌首页\par\url{http://127.0.0.1:4174/}\par
+角色登录与应用\par\url{http://127.0.0.1:4174/app/}\par
+产品文档\par\url{http://127.0.0.1:4174/docs/}\par
+区块链浏览器\par\url{http://127.0.0.1:4000/}\par
+钱包 RPC\par\url{http://127.0.0.1:18545}\par
+使用本地导入文件 .data/local-wallets/wallet-import.private.json 将六个角色账户分别导入 Rabby。该文件只保存在自己的实例中，权限为600，终端仅打印地址。进入应用后核对 Chain ID 为20260922，再选择角色并签名。本地账户默认不同于手册前面列出的共享环境地址，导入共享角色私钥并不会自动取得新实例中的权限。
+
+\subsection{空白场景、数据源与业务复现}
+公开源码不包含真实电站原始记录、API 凭证或预先发行的产品。因此首次启动后产品大厅为空属于预期状态。中介进入“监控与证据”，在数据源选择中明确选用“合成样本”并确认；业主随后选择该样本电站提交申请。合成数据会有相应标记，只用于流程测试，不能作为真实资产的估值证明。
+
+从 B 组截图完成申请、报价、审核和签署，按 C 组完成凭证授权、入池、估值和发布，再按 D 组完成资格、认购与结算。发布前投资者大厅不显示草稿。月度运营按 E 组完成业主实际钱包缴费、中介确认和分配，退出及到期操作按 F 至 H 组执行。本地结算仍须满足资金条件，时间推进也不会代替订单审核。
+
+本地普通 Docker 环境的时间控制位于中介“产品运营”底部的“演示工具·财务时间推进”。逐月完成账单、缴费、确认、费用和估值后再推进，不必依赖某个维护环境专用的引导捷径。账期形成不代表款项到账，业主付款和电网售电模拟款仍须分别核对。
+
+需要验证真实数据接入时，另行取得授权并在服务端配置电站 API，或导入已核验的记录回放。容器必须对回放文件建立只读挂载，DEYE\_REPLAY\_FILE 应使用容器内路径，不能只填写宿主机文件名。实时接口失败不会自动切换成合成数据。相关字段、单位和估值适用性仍需核对，不能因为页面出现数值就视为数据认证完成。
+
+\subsection{开发回归、停止与恢复}
+修改后可在仓库根目录运行以下检查。它们用于检查类型、合约和引导规则，不能替代真实钱包和浏览器流程的验收。需要真实界面验证时，应在自己的实例逐步操作，并保留交易哈希和业务记录。
+
+\begin{verbatim}
+npm run typecheck:ui
+DEYE_LOCAL_SOLC=1 npm run test:onchain
+npm run test:guidance
+\end{verbatim}
+需要自动化完整业务回归时，可以在自己控制的本地 Docker 实例使用 web3:e2e。该工具会备份、执行签名交易、推进时间并恢复场景，过程中会停止服务；不能把它作为只读检查在共享公网环境执行。停止使用 web3:down，重新启动使用 web3:up，普通停止保留数据卷。只有明确需要完全重建时才考虑清理卷，并先保留本地钱包与部署记录。
+
+\begin{verbatim}
+npm run web3:e2e
+npm run web3:down
+npm run web3:up
+npm run web3:health
+\end{verbatim}
+本节命令来自当前仓库的部署脚本。文档修订没有重新启动或重置现有公网、Base Sepolia 或维护环境，也不将文档编译通过称作新机器部署已经通过。新设备仍需执行健康检查，并验证所用钱包、容器平台和数据源。
+
 \clearpage\section{动态引导与交接}
 首次进入角色时，业务介绍说明设备、收益权、资金和参与者之间的关系。右侧操作引导显示当前产品、对象、必要条件、处理人和预期结果。可以暂停或收起引导，再从顶部“操作引导”恢复。完成状态来自业务与链上记录，不由“下一步”按钮决定。
 
@@ -319,6 +470,7 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \clearpage\begin{landscape}
 \section{应用入口}
 \subsection{A0 业务应用访问}
+\label{step:A0}
 本步由所有测试同事操作。进入GitHub首页后，点击编号1所示Launch App。首页和文档无需钱包登录。
 
 操作成功后，浏览器进入当前业务HTTPS入口并显示角色弹窗。下一步，使用对应测试钱包登录。
@@ -329,6 +481,7 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{A1 选择角色并登录}
+\label{step:A1}
 本步由本次操作对应的参与者操作。进入首页的Launch App入口后，在弹窗中点击所需角色，再在编号2处选择Rabby，最后点击编号3处连接钱包并登录。钱包请求出现后，核对地址、域名和链编号，再确认签名。
 
 操作成功后，页面进入所选角色工作台。登录消息签名不扣除USDC，也不会产生业务交易。下一步，该角色按左侧导航开始业务。
@@ -339,6 +492,7 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{A2 创建新的发行草稿}
+\label{step:A2}
 本步由中介机构操作。进入页面顶部的“创建新一期”后，点击创建新一期，填写产品名并确认仅用于测试，再点击编号1部署并开始发行。
 
 操作成功后，系统部署独立产品合约并切换到新草稿。旧产品的退款和交易仍属于旧合约。下一步，业主在顶部选择同一个新产品后申请。
@@ -350,6 +504,7 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{A3 领取当前产品测试资金}
+\label{step:A3}
 本步由本次登录的参与者操作。进入页面顶部后，点击编号1处领取测试资金，再到认购页核对余额。
 
 操作成功后，当前地址取得演示燃料币和所选产品的测试USDC。下一步，投资者确认资格后认购，其他角色继续待办。
@@ -362,6 +517,7 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \clearpage\begin{landscape}
 \section{申请、估值与协议}
 \subsection{B1 核对电站与证据来源}
+\label{step:B1}
 本步由业主操作。进入“我的电站”和“电站详情”后，先在列表确认电站名称，再点击编号1所示详情入口。
 
 操作成功后，详情页显示站点、设备、历史电量和采集时间。下一步，业主提交收益权申请。
@@ -372,6 +528,7 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B2 阅读电站详情}
+\label{step:B2}
 本步由业主操作。进入“电站详情”后，在编号1附近核对电站名称、容量、数据模式和更新时间，再阅读历史图表。
 
 操作成功后，确认自己正在使用的电站证据。下一步，业主进入收益权申请。
@@ -382,6 +539,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B3 提交收益权申请}
+\label{step:B3}
 本步由业主操作。进入“收益权申请”后，选择电站，填写收入归集安排和补充说明，然后点击编号1处的提交按钮。
 
 操作成功后，系统生成一条申请及其编号，申请详情显示等待中介审核。下一步，中介机构在申请队列处理。
@@ -393,6 +551,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B4 待审核申请查询}
+\label{step:B4}
 本步由中介机构操作。进入“申请审核”后，在列表中按申请编号和状态找到记录，点击编号1处进入详情。
 
 操作成功后，详情展示申请资料、证据、审核动作和下一步。下一步，中介机构审核资料。
@@ -401,6 +560,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B5 申请资料审核}
+\label{step:B5}
 本步由中介机构操作。进入申请详情的审核区后，核对电站身份及收款责任，选择审核通过并填写意见，再点击编号1。资料不完整时应要求补充。
 
 操作成功后，通过的申请进入报价流程；补充资料的申请回到业主，拒绝的申请不继续发行。下一步，中介机构生成估值报价。
@@ -412,6 +572,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B6 生成收益权报价}
+\label{step:B6}
 本步由中介机构操作。进入“报价与估值”的申请详情后，选择历史季节性基线，核对电价、业主支付比例、交付系数、费用和汇率，记录基线选择依据并确认数据口径，最后点击编号1。
 
 操作成功后，系统保存60期现金流、折现估值、报价及模型和证据摘要。下一步，受托管理人审核报价。
@@ -423,6 +584,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B7 独立批准报价}
+\label{step:B7}
 本步由受托管理人A操作。进入“审核队列”的报价详情后，核对收入分配、估值有效期和暂定标记，阅读基线依据，在确认接受暂定估算后点击编号1。
 
 操作成功后，当前报价得到独立审批，可以交由业主接受。下一步，业主查看报价并确认。
@@ -434,6 +596,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B8 核对逐期现金流与电费优惠}
+\label{step:B8}
 本步由业主操作。进入“报价与协议”后，沿时间轴从左向右查看各期发电量、上网量、交付自用量、业主付款、售电收入及现金流现值。
 
 操作成功后，理解一次性收款与随后每月付费义务，确认报价依据。下一步，业主接受报价。
@@ -444,6 +607,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B9 接受已批准的报价}
+\label{step:B9}
 本步由业主操作。进入申请的报价详情后，确认购买价格和期限后点击编号1处接受报价。
 
 操作成功后，经济条款冻结，详情允许签署协议。下一步，业主签署协议消息。
@@ -453,6 +617,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B10 签署收益权协议}
+\label{step:B10}
 本步由业主操作。进入同一申请的协议区后，点击编号1，在Rabby中阅读并签署绑定产品、站点、价格、比例、期限与链的协议消息。
 
 操作成功后，后端记录签名和协议摘要，申请进入等待铸造状态。下一步，中介机构铸造电站凭证。
@@ -465,6 +630,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \clearpage\begin{landscape}
 \section{凭证、入池与发行}
 \subsection{C1 铸造电站身份凭证}
+\label{step:C1}
 本步由中介机构操作。进入“资产池管理”的已签约申请后，点击编号1并在自己的钱包确认铸造交易。
 
 操作成功后，站点NFT发给业主，系统记录Token ID和交易哈希。下一步，业主授权托管。
@@ -476,6 +642,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{C2 授权资产池托管}
+\label{step:C2}
 本步由业主操作。进入“报价与协议”的托管待办后，核对资产池合约与Token ID，点击编号1并签署授权交易。
 
 操作成功后，资产池取得接收这张站点NFT的权限。下一步，中介机构执行入池。
@@ -487,6 +654,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{C3 执行收益权入池}
+\label{step:C3}
 本步由中介机构操作。进入“资产池管理”的已授权申请后，核对协议摘要和购买价，点击编号1完成入池。
 
 操作成功后，NFT进入托管，收益权条款登记到资产池，投资者份额仍为零。下一步，中介机构提交资产池估值。
@@ -496,6 +664,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{C4 提交资产池估值}
+\label{step:C4}
 本步由中介机构操作。进入“资产池管理”的估值区后，核对所选产品、全部入池收益权与池费用，然后点击编号1提交估值交易。
 
 操作成功后，链上记录估值报告摘要、NAV及有效期。下一步，受托管理人A批准估值。
@@ -505,6 +674,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{C5 批准资产池估值}
+\label{step:C5}
 本步由受托管理人A操作。进入“审核队列”的资产池估值区后，核对报告、现金、应收款、未来收益权和负债，确认暂定估算后点击编号1。
 
 操作成功后，资产池取得当前有效的获批估值。下一步，中介机构发布募集。
@@ -514,6 +684,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{C6 发布募集条款}
+\label{step:C6}
 本步由中介机构操作。进入“产品运营”后，阅读预计净年化收益、现金分配时间轴、募集目标和购买资金要求，再点击编号1发布。
 
 操作成功后，产品状态从草稿变为募集中，并进入产品大厅。下一步，投资者申请资格并认购。
@@ -526,6 +697,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \clearpage\begin{landscape}
 \section{资格、认购与结算}
 \subsection{D1 从产品大厅选择产品}
+\label{step:D1}
 本步由投资者A或B操作。进入“产品大厅”后，核对状态、预计收益、期限及募集进度，点击编号1前往认购，或先进入详情阅读现金流。
 
 操作成功后，应用切换到所选产品及其独立资格、余额和订单。下一步，投资者核对现金流与资格。
@@ -536,6 +708,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D2 阅读投资者现金流时间轴}
+\label{step:D2}
 本步由投资者操作。进入“资产池详情”后，按期查看业主付款、售电收入、回款延迟、池费用、保护储备及月度分配。
 
 操作成功后，理解初始认购支出、期间分配和剩余资产价值是不同指标。下一步，投资者申请资格。
@@ -546,6 +719,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D3 提交投资资格申请}
+\label{step:D3}
 本步由投资者操作。进入“投资资格”后，阅读风险声明，勾选确认后点击编号1提交。
 
 操作成功后，资格申请显示等待中介审批。下一步，中介机构审核该投资者。
@@ -557,6 +731,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D4 审核投资资格}
+\label{step:D4}
 本步由中介机构操作。进入“投资者资格审核”后，按投资者地址打开申请，核对声明，选择通过并点击编号1签署资格登记交易。
 
 操作成功后，该地址在本产品合约中获得资格。下一步，投资者领取资金并认购。
@@ -568,6 +743,7 @@ ALL\_OFFLINE表示API返回的采集状态，不代表链上产品失效。回�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D5 授权USDC并认购}
+\label{step:D5}
 本步由投资者A操作。进入“认购”后，先领取当前产品的测试资金并检查余额，填写金额，再点击编号1。按钱包顺序确认USDC授权和认购交易。 在募集尚未结束且额度足够时，可以使用“继续追加认购”再次下单。每次只支付本次新增金额，系统累计托管款并要求中介重新审核最新总额。
 
 操作成功后，认购款进入托管，订单显示金额和待中介审核状态，已发行份额暂为零。下一步，中介机构审核认购订单。
@@ -579,6 +755,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D6 结算前取消认购}
+\label{step:D6}
 本步由投资者A操作。进入该笔认购订单后，需要演示退款时，点击编号1退回本笔认购，并在钱包确认。
 
 操作成功后，合约将全部托管金额退回原钱包，订单金额归零且不铸造份额。下一步，投资者可重新认购，或结束测试。
@@ -590,6 +767,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D7 中介逐笔审核认购}
+\label{step:D7}
 本步由中介机构操作。进入“产品运营”的认购审核列表后，按地址核对每笔订单、金额、资格和发行条款，选择通过并点击编号1。对投资者B也完成审核。
 
 操作成功后，订单变为已审核通过，但DRS仍未铸造。下一步，中介机构执行统一发行结算。
@@ -601,6 +779,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D8 统一结算并发行DRS}
+\label{step:D8}
 本步由中介机构操作。进入“产品运营”的发行与结算区后，确认所有待结算订单均通过审核，获批估值有效，资金足以购买全部收益权并保留10\%现金，再点击编号1结算。 10\%留存由结算合约自动完成，不需要另外存款。页面若提示尚缺资金，应请投资者按所示差额追加认购，再重新审核该累计订单。
 
 操作成功后，合约向业主支付购买款，保留披露的现金并按认购金额铸造DRS。下一步，投资者查看持仓，中介开始运营。
@@ -612,6 +791,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D9 确认结算后的持仓}
+\label{step:D9}
 本步由投资者A和B操作。进入“我的持仓”后，刷新并查看已发行DRS数量、认购支出、分配和剩余NAV。
 
 操作成功后，DRS数量大于零，订单已结算，份额与实际认购比例对应。下一步，中介机构按月处理运营。
@@ -623,6 +803,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \clearpage\begin{landscape}
 \section{月度回款、估值与分配}
 \subsection{E1 推进一个演示财务月份}
+\label{step:E1}
 本步由中介机构操作。进入“产品运营”的演示时间区后，点击右侧操作引导的“定位操作”。尚未到月度截止日时，选择弹窗提供的推进选项，阅读共享财务时钟提示并确认。该操作不会生成实时遥测，也不会自动批准净值或登记回款。
 
 操作成功后，财务时间到达下一服务月末，电站采集时间保持不变。下一步，中介发布本期月度账单，再交由业主缴费。
@@ -634,6 +815,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E2 发布月度缴费账单}
+\label{step:E2}
 本步由中介机构操作。进入「监控与证据」的月度账单区后，核对服务期编号和已有的完整历史月份，检查本期业主电费、售电收入、成本及汇率，再点击编号1发布账单并确认钱包交易。
 
 操作成功后，链上账单绑定本期业主地址、应付测试USDC金额和证据摘要，款项尚未到账。下一步，业主切换自己的钱包完成本期缴费。
@@ -645,6 +827,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E3 业主授权并支付月度电费}
+\label{step:E3}
 本步由业主操作。进入「资金与月度缴费」的待付款账单后，核对产品、期数、币种和金额，点击编号1。先在钱包授权本张账单所需金额，再确认支付交易。余额不足时先领取测试资金。
 
 操作成功后，本期电费从业主钱包转入账单合约，账单显示已付款并等待中介确认。下一步，中介登记单独的售电回款。
@@ -656,6 +839,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E3a 登记独立售电回款}
+\label{step:E3a}
 本步由中介机构操作。进入「监控与证据」的同一账单后，确认业主付款状态后，核对本期售电金额，点击编号1登记明确标注的模拟电网售电回款。
 
 操作成功后，独立系统账户将本期售电部分转入账单合约，不替代业主的电费支付。下一步，中介核对两笔资金并确认入池。
@@ -667,6 +851,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E3b 核对并确认收款入池}
+\label{step:E3b}
 本步由中介机构操作。进入「监控与证据」的同一账单后，核对业主付款、售电回款、站点费用及净额，点击编号1「核对并确认收款入池」，再在中介钱包确认交易。
 
 操作成功后，合约一次性扣付站点费用，将约定净额转入资产池，并清除对应应收款。下一步，中介计提月度费用，再提交估值供受托审批。
@@ -678,6 +863,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E4 计提月度池费用}
+\label{step:E4}
 本步由中介机构操作。进入“产品运营”的费用区后，点击编号1计提本期费用。
 
 操作成功后，系统按上一个获批月末NAV计算当月池费用，同时记录约定固定费用。下一步，中介提交本期资产池估值并交受托审批。
@@ -689,6 +875,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E5 更新运营后的净值}
+\label{step:E5}
 本步由中介机构和受托管理人分别操作。进入“资产池管理”的估值区后，中介在回款登记和费用计提后编制本期估值，再交给受托管理人。受托人核对报告和假设，勾选已审核的确认项，再点击“批准并锚定估值”并在钱包确认。
 
 操作成功后，本期估值获得链上批准，页面解除相应条件。下一步，中介返回产品运营宣告本月分配。
@@ -700,6 +887,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E6 月度结清费用并宣告分配}
+\label{step:E6}
 本步由中介机构操作。进入“产品运营”的分配区后，确认本期回款、费用和估值已经核对并获受托批准后，点击编号1宣告月度分配。合约自动支付本期应付费用，恢复六个月必需费用储备，再将合格剩余回款的75\%形成领取权，25\%留作赎回流动性。
 
 操作成功后，页面显示本次分配编号及各投资者的实际可领取金额。下一步，投资者通过交接入口进入“我的持仓”核对并领取。
@@ -711,6 +899,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E7 领取已宣告的分配}
+\label{step:E7}
 本步由投资者操作。进入“我的持仓”的分配记录后，按分配编号核对金额，点击编号1并签署领取交易。
 
 操作成功后，USDC转入自己的钱包，该分配记录显示已领取。下一步，中介继续下一服务月，投资者按需要退出。
@@ -723,6 +912,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \clearpage\begin{landscape}
 \section{份额转让与季度赎回}
 \subsection{F1 提出转让条款}
+\label{step:F1}
 本步由投资者A作为卖方操作。进入“转让与赎回”后，选择已获资格的买方，填写份额与协商USDC总价，再点击编号1。
 
 操作成功后，系统记录买卖双方、份额、价格及参考NAV。下一步，投资者B确认买方条款。
@@ -734,6 +924,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F2 买方同意并授权支付}
+\label{step:F2}
 本步由投资者B操作。进入“转让与赎回”的待确认记录后，核对卖方地址、份额和总价，点击编号1并按钱包顺序授权USDC及确认条款。
 
 操作成功后，合约记录买方对这组准确条款的同意。下一步，偏离超过10\%时由中介复核，否则由卖方结算。
@@ -745,6 +936,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F3 复核明显偏离NAV的转让}
+\label{step:F3}
 本步由中介机构操作。进入“转让审核”后，核对协商价格及偏离比例，再点击编号1登记审批。
 
 操作成功后，偏离超过10\%的转让满足额外审核条件。下一步，卖方执行原子结算。
@@ -756,6 +948,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F4 完成原子转让}
+\label{step:F4}
 本步由投资者A作为卖方操作。进入“转让与赎回”的已同意记录后，确认买方同意、支付授权和所需审批齐备后，点击编号1。
 
 操作成功后，同一交易内份额转给买方，USDC转给卖方。下一步，双方核对钱包余额与交易事件。
@@ -767,6 +960,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F5 申请季度赎回}
+\label{step:F5}
 本步由投资者A操作。进入“转让与赎回”的赎回区后，填写拟赎回份额，在截止前点击编号1。
 
 操作成功后，请求份额进入托管，页面显示可处理日期与排队数量。下一步，中介在合格季度窗口处理。
@@ -778,6 +972,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F6 按窗口上限处理赎回}
+\label{step:F6}
 本步由中介机构操作。进入“产品运营”的赎回窗口区后，在通知期和季度条件满足后更新并批准估值，再点击编号1处理。
 
 操作成功后，合约按可用现金与5\%NAV上限计算成交比例，支付USDC并销毁已支付份额，余额继续排队。下一步，投资者查看已成交与剩余请求。
@@ -789,6 +984,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F7 取消尚未成交的排队部分}
+\label{step:F7}
 本步由投资者A操作。进入“转让与赎回”的剩余请求后，在下一截止前点击编号1取消未成交部分。
 
 操作成功后，未支付份额退回钱包，已成交部分保持有效。下一步，投资者决定继续持有或重新申请。
@@ -801,6 +997,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \clearpage\begin{landscape}
 \section{服务事件与受托处置}
 \subsection{G1 建立服务事件}
+\label{step:G1}
 本步由中介机构操作。进入“电站监控”的服务事件区后，选择原因并写清事实、证据和拟处理事项，点击编号1。
 
 操作成功后，系统记录事件，合约固定事件建立时的持仓快照。下一步，投资者按快照表示支持。
@@ -812,6 +1009,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{G2 按固定快照支持处置}
+\label{step:G2}
 本步由投资者A操作。进入“我的持仓”的服务事件记录后，阅读事件原因与拟变更收款方，点击编号1支持。
 
 操作成功后，支持权重按事件快照计算，达到30\%后允许受托审批。下一步，受托管理人A独立审核。
@@ -823,6 +1021,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{G3 第一位受托人批准}
+\label{step:G3}
 本步由受托管理人A操作。进入“受托处置”的事件详情后，核对快照比例、原因和收款地址，点击编号1。
 
 操作成功后，合约记录第一位审批人的地址，但尚不完成变更。下一步，受托管理人B再次独立审核。
@@ -834,6 +1033,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{G4 第二位受托人批准并执行}
+\label{step:G4}
 本步由受托管理人B操作。进入同一事件详情后，切换到受托人B对应钱包并重新登录，独立核对后点击编号1。
 
 操作成功后，合约核对两名不同审批人并执行演示收款方变更。下一步，中介核对执行结果并继续运营。
@@ -846,6 +1046,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \clearpage\begin{landscape}
 \section{到期关闭与凭证返还}
 \subsection{H1 到期关闭产品}
+\label{step:H1}
 本步由中介机构操作。进入“产品运营”的到期区后，确认60期费用与月度分配处理完成，应收款已收齐，负债结清，最终估值已批准，再点击编号1。
 
 操作成功后，产品进入已关闭状态，剩余可用现金形成最终分配。下一步，投资者领取剩余分配。
@@ -857,6 +1058,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{H2 领取最终与尚未领取的分配}
+\label{step:H2}
 本步由投资者A和B操作。进入“我的持仓”的分配记录后，逐笔核对尚未领取的金额，点击编号1并在钱包确认。
 
 操作成功后，全部可领取USDC转入对应投资者钱包。下一步，业主取回站点凭证。
@@ -868,6 +1070,7 @@ USDC授权只是允许合约扣款，第二笔认购交易成功才会形成托�
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{H3 取回电站身份凭证}
+\label{step:H3}
 本步由业主操作。进入“报价与协议”的到期待办后，确认对应产品已关闭，点击编号1签署取回交易。
 
 操作成功后，站点NFT从资产池返回业主，收益权托管结束。下一步，本次业务闭环完成。

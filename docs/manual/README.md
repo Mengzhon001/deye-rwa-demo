@@ -8,6 +8,10 @@ The manuals were updated on 30 October 2026. They show bill publication, househo
 
 The 30 October revision updates the unified application to https://reuters-romance-arranged-bloggers.trycloudflare.com/, both network-specific application paths and the private-chain RPC and explorer. It also explains progressive workspace loading. Temporary addresses were checked against the running services; the stable homepage remains https://mengzhon001.github.io/deye-rwa-demo/.
 
+Both languages now begin with a comparison of the shared private chain, Base Sepolia and a fresh local Docker deployment. Dedicated chapters cover private-chain lifecycle acceptance, public-chain transaction checks and future oracle preparation, and local installation, wallets, data sources, regression, shutdown and recovery. The lifecycle checklist links to the illustrated steps. Local deployment creates a separate private chain (20260922); it is not another public chain and does not reuse shared products or wallet roles by default.
+
+两版手册均增加三种测试路径的用途对照和独立操作章节。共享私链（20261008）用于完整生命周期，Base Sepolia（84532）用于真实公链兼容性验证及后续 Oracle 接入准备，本地 Docker 部署（默认20260922）用于开发、复现和独立回归。当前版本尚未接入 Oracle。本地部署命令已与仓库脚本逐项核对；本次文档修订不代表重新执行了新机器部署或链上生命周期。
+
 本地交付目录为项目根目录下可见的 `docs/manual/`。中英文手册已经合并私有演示链和 Base Sepolia 的说明，不需要从隐藏的 `.data` 目录寻找另一份公链手册。2026 年 10 月 30 日修订同步更新了网址、网络配置与分区加载说明。
 
 The 22 October monthly walkthrough used authenticated browser pages and dedicated local keys signing real transactions outside the screenshot browser. It covered rejection, insufficient funds, duplicate protection and backend restart recovery. That monthly walkthrough did not constitute a new Rabby extension test. The independent 29 October Base Sepolia checks separately use the actual Rabby extension for HTTPS login, rejection, subscription and refund; they do not claim an accelerated public-chain lifecycle.
@@ -16,7 +20,7 @@ The 22 October monthly walkthrough used authenticated browser pages and dedicate
 
 ## Rebuilding
 
-Install Python 3.12+ and XeLaTeX. Typography uses the macOS Songti collection at `/System/Library/Fonts/Supplemental/Songti.ttc`. Adjust the font declarations in the generator on another operating system. From the repository root, generate one language or both.
+Install Python 3.12+ and XeLaTeX. Keep `scripts/manual/testing_paths.py` alongside `build.py`. Typography uses the macOS Songti collection at `/System/Library/Fonts/Supplemental/Songti.ttc`. Adjust the font declarations in the generator on another operating system. From the repository root, generate one language or both.
 
 ```sh
 python3 scripts/manual/build.py --language both --work output/manual --public-config docs/manual/deployment.public.json --legacy-assets docs/manual/assets --example docs/manual/example.json --english-screenshots docs/manual/screenshots.en.json

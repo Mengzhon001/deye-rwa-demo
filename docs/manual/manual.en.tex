@@ -6,6 +6,7 @@
 \setmainfont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6,BoldFont=Songti.ttc,BoldFeatures={FontIndex=0}]
 \setCJKmainfont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6,BoldFont=Songti.ttc,BoldFeatures={FontIndex=0}]
 \setmonofont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6]
+\setCJKmonofont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6]
 \renewcommand{\normalsize}{\fontsize{12}{18}\selectfont}\normalsize
 \titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
@@ -26,6 +27,34 @@ Every illustrated workflow step uses the English interface. The monthly payment 
 The payment release is tested through two consecutive months of household payments, receipt confirmation and distributions on an isolated chain. The browser test uses dedicated test keys to sign actual transactions outside the browser and does not claim renewed Rabby extension certification. Advanced transfer, redemption, servicing and expiry instructions retain their validated business rules and must follow the current window conditions. This remains demonstration software. Real tariff settlement, bank clearing, production identity compliance and a full security audit are not complete.
 
 \renewcommand{\contentsname}{Contents}\clearpage\tableofcontents
+\clearpage\section{Testing approaches and their purposes}
+There are three ways to use the system: the shared private demonstration, the Base Sepolia public-chain environment, and an independent deployment on your own computer. Select an approach according to the test objective rather than assuming that similar pages share the same environment. The private chain supports the complete business lifecycle under a controlled clock. Base Sepolia validates contracts and wallets under public-chain conditions and establishes a baseline for later oracle integration. A local deployment supports development, independent reproduction and regression testing.
+
+Local deployment is a hosting approach, not a third public blockchain. The default local profile creates its own private Anvil chain. The shared private chain and a new local chain run the same business logic but have different Chain IDs, contracts, account configuration and storage. Conversely, a backend running on your computer but connected to Base Sepolia is still a public-chain test and cannot advance or reset that chain.
+
+\begin{longtable}{L{2.5cm}L{4.2cm}L{4.5cm}L{3cm}}\toprule Approach & Main purpose & Recommended checks & Time and funding\\\midrule\endhead
+Shared private demo & Complete lifecycle demonstrations and multi-role business acceptance. & Applications, issuance, monthly payments, distributions, transfers, redemptions, servicing and closure. & 20261008; test mUSDC; intermediary-controlled demo time.\\\addlinespace
+Base Sepolia & Public-chain compatibility and a baseline for later oracle integration. & Wallets, gas, Circle USDC, approvals, subscriptions, refunds, receipts and recovery. & 84532; test ETH and USDC; real chain time.\\\addlinespace
+Independent local deployment & Code changes, issue reproduction and repeatable isolated regression. & Build a product from an empty scene and check the UI, model, permissions and workflow. & Default 20260922; independent wallets and local test tokens.\\\addlinespace
+\bottomrule\end{longtable}
+The shared private chain and Base Sepolia reuse the business-role addresses, but balances, eligibility and holdings remain independent on each chain. A colleague initializing a fresh deployment receives another set of local accounts and must not substitute the shared-environment addresses. Record the Chain ID, wallet address, product contract and starting state for every test.
+
+\clearpage
+\subsection{Selecting a test path}
+\begin{center}\begin{tikzpicture}[>=Latex,box/.style={draw,align=center,text width=4.1cm,minimum height=1.5cm,inner sep=5pt}]
+\node[box] (goal) at (5,0) {Identify the test objective};
+\node[box] (private) at (0,-2.8) {Full lifecycle and handoffs};
+\node[box] (privateout) at (0,-5.6) {Shared private chain and illustrated steps A to H};
+\draw[->] (goal.south)--(private.north);\draw[->] (private.south)--(privateout.north);
+\node[box] (base) at (5,-2.8) {Public-chain tests and future oracle preparation};
+\node[box] (baseout) at (5,-5.6) {Small Base Sepolia transactions and reconciliation};
+\draw[->] (goal.south)--(base.north);\draw[->] (base.south)--(baseout.north);
+\node[box] (local) at (10,-2.8) {Development, reproduction and isolated regression};
+\node[box] (localout) at (10,-5.6) {Local Docker, independent chain and test wallets};
+\draw[->] (goal.south)--(local.north);\draw[->] (local.south)--(localout.north);
+\end{tikzpicture}\end{center}
+Readers learning the product or checking role handoffs can start with the shared private chain. Use your own local instance for code changes or an issuance from an empty scene. Prepare Base Sepolia test ETH and Circle test USDC when checking public-chain behavior or preparing the later oracle integration. Separate chapters explain each path; the subsequent full workflow illustrations apply to private and local environments according to their current state.
+
 \clearpage\section{Product states and role handoffs}
 A product starts as a draft, opens fundraising after approval and issues DRS only on successful settlement. It then enters servicing. Failed fundraising allows refunds, and a live product is reconciled and closed when its rights expire. Contract deployment is distinct from publication, and escrowed subscriptions are distinct from issued shares.
 
@@ -251,8 +280,46 @@ After the wallet signature is verified, the role workspace and navigation appear
 To switch, confirm the destination network in Rabby and sign in again with the intended role. Role addresses remain unchanged, while sessions, products, pending operations and page selections are isolated by chain. Switching does not convert or bridge private-chain mUSDC into Circle USDC. Reconcile any pending operation on its original page or in the transaction log before switching. A rejected wallet request or unavailable destination leaves the application on its original network.
 
 \begin{center}\includegraphics[width=\linewidth,height=.42\textheight,keepaspectratio]{assets/network-menu.en.png}\par Network selection in the unified application. Select the chain, verify it in the wallet and sign in again.\end{center}
+\clearpage\section{Full lifecycle testing on the private demonstration}
+\subsection{Purpose and prerequisites}
+The shared private demonstration checks the complete handoff of the revenue-rights business between roles. It uses Anvil, demo mUSDC and its own Blockscout. Authorized intermediary time advancement allows monthly operations, the six-month lock, quarterly redemption and expiry to be exercised without waiting through the real calendar. Advancing time creates no station telemetry and does not replace invoices, payments, approvals or distribution transactions.
+
+Obtain the role test accounts from the operator and agree which product the group will use. A full walkthrough requires an owner, intermediary, investors A/B and trustees A/B. An investor-only check can use a prepared product that is published and still fundraising, without repeating the application and issuance preparation. If the product is already active, primary fundraising subscriptions are closed; select another fundraising product or ask the operator to prepare a new scene.
+
+\subsection{Entry and network confirmation}
+\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/private/app/}\par
+Click Launch App on the public homepage and select Private demo in the upper-right network menu. Verify Chain ID 20261008 in Rabby, select the intended role and sign in. Check the product name and vault address. Wallet funds, escrowed orders and issued DRS are separate records. Claiming demo funds increases the wallet balance but does not submit a subscription.
+
+\subsection{Direct investor testing}
+Choose a fundraising product, inspect its cashflow timeline and risks, and submit the eligibility declarations. After intermediary approval, obtain demo funds, enter an amount within the remaining capacity, approve mUSDC and confirm the subscription transaction. The intermediary reviews the current cumulative order. Additional subscriptions are allowed while fundraising and capacity permit, and each addition requires another review.
+
+To check refunds, the original investor can cancel before settlement and recover the entire cumulative escrow. To continue to holdings and distributions, cover the displayed settlement shortfall and have the intermediary review and settle. The contract retains the agreed 10\% cash automatically; there is no separate reserve-transfer step. Until settlement completes, escrow must not be treated as issued shares.
+
+\clearpage
+\subsection{Lifecycle and illustrated-step index}
+The table organizes the full walkthrough by business state. Confirm both the page result and corresponding chain record before handing off to the next role. The identifiers link to the annotated illustrations later in the manual. Investor testing on a prepared product starts with group D, while an empty scene starts with group B.
+
+\begin{longtable}{L{2.8cm}L{4.6cm}L{5.1cm}L{1.7cm}}\toprule Stage & Participant and action & Result to confirm & Figures\\\midrule\endhead
+Application and agreement & Owner applies; intermediary reviews and prices; trustee approves; owner accepts and signs. & Agreement, valuation and station evidence match. & \hyperref[step:B3]{B3} / \hyperref[step:B10]{B10}\\\addlinespace
+Admission and publication & Intermediary mints; owner authorizes; intermediary admits and prepares NAV; trustee approves before publication. & Fundraising opens with reconciled custody and issuance terms. & \hyperref[step:C1]{C1} / \hyperref[step:C6]{C6}\\\addlinespace
+Subscription and settlement & Investors obtain eligibility and subscribe; intermediary reviews and settles. & Escrow pays for rights, cash is retained and investors receive DRS. & \hyperref[step:D3]{D3} / \hyperref[step:D8]{D8}\\\addlinespace
+Monthly servicing & Intermediary bills; owner pays; intermediary reconciles export and receipts; trustee approves NAV. & Both receipt sources, expenses and approved NAV are recorded separately. & \hyperref[step:E1]{E1} / \hyperref[step:E5]{E5}\\\addlinespace
+Declaration and claim & Intermediary declares the monthly distribution; investors switch to their own wallets and claim. & Declared, claimable and paid amounts reconcile with USDC transfers. & \hyperref[step:E6]{E6} / \hyperref[step:E7]{E7}\\\addlinespace
+Transfer and redemption & Participants and intermediary act after lock and notice conditions are met. & Shares, payments, partial fills and remaining requests agree. & \hyperref[step:F1]{F1}\\\addlinespace
+Servicing and closure & Obtain snapshot support and two trustee approvals where required, then reconcile expiry. & Receivables and liabilities are reconciled, with final distribution and credential release. & \hyperref[step:G1]{G1} / \hyperref[step:H1]{H1}\\\addlinespace
+\bottomrule\end{longtable}
+\subsection{Clock advancement, shared state and evidence}
+When waiting for a cutoff, the intermediary opens Product operations, expands Demo tools: financial time, selects the next monthly fee cutoff and confirms. Where supported, the guide locates the same shortcut. Complete each month's billing, receipts, expenses and valuation approval before moving to the next month. Skipping dates does not complete the missing accounting.
+
+Products in the shared environment use the same chain clock. Advancing it can expire another product's fundraising or valuation, so coordinate through one operator. The operator should also control resets and preparation of new sample products. Record the product and role addresses, key hashes, business identifiers, expected outcomes and actual results. Do not record off-chain review as an on-chain transaction.
+
 \clearpage\section{Base Sepolia public-chain testing}
 The original public demonstration remains the environment for the full accelerated lifecycle. Base Sepolia is a separate environment for public-chain contracts and wallet transactions. Role addresses are shared, but contracts, balances and workflow records are independent. The complete lifecycle screenshots later in this manual illustrate the private-chain demonstration. Public-chain testing follows the real-time and funding restrictions in this section.
+
+\subsection{Test objectives and later oracle integration}
+Base Sepolia checks whether the business code handles wallet signatures, gas, Circle USDC approvals and transfers, contract calls, event reads and recovery on a real public chain. It also provides the foundation for later oracle integration, where report receivers, report digests, billing-period binding, permissions and failure handling can be tested on the same public test chain without disturbing the private-chain demonstration.
+
+The current deployment has no oracle integration. Present tests validate public-chain transactions and the existing report workflow; they do not establish independent oracle certification of station data. The later implementation must add off-chain retrieval and validation, report signatures or attestations, and on-chain receipt and enforcement, followed by deployment and testing of the affected components. An oracle attestation does not itself prove household payment; USDC receipts still require separate transaction reconciliation.
 
 \subsection{Entry and network configuration}
 Public-chain application\par\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/base-sepolia/app/}\par
@@ -286,6 +353,11 @@ Select a fundraising product and apply for eligibility. After intermediary appro
 
 Settlement still requires a current valuation, order approvals, the fundraising threshold and sufficient purchase funding and reserve. The contract automatically retains 10\%; no separate reserve transfer is needed. Small test balances support approvals, subscriptions, review and refunds, but do not establish that a larger funded settlement has completed.
 
+\subsection{Public-chain checks and completion criteria}
+Start with one investor account and test sign-in, eligibility, USDC approval, a small subscription and its refund. Then check the intermediary and trustee permissions using their own accounts. Verify the network and balance before each transaction, and reconcile its receipt, events and token transfers in the public explorer. While fundraising is open, add a subscription and check that the intermediary reviews the latest cumulative amount. Retain and reconfirm the original hash when a submitted transaction is slow to appear rather than paying again.
+
+This round is complete when actual transaction amounts agree with business records, wrong wallets and networks are rejected, and records recover after refresh or restart. If settlement funding or the real monthly cutoff has not been reached, record settlement, billing and distribution as not executed in this round and explain why. Small test balances and a short observation window do not amount to lifecycle acceptance; use the private demonstration or your own local instance for that path.
+
 \subsection{Real time and testing scope}
 The application cannot advance public-chain time. Monthly billing requires a settled product and the end of the relevant service period. The six-month transfer lock, redemption notice period and expiry remain unchanged. Reset and time-advance controls are therefore unavailable. Use the original public private-chain environment for the complete accelerated lifecycle.
 
@@ -304,6 +376,85 @@ Monthly billing contract\par\nolinkurl{0xa2748E730069A38913b5E2e09a45C5aB546a090
 \clearpage\begin{landscape}
 \begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-wallet.en.png}\par Wallet balances and official-faucet instructions. The backend does not mint Circle USDC.\end{center}
 \end{landscape}
+\clearpage\section{Local deployment and independent testing}
+\subsection{Purpose and default environment}
+A local deployment lets developers reproduce issues, change the model and contracts, validate the interface and repeat a walkthrough from an empty scene. It needs no public tunnel and does not depend on the demonstration operator's Mac staying online. The commands below assume a fresh clone in an independent directory, not a working directory already hosting the shared demonstration.
+
+The default Compose project is deye-rwa-platform and its Chain ID is 20260922. The application, Blockscout and wallet RPC use local ports 4174, 4000 and 18545. Check that the ports are free before starting. Resolve a conflict without stopping someone else's active demonstration. The address 127.0.0.1 refers only to the current computer and does not give a colleague access from another machine.
+
+The existing maintenance profile on port 4191 and Chain ID 20261014 is a separate guidance regression environment with separately prepared recorded evidence. A fresh deployment does not copy that profile, shared public wallets, prepared products or real station credentials. These addresses differ because the environments are isolated; use the network information returned by your own deployment.
+
+\begin{center}\begin{tikzpicture}[>=Latex,box/.style={draw,align=center,text width=4cm,minimum height=1.3cm}]
+\node[box] (browser) at (0,0) {Browser and Rabby};
+\node[box] (app) at (5,0) {Local application and backend};
+\node[box] (data) at (10,0) {Scene and evidence storage};
+\node[box] (rpc) at (0,-3) {Restricted RPC gateway};
+\node[box] (chain) at (5,-3) {Independent Anvil chain};
+\node[box] (explorer) at (10,-3) {Blockscout and database};
+\draw[->] (browser)--(app);
+\draw[->] (app)--(data);
+\draw[->] (browser)--(rpc);
+\draw[->] (rpc)--(chain);
+\draw[->] (app)--(chain);
+\draw[->] (chain)--(explorer);
+\end{tikzpicture}\end{center}
+\clearpage
+\subsection{Installation, startup and health checks}
+Prepare Node.js 22.19 or a newer 22.x release, npm, and running Docker with Compose. The scripts call docker-compose, so installations offering only docker compose need a compatible command first. Full deployment has primarily been validated on Apple Silicon Macs. Check image architecture on other platforms; the source-verification compiler uses amd64 and needs emulation on Apple Silicon. The first installation downloads npm dependencies, container images and explorer dependencies and therefore needs an internet connection.
+
+Run these commands in a new directory. web3:init creates local configuration, web3:wallets exports this instance's test accounts, and web3:up builds and starts the application, node and explorer. Initial Blockscout migrations may take time. Wait for the health checks before connecting a wallet.
+
+\begin{verbatim}
+git clone https://github.com/Mengzhon001/deye-rwa-demo.git deye-rwa-local
+cd deye-rwa-local
+npm ci
+DEYE_LOCAL_SOLC=1 npm run build
+npm run web3:init
+npm run web3:wallets
+npm run web3:up
+npm run web3:health
+\end{verbatim}
+Health checks cover the RPC Chain ID, application API, homepage, business page, documentation and Blockscout interface and API. If a check fails, use web3:status to inspect container status and web3:logs to inspect startup. Reinitializing wallets or deleting volumes is not a remedy for indexing delay. A healthy service does not itself prove source verification; inspect the relevant contract page in Blockscout.
+
+\begin{verbatim}
+npm run web3:status
+npm run web3:logs
+\end{verbatim}
+\subsection{Local entry points and wallets}
+Homepage\par\url{http://127.0.0.1:4174/}\par
+Role sign-in and application\par\url{http://127.0.0.1:4174/app/}\par
+Product documentation\par\url{http://127.0.0.1:4174/docs/}\par
+Explorer\par\url{http://127.0.0.1:4000/}\par
+Wallet RPC\par\url{http://127.0.0.1:18545}\par
+Import the six accounts into Rabby from .data/local-wallets/wallet-import.private.json on your own machine. The file has mode 600 and the terminal prints addresses only. Verify Chain ID 20260922, choose the role and sign in. The generated accounts differ from the shared-environment addresses listed earlier in the manual; importing a shared role key does not automatically grant its role in a new instance.
+
+\subsection{Empty scenes, data sources and workflow reproduction}
+The public source excludes raw station records, API credentials and pre-issued products. An empty product hall on first startup is therefore expected. The intermediary opens Monitoring and evidence, explicitly selects Synthetic fixture as the source and confirms. The owner then submits an application for the sample station. The synthetic label must remain visible; the fixture tests workflow and does not prove a real asset's value.
+
+Follow group B for application, quotation, review and signing, group C for credential approval, admission, valuation and publication, and group D for eligibility, subscription and settlement. Drafts do not appear in the investor hall. Group E covers actual household wallet payments, intermediary confirmation and distributions. Follow groups F to H for exits and expiry. Settlement still requires sufficient funds, and advancing time does not approve orders.
+
+The standard local Docker profile exposes time controls under Demo tools: financial time at the bottom of the intermediary's Product operations page. Complete billing, payment, confirmation, expenses and valuation month by month before advancing, without relying on a maintenance-profile-specific guide shortcut. A bill does not mean cash has arrived; household payment and simulated grid-export funding still require separate reconciliation.
+
+For real-data integration, obtain authorization and configure the station API on the server, or import validated recorded evidence. A container needs a read-only mount for the replay file, and DEYE\_REPLAY\_FILE must identify its container path rather than only a host filename. An API failure never silently selects synthetic data. Field mappings, units and suitability for valuation must still be checked; displaying numbers is not data certification.
+
+\subsection{Development regression, shutdown and recovery}
+After a code change, run the following checks from the repository root. They test types, contracts and guidance rules and do not replace real-wallet and browser acceptance. Perform the interface walkthrough in your own instance and retain hashes and business records.
+
+\begin{verbatim}
+npm run typecheck:ui
+DEYE_LOCAL_SOLC=1 npm run test:onchain
+npm run test:guidance
+\end{verbatim}
+For automated lifecycle regression, web3:e2e operates on your own local Docker instance. It backs up the scene, executes signed transactions, advances time and restores the scene, stopping services in the process. It is not a read-only check for the shared public environment. Use web3:down to stop and web3:up to restart; ordinary shutdown preserves volumes. Remove volumes only for an intentional complete rebuild after preserving the local wallets and deployment records.
+
+\begin{verbatim}
+npm run web3:e2e
+npm run web3:down
+npm run web3:up
+npm run web3:health
+\end{verbatim}
+These commands follow the current repository scripts. This documentation revision does not restart or reset the existing public, Base Sepolia or maintenance environments, and successful document compilation is not a claim that a fresh machine has been deployed and tested. A new machine still needs its health checks and validation of wallets, container platform and data source.
+
 \clearpage\section{Dynamic guidance and handoffs}
 The first-entry introduction explains equipment, rights, money and participant responsibilities. The guide panel identifies the product, object, prerequisites, handler and expected result. Pause or collapse it and reopen Operation guide from the top bar. Completion comes from business and chain state rather than a Next button.
 
@@ -319,6 +470,7 @@ In the monthly cycle, a pending trustee approval must be completed first. The gu
 \clearpage\begin{landscape}
 \section{Application entry}
 \subsection{A0 Application access}
+\label{step:A0}
 This step is performed by All participants. Open the public homepage and click Launch App. The browser should enter the current HTTPS application address and show the role selection dialog. If the environment is unavailable, ask the demonstration operator to check the Mac and tunnels.
 
 After this step, select the intended role before connecting the wallet.
@@ -328,6 +480,7 @@ After this step, select the intended role before connecting the wallet.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{A1 Role selection and wallet sign-in}
+\label{step:A1}
 This step is performed by The participant performing the next task. Select the role, choose Rabby and click Connect wallet and sign in. In the extension, check the account, application domain, role and Chain ID before signing. A successful login opens the corresponding workspace without transferring funds.
 
 After this step, continue in the selected role's workspace.
@@ -336,6 +489,7 @@ After this step, continue in the selected role's workspace.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{A2 Creation of an issuance draft}
+\label{step:A2}
 This step is performed by Intermediary. Click Create new series in the top bar. Enter the product name, acknowledge that this is a test and confirm deployment. The new draft has separate contracts and does not appear in the investor hall until fundraising is published.
 
 After this step, ask the owner to select this same product before applying.
@@ -344,6 +498,7 @@ After this step, ask the owner to select this same product before applying.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{A3 Test funds for the selected product}
+\label{step:A3}
 This step is performed by The connected participant. Click Receive test funds in the top bar and check the wallet balances. The faucet supplies demo gas and the selected product's test USDC. It does not create an investment or issue DRS, and another product may have a different test USDC contract.
 
 After this step, the investor can subscribe after qualification is approved.
@@ -354,6 +509,7 @@ After this step, the investor can subscribe after qualification is approved.
 \clearpage\begin{landscape}
 \section{Application, valuation and agreement}
 \subsection{B1 Station identity and evidence source}
+\label{step:B1}
 This step is performed by Owner. Open My stations and select the station details entry. Check the station identity, capacity and evidence timestamp before starting an application. The station list and the single-station dashboard serve different purposes.
 
 After this step, review the detailed evidence and then submit an application.
@@ -363,6 +519,7 @@ After this step, review the detailed evidence and then submit an application.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B2 Station dashboard review}
+\label{step:B2}
 This step is performed by Owner. Review generation, export, devices, alerts and the source badge in Station details. Recorded replay describes an earlier collection and is not a live reading. ALL\_OFFLINE is the reported telemetry status and does not by itself invalidate a blockchain product.
 
 After this step, submit the revenue-right application for the selected station.
@@ -372,6 +529,7 @@ After this step, submit the revenue-right application for the selected station.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B3 Revenue-right application}
+\label{step:B3}
 This step is performed by Owner. Select the station and enter the requested information in the application form. Submit the record and retain its application identifier. This step stores the application and evidence references without minting an NFT or issuing investor shares.
 
 After this step, the intermediary reviews the application queue.
@@ -381,6 +539,7 @@ After this step, the intermediary reviews the application queue.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B4 Application queue}
+\label{step:B4}
 This step is performed by Intermediary. Open Application review and find the row for the relevant product and station. Check its status and next handler, then open the detailed record. Use the application identifier to distinguish separate requests for the same station.
 
 After this step, review the evidence and terms in the application detail.
@@ -390,6 +549,7 @@ After this step, review the evidence and terms in the application detail.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B5 Application assessment}
+\label{step:B5}
 This step is performed by Intermediary. Check station identity, evidence, the proposed rights scope and collection responsibilities. Approve complete materials or request supplementation with a clear explanation. A rejected or incomplete application must be resolved before pricing continues.
 
 After this step, prepare the revenue-right offer for an approved application.
@@ -399,6 +559,7 @@ After this step, prepare the revenue-right offer for an approved application.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B6 Revenue-right valuation and offer}
+\label{step:B6}
 This step is performed by Intermediary. Open Quotes and valuation for the approved application. Review historical sample quality, seasonal generation and export estimates, delivered self-use, tariffs, owner discount, costs, FX and discounting. Record the reason for any provisional baseline before generating the offer.
 
 After this step, the trustee independently reviews the offer and assumptions.
@@ -408,6 +569,7 @@ After this step, the trustee independently reviews the offer and assumptions.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B7 Independent offer approval}
+\label{step:B7}
 This step is performed by Trustee. Open the application in the review queue and compare the forecast with its evidence and assumptions. Explicitly acknowledge provisional data when justified, then approve the offer. Approval does not sign the owner's agreement or transfer funds.
 
 After this step, the owner reviews and accepts the approved offer.
@@ -417,6 +579,7 @@ After this step, the owner reviews and accepts the approved offer.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B8 Owner cashflow and electricity discount}
+\label{step:B8}
 This step is performed by Owner. Open the approved quote and inspect the monthly timeline from left to right. For each period, compare generation, export, delivered self-use, the grid-price comparison, the owner's discounted payment, export income, costs and discounted present value. These are forecasts rather than recorded receipts.
 
 After this step, accept only after the price and future payment obligation are understood.
@@ -425,6 +588,7 @@ After this step, accept only after the price and future payment obligation are u
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B9 Acceptance of the approved offer}
+\label{step:B9}
 This step is performed by Owner. Check the rights percentage, five-year term, purchase price, deductions and discounted electricity payment rule. Click Accept for the approved offer. Acceptance records consent to these terms and does not yet mint the station credential.
 
 After this step, sign the corresponding agreement with the owner wallet.
@@ -434,6 +598,7 @@ After this step, sign the corresponding agreement with the owner wallet.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{B10 Revenue-right agreement signature}
+\label{step:B10}
 This step is performed by Owner. Read the agreement and request the wallet signature. Verify the station, product, Chain ID, price, term and content digest in the message. The signature records agreement acceptance off-chain without transferring equipment ownership.
 
 After this step, the intermediary mints the station identity credential.
@@ -444,6 +609,7 @@ After this step, the intermediary mints the station identity credential.
 \clearpage\begin{landscape}
 \section{Credentials, admission and publication}
 \subsection{C1 Station credential minting}
+\label{step:C1}
 This step is performed by Intermediary. In Pool management, open the signed application and click Mint station credential. Confirm the transaction with the intermediary wallet. After confirmation, the station NFT belongs to the owner and the transaction can be checked in Blockscout.
 
 After this step, the owner authorizes custody by this pool.
@@ -453,6 +619,7 @@ After this step, the owner authorizes custody by this pool.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{C2 Pool custody authorization}
+\label{step:C2}
 This step is performed by Owner. Open the agreement's custody task and check the station NFT and destination vault. Authorize this pool in the wallet and wait for chain confirmation. Approval permits custody but is not itself admission into the pool.
 
 After this step, the intermediary executes admission after authorization is confirmed.
@@ -462,6 +629,7 @@ After this step, the intermediary executes admission after authorization is conf
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{C3 Revenue-right admission}
+\label{step:C3}
 This step is performed by Intermediary. Check the signed agreement, owner authorization, purchase price and rights term, then execute admission. Confirm that the station NFT is held by the vault and the agreement digest is recorded. Admission does not mint investor shares.
 
 After this step, prepare the pool valuation.
@@ -471,6 +639,7 @@ After this step, prepare the pool valuation.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{C4 Pool valuation submission}
+\label{step:C4}
 This step is performed by Intermediary. Prepare the pool report after reconciling rights value, cash, receivables, liabilities and future pool expenses. Confirm the submission transaction and retain its report digest and validity period. A material cashflow change may require a new report.
 
 After this step, the trustee approves the submitted report.
@@ -480,6 +649,7 @@ After this step, the trustee approves the submitted report.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{C5 Pool valuation approval}
+\label{step:C5}
 This step is performed by Trustee. Review the current report and explicitly check the assumptions acknowledgement before clicking Approve and anchor valuation. Confirm with the trustee wallet. An expired or changed report must return to the intermediary for preparation rather than being forced through approval.
 
 After this step, the intermediary publishes fundraising after approval.
@@ -489,6 +659,7 @@ After this step, the intermediary publishes fundraising after approval.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{C6 Fundraising publication}
+\label{step:C6}
 This step is performed by Intermediary. Open Product operations and review projected net IRR, expected distributions, reserve policy, target, price and deadline. Publish the issuance terms with the wallet. Investors can then see the product as Fundraising, although no investor shares have been issued yet.
 
 After this step, investors review the published product and apply for qualification.
@@ -499,6 +670,7 @@ After this step, investors review the published product and apply for qualificat
 \clearpage\begin{landscape}
 \section{Qualification, subscriptions and settlement}
 \subsection{D1 Product selection}
+\label{step:D1}
 This step is performed by Investor. Open Product hall and select a published Fundraising or Active product. Check its status, cadence, target and contract before entering details. Draft contracts are management work and are excluded from the investor hall.
 
 After this step, review the product timeline and eligibility requirements.
@@ -508,6 +680,7 @@ After this step, review the product timeline and eligibility requirements.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D2 Investor cashflow timeline}
+\label{step:D2}
 This step is performed by Investor. Read the monthly timeline in Pool details. Distinguish the initial investment, monthly collections, accrued expenses, declared distributions, retained cash and remaining NAV. The projected net IRR is a model result and is not the valuation discount rate or a guaranteed coupon.
 
 After this step, apply for qualification before subscribing.
@@ -516,6 +689,7 @@ After this step, apply for qualification before subscribing.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D3 Investment qualification application}
+\label{step:D3}
 This step is performed by Investor. Open Investment qualification, read the risk statement and acknowledge the test-only setting. Submit the application for the connected wallet and selected product. A staff member must approve it before the contract accepts a subscription.
 
 After this step, the intermediary reviews this wallet's qualification.
@@ -525,6 +699,7 @@ After this step, the intermediary reviews this wallet's qualification.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D4 Qualification approval}
+\label{step:D4}
 This step is performed by Intermediary. Open the qualification queue, select the investor and review the application. Approve the correct wallet for the selected product and confirm the on-chain transaction. Choosing an investor role in the UI does not grant eligibility.
 
 After this step, the investor receives test funds and submits a subscription.
@@ -534,6 +709,7 @@ After this step, the investor receives test funds and submits a subscription.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D5 USDC approval and subscription}
+\label{step:D5}
 This step is performed by Investor. Enter the additional amount in Subscription and check the remaining capacity and wallet balance. Confirm USDC approval if requested, then confirm the subscription transaction. Each addition increases cumulative escrow and invalidates the earlier order review. Repeat subscriptions remain available while fundraising permits them.
 
 After this step, the intermediary reviews the latest cumulative amount before settlement.
@@ -543,6 +719,7 @@ After this step, the intermediary reviews the latest cumulative amount before se
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D6 Cancellation before settlement}
+\label{step:D6}
 This step is performed by Investor. Open the order and click the refund action before issuance settlement. Confirm the wallet transaction and check that the full cumulative escrow returns to the wallet. This cancels the pending investment without issuing DRS.
 
 After this step, the investor may subscribe again while fundraising remains open.
@@ -552,6 +729,7 @@ After this step, the investor may subscribe again while fundraising remains open
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D7 Cumulative subscription review}
+\label{step:D7}
 This step is performed by Intermediary. In Product operations, locate the investor's order and compare wallet, cumulative escrow and issuance terms. Approve the latest review version with the intermediary wallet. Approval does not issue shares, and a later addition requires another review.
 
 After this step, settle only when every order and all funding conditions are satisfied.
@@ -561,6 +739,7 @@ After this step, settle only when every order and all funding conditions are sat
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D8 Fundraising settlement and share issuance}
+\label{step:D8}
 This step is performed by Intermediary. Check that all orders are approved and the subscription total covers signed purchases plus the 10\% initial cash retention. The contract retains the cash automatically during settlement. If a shortfall is shown, direct the investor to add exactly that amount and review the updated order before settling.
 
 After this step, the owner receives the purchase payment and investors inspect their issued shares.
@@ -570,6 +749,7 @@ After this step, the owner receives the purchase payment and investors inspect t
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{D9 Confirmed investment position}
+\label{step:D9}
 This step is performed by Investor. Open My holdings after settlement and refresh the confirmed state. Check DRS, the settlement record, the latest approved NAV and any declared distribution. Wallet USDC, subscription escrow and investment NAV are different amounts.
 
 After this step, the intermediary begins monthly collection and accounting.
@@ -580,6 +760,7 @@ After this step, the intermediary begins monthly collection and accounting.
 \clearpage\begin{landscape}
 \section{Monthly collections, valuation and distributions}
 \subsection{E1 Demonstration financial cutoff}
+\label{step:E1}
 This step is performed by Intermediary. Use Locate operation for the monthly fee task. If its cutoff has not arrived, choose the offered financial-time shortcut and read the shared-clock confirmation. Advancing the test clock affects all products on the chain and does not create live telemetry or approve valuations.
 
 After this step, record completed service periods and reconcile the opening NAV before accruing fees.
@@ -589,6 +770,7 @@ After this step, record completed service periods and reconcile the opening NAV 
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E2 Publish the monthly payment bill}
+\label{step:E2}
 This step is performed by Intermediary. Under Monitoring \& evidence, check the service period and complete recorded history month. Review the household bill, export income, station costs and FX, then use marker 1 to publish and confirm the wallet transaction.
 
 After this step, the invoice binds the designated household, exact test-USDC payment and evidence digest. No cash has been collected yet. The owner pays next.
@@ -598,6 +780,7 @@ After this step, the invoice binds the designated household, exact test-USDC pay
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E3 Approve and pay the monthly bill}
+\label{step:E3}
 This step is performed by Owner. Under Funds \& monthly bills, check the product, period, token and amount. Use marker 1, approve the exact invoice amount in the wallet and then confirm payment. Explicitly claim test funds first if the balance is insufficient.
 
 After this step, the household wallet transfers the bill amount into the billing contract. The invoice awaits intermediary reconciliation. A direct token transfer does not settle a named bill.
@@ -607,6 +790,7 @@ After this step, the household wallet transfers the bill amount into the billing
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E3a Record the separate grid-export receipt}
+\label{step:E3a}
 This step is performed by Intermediary. Under Monitoring \& evidence, inspect the same invoice and household-payment status. Use marker 1 to record only the explicitly simulated grid-export receipt.
 
 After this step, a separate system account funds the export component. It does not replace or top up the household payment. Both components await reconciliation.
@@ -616,6 +800,7 @@ After this step, a separate system account funds the export component. It does n
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E3b Reconcile and confirm receipt into the pool}
+\label{step:E3b}
 This step is performed by Intermediary. Inspect the household payment, export receipt, station expense and net amount on the same invoice. Use marker 1 to reconcile and confirm receipt into the pool, then confirm the intermediary wallet transaction.
 
 After this step, the billing contract pays agreed station expenses once and transfers assigned net proceeds to the vault. The receivable clears once. Completed historical collections are not charged again. Continue with monthly fees and valuation approval.
@@ -625,6 +810,7 @@ After this step, the billing contract pays agreed station expenses once and tran
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E4 Monthly pool expense accrual}
+\label{step:E4}
 This step is performed by Intermediary. Check the fee cutoff and the approved opening NAV for this fee period. If the basis is missing, follow the guide to prepare a report and obtain trustee approval. Accrue the monthly annual-fee fraction and mandatory pool costs once. Accrual records liabilities rather than another immediate cash payment.
 
 After this step, prepare the post-accounting valuation for trustee approval.
@@ -634,6 +820,7 @@ After this step, prepare the post-accounting valuation for trustee approval.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E5 Monthly valuation approval}
+\label{step:E5}
 This step is performed by Intermediary, followed by trustee. Prepare a report after receipts and fee accrual are reconciled. The trustee must check the current report and approve its anchor transaction. An older fully paid distribution must not replace this pending approval task. Reprepare a report whose inputs or validity have changed.
 
 After this step, return to the intermediary for the monthly distribution declaration.
@@ -643,6 +830,7 @@ After this step, return to the intermediary for the monthly distribution declara
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E6 Monthly distribution declaration}
+\label{step:E6}
 This step is performed by Intermediary. After the current report is approved, declare the due monthly distribution. The contract pays applicable accrued expenses, restores six months of mandatory-cost reserve and allocates eligible remaining receipts 75\% to distribution and 25\% to redemption liquidity. The initial retained cash is not treated as distributable revenue.
 
 After this step, follow the explicit handoff to the investor to inspect and claim this new distribution.
@@ -652,6 +840,7 @@ After this step, follow the explicit handoff to the investor to inspect and clai
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{E7 Distribution claim}
+\label{step:E7}
 This step is performed by Investor. Open My holdings and locate the newly declared distribution identifier. Check the positive claimable amount, confirm Claim in Rabby and compare the wallet balance before and after confirmation. A paid record remains historical and must not continue to appear as payable.
 
 After this step, staff can reconcile the next month after the claim or explicitly defer investor viewing.
@@ -662,6 +851,7 @@ After this step, staff can reconcile the next month after the claim or explicitl
 \clearpage\begin{landscape}
 \section{Peer transfers and quarterly redemption}
 \subsection{F1 Peer transfer proposal}
+\label{step:F1}
 This step is performed by Investor A as seller. After the six-month lock, enter the eligible buyer, share quantity and negotiated USDC total in Transfers and exits. Submit the exact terms and inspect the NAV comparison. A proposal does not itself transfer shares or collect payment.
 
 After this step, investor B accepts these terms and authorizes payment.
@@ -671,6 +861,7 @@ After this step, investor B accepts these terms and authorizes payment.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F2 Buyer consent and payment approval}
+\label{step:F2}
 This step is performed by Investor B. Open the proposed transfer and verify the seller, shares and total consideration. Complete the required USDC approval and buyer-consent transactions in the indicated order. Consent is bound to these exact terms and cannot be supplied by the seller.
 
 After this step, obtain intermediary price review if the deviation exceeds 10\%.
@@ -680,6 +871,7 @@ After this step, obtain intermediary price review if the deviation exceeds 10\%.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F3 Transfer price review}
+\label{step:F3}
 This step is performed by Intermediary. Open Transfer review and compare the negotiated price with the approved NAV reference. Record the required approval for a deviation above 10\%. Review does not guarantee the price or complete either transfer leg.
 
 After this step, the seller completes atomic settlement.
@@ -689,6 +881,7 @@ After this step, the seller completes atomic settlement.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F4 Atomic peer settlement}
+\label{step:F4}
 This step is performed by Investor A as seller. Check buyer consent, allowance, eligibility, lock and required review, then confirm settlement. A successful transaction transfers shares to the buyer and USDC to the seller together. Verify both token transfers in Blockscout.
 
 After this step, both investors review their updated positions.
@@ -698,6 +891,7 @@ After this step, both investors review their updated positions.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F5 Quarterly redemption request}
+\label{step:F5}
 This step is performed by Investor. Before the notice cutoff, enter the shares to redeem and confirm the request. The shares enter escrow and remain entitled to distributions until paid. The request is not an immediate cash redemption at today's reference NAV.
 
 After this step, the intermediary processes an eligible quarterly dealing window after the lock.
@@ -707,6 +901,7 @@ After this step, the intermediary processes an eligible quarterly dealing window
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F6 Proportional redemption processing}
+\label{step:F6}
 This step is performed by Intermediary. At the eligible dealing date, reconcile and approve the dealing NAV before processing requests. Payment is capped by the lower of redemption liquidity and 5\% of pool NAV. The contract pays and burns only filled shares and carries the unfilled balance forward.
 
 After this step, the investor checks payment, burned shares and the remaining escrow request.
@@ -716,6 +911,7 @@ After this step, the investor checks payment, burned shares and the remaining es
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{F7 Cancellation of the unfilled request}
+\label{step:F7}
 This step is performed by Investor. Before the next cutoff, cancel the outstanding unpaid portion of the redemption request. Confirm that these escrowed shares return to the wallet. Already paid and burned shares cannot be cancelled.
 
 After this step, continue holding or submit a later request if appropriate.
@@ -726,6 +922,7 @@ After this step, continue holding or submit a later request if appropriate.
 \clearpage\begin{landscape}
 \section{Servicing cases and trustee intervention}
 \subsection{G1 Servicing case creation}
+\label{step:G1}
 This step is performed by Intermediary. Open Monitoring and evidence and document the reason, supporting evidence and proposed collection-recipient change. Create the case and inspect its fixed ownership snapshot. Ordinary forecast underperformance is not automatically a household default.
 
 After this step, investors review the case and may support it using snapshot weights.
@@ -735,6 +932,7 @@ After this step, investors review the case and may support it using snapshot wei
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{G2 Snapshot-weighted support}
+\label{step:G2}
 This step is performed by Investor. Read the case and the proposed recipient, then confirm support with the investor wallet. The contract uses the fixed snapshot and requires 30\% support before trustee action. Later transfers cannot create duplicate voting weight.
 
 After this step, trustee A independently reviews the eligible case.
@@ -744,6 +942,7 @@ After this step, trustee A independently reviews the eligible case.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{G3 First trustee approval}
+\label{step:G3}
 This step is performed by Trustee A. Open the case, check evidence, snapshot support and recipient, then approve with trustee A's wallet. The contract records this distinct address but does not yet execute the recipient change.
 
 After this step, trustee B performs a separate review of the same case.
@@ -753,6 +952,7 @@ After this step, trustee B performs a separate review of the same case.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{G4 Second trustee approval and execution}
+\label{step:G4}
 This step is performed by Trustee B. Switch to trustee B's configured wallet and sign in again. Review the same case independently and approve it. Two different trustee addresses are required to authorize the demo collection-recipient change, which does not control equipment or a real bank account.
 
 After this step, the intermediary checks execution and continues servicing.
@@ -763,6 +963,7 @@ After this step, the intermediary checks execution and continues servicing.
 \clearpage\begin{landscape}
 \section{Expiry, closure and credential release}
 \subsection{H1 Product closure at rights expiry}
+\label{step:H1}
 This step is performed by Intermediary. After all 60 service months, reconcile receivables, accrued liabilities and distributions, then obtain the final required valuation approval. Confirm Close product when every condition is satisfied. Remaining cash becomes a final distribution rather than an invented repayment of original principal.
 
 After this step, investors claim remaining amounts and the owner retrieves the station credential.
@@ -772,6 +973,7 @@ After this step, investors claim remaining amounts and the owner retrieves the s
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{H2 Final and outstanding distribution claims}
+\label{step:H2}
 This step is performed by Each investor. Review every unpaid distribution in My holdings and claim the amounts belonging to this wallet. Check the confirmed USDC transfers. Previously paid distributions are not paid again, and a remaining historical DRS balance does not extend expired revenue rights.
 
 After this step, the owner completes station credential release.
@@ -781,6 +983,7 @@ After this step, the owner completes station credential release.
 \end{landscape}
 \clearpage\begin{landscape}
 \subsection{H3 Station credential release}
+\label{step:H3}
 This step is performed by Owner. Open the expired agreement's release task after product closure. Confirm the release transaction and check that the station NFT returns from the vault to the owner. Equipment ownership remained with the owner throughout the agreement.
 
 After this step, the product lifecycle is complete and its transaction history remains queryable.

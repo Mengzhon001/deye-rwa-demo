@@ -1,6 +1,7 @@
 """Generate matched Chinese/English LaTeX manuals. Runtime credentials are optional local inputs, never source assets."""
 from pathlib import Path
 import argparse,json,re,shutil,hashlib
+from testing_paths import write_overview, write_private, write_base_purpose, write_base_checks, write_local
 P=argparse.ArgumentParser();P.add_argument('--work',required=True);P.add_argument('--public-config',required=True);P.add_argument('--private-accounts');P.add_argument('--legacy-assets',required=True);P.add_argument('--example',required=True);P.add_argument('--language',choices=['zh','en','both'],default='both');P.add_argument('--english-screenshots');A=P.parse_args()
 ROOT=Path.cwd();D=Path(A.work).resolve();D.mkdir(parents=True,exist_ok=True);pub=json.loads(Path(A.public_config).read_text());keys=json.loads(Path(A.private_accounts).read_text()) if A.private_accounts else {};example=json.loads(Path(A.example).read_text());steps=json.loads(Path('scripts/manual/steps.zh.json').read_text());en={x.split('\t')[0]:x.split('\t')[1:]for x in Path('scripts/manual/steps.en.tsv').read_text().splitlines()if x}
 legacy=Path(A.legacy_assets);capture_file=D/'captures.json' if(D/'captures.json').exists()else Path('docs/manual/captures.json');captures=json.loads(capture_file.read_text())if capture_file.exists()else[]
@@ -56,6 +57,7 @@ for lang in (['zh','en'] if A.language=='both' else [A.language]):
 \setmainfont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6,BoldFont=Songti.ttc,BoldFeatures={FontIndex=0}]
 \setCJKmainfont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6,BoldFont=Songti.ttc,BoldFeatures={FontIndex=0}]
 \setmonofont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6]
+\setCJKmonofont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6]
 \renewcommand{\normalsize}{\fontsize{12}{18}\selectfont}\normalsize
 \titleformat{\section}{\normalsize\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
@@ -71,6 +73,7 @@ for lang in (['zh','en'] if A.language=='both' else [A.language]):
  if keys:para('本内部文件附有专用测试钱包私钥，只应发送给测试同事，不要将这些账户用于真实资金。GitHub首页和源码不包含这些私钥。','This internal file includes dedicated test-account private keys for participating colleagues. Never use these accounts for real funds. The GitHub homepage and source repository do not contain these keys.')
  para('本次月度缴费流程在独立测试链上验证了连续两个月的业主付款、确认入池和分配。自动化浏览器使用独立测试密钥签署实际交易，不代表本次重新完成了Rabby扩展认证。高级转让、赎回、服务处置与到期说明沿用已验证的业务规则，并应结合当前窗口条件操作。当前系统是演示软件，真实电价、银行清算、生产身份合规和完整安全审计尚未完成。','The payment release is tested through two consecutive months of household payments, receipt confirmation and distributions on an isolated chain. The browser test uses dedicated test keys to sign actual transactions outside the browser and does not claim renewed Rabby extension certification. Advanced transfer, redemption, servicing and expiry instructions retain their validated business rules and must follow the current window conditions. This remains demonstration software. Real tariff settlement, bank clearing, production identity compliance and a full security audit are not complete.')
  t(r'\renewcommand{\contentsname}{'+L('目录','Contents')+r'}\clearpage\tableofcontents')
+ write_overview(t,L,para,section,sub,esc)
  section('产品状态与角色交接','Product states and role handoffs')
  para('产品从草稿进入募集，募集满足资金与审批条件后统一结算并发行DRS，随后进入存续期。募集失败的产品提供退款，存续产品在收益权到期后完成清理和关闭。部署合约不等于发布产品，认购款进入托管也不等于已发行份额。','A product starts as a draft, opens fundraising after approval and issues DRS only on successful settlement. It then enters servicing. Failed fundraising allows refunds, and a live product is reconciled and closed when its rights expire. Contract deployment is distinct from publication, and escrowed subscriptions are distinct from issued shares.')
  para('业主申请并签署收益权协议，并按月使用本人钱包缴费。中介负责材料审核、估值编制、发行组织和运营。受托管理人独立审核报价和资产池估值。投资者自行确认资格、认购、领取与退出。两位受托人只在规定的服务处置中需要分别批准，普通报价和估值审批不是每次都要求双人操作。','The owner applies, signs the rights agreement and pays monthly bills using their own wallet. The intermediary assesses materials, prepares valuations, organizes issuance and operates the pool. Trustees independently approve offers and pool valuations. Investors complete qualification, subscriptions, claims and exits. Two separate trustees are required for the defined servicing intervention, rather than for every ordinary valuation approval.')
@@ -109,11 +112,13 @@ for lang in (['zh','en'] if A.language=='both' else [A.language]):
  para('钱包签名验证完成后，页面先显示角色工作台和导航，产品资料、钱包余额和已保存记录分别加载。完整业务状态尚未读取时，相关交易按钮保持不可用，不能把加载中的金额理解为零。某部分查询失败时，可以单独重试该部分；业务状态加载失败后，原登录仍会保留，无需反复连接钱包或签名。','After the wallet signature is verified, the role workspace and navigation appear first. Product metadata, wallet balances and saved records load independently. Transaction controls remain unavailable until the required business state is loaded, and a pending amount does not mean zero. An unavailable section can be retried separately. If business-state loading fails, sign-in is retained without repeatedly connecting or signing again.')
  para('切换时，请先在 Rabby 确认目标网络，然后使用同一角色钱包重新签名登录。角色地址保持不变，但登录会话、产品、待确认操作和页面选择按链分别保存。切换不会把私链 mUSDC 兑换或转移为 Circle USDC。如果当前仍有待确认交易，系统会要求先在原页面或交易日志核对结果。拒绝钱包请求或目标服务不可用时，页面仍保留原网络。','To switch, confirm the destination network in Rabby and sign in again with the intended role. Role addresses remain unchanged, while sessions, products, pending operations and page selections are isolated by chain. Switching does not convert or bridge private-chain mUSDC into Circle USDC. Reconcile any pending operation on its original page or in the transaction log before switching. A rejected wallet request or unavailable destination leaves the application on its original network.')
  figure(ROOT/'docs/manual/assets'/('network-menu.'+lang+'.png'),L('统一入口的网络选择窗口。请选择需要测试的链，再在钱包核对网络并重新登录。','Network selection in the unified application. Select the chain, verify it in the wallet and sign in again.'),'.42\\textheight')
+ write_private(t,L,para,section,sub,esc,pub)
  section('Base Sepolia 公链测试','Base Sepolia public-chain testing')
  base_file=ROOT/'docs/manual/base-sepolia.public.json'
  if not base_file.exists():raise RuntimeError('Base Sepolia public configuration is required')
  base_cfg=json.loads(base_file.read_text())
  para('原公网演示继续用于完整生命周期演练。Base Sepolia 是另一个独立环境，用于检验公共链的合约和钱包交易。两者沿用同一组角色地址，但合约、余额和业务记录相互独立。后文的完整生命周期操作图以私链演示为例，公链测试应遵循本节的实际时间和资金限制。','The original public demonstration remains the environment for the full accelerated lifecycle. Base Sepolia is a separate environment for public-chain contracts and wallet transactions. Role addresses are shared, but contracts, balances and workflow records are independent. The complete lifecycle screenshots later in this manual illustrate the private-chain demonstration. Public-chain testing follows the real-time and funding restrictions in this section.')
+ write_base_purpose(para,sub)
  sub('入口与网络配置','Entry and network configuration')
  for z,e,value in [('公链测试应用','Public-chain application',base_cfg['app']+'/app/'),('公链浏览器','Public-chain explorer',base_cfg['explorer']),('钱包 RPC','Wallet RPC',base_cfg['rpc'])]:
   t(esc(L(z,e))+r'\par\url{'+value+r'}\par')
@@ -132,6 +137,7 @@ for lang in (['zh','en'] if A.language=='both' else [A.language]):
  t(r'\url{https://portal.cdp.coinbase.com/products/faucet}\par\url{https://faucet.circle.com/}\par')
  para('投资者选择募集中产品并申请资格。中介批准资格后，投资者填写金额，先批准对应 USDC 额度，再确认认购交易。募集开放时可以追加认购，每次追加后中介必须重新审核累计金额。结算前取消认购会退回本人全部累计托管款。认购进入托管并不等于已经取得 DRS。','Select a fundraising product and apply for eligibility. After intermediary approval, enter an amount, approve the corresponding USDC allowance and confirm the subscription transaction. Additional subscriptions are allowed while fundraising remains open, and the intermediary reviews the new accumulated amount. Cancellation before settlement refunds the full accumulated escrow for that address. Escrow does not mean DRS has been issued.')
  para('结算继续要求有效估值、订单审批、募集门槛以及足够的购买款和初始留存。合约会自动留存10%，不需要用户另行转账。少量测试币可以用于检查授权、认购、审核和退款，不能据此声称已经完成需要更多资金的发行结算。','Settlement still requires a current valuation, order approvals, the fundraising threshold and sufficient purchase funding and reserve. The contract automatically retains 10%; no separate reserve transfer is needed. Small test balances support approvals, subscriptions, review and refunds, but do not establish that a larger funded settlement has completed.')
+ write_base_checks(t,L,para,sub)
  sub('真实时间与测试范围','Real time and testing scope')
  para('公共链不能由应用提前推进时间。月度缴费需要产品已经结算，并到达对应服务期末。六个月转让锁定、赎回通知期和到期时间也保持不变。页面因此不提供重置和时间推进。完整生命周期演示仍应使用原公网私链环境。','The application cannot advance public-chain time. Monthly billing requires a settled product and the end of the relevant service period. The six-month transfer lock, redemption notice period and expiry remain unchanged. Reset and time-advance controls are therefore unavailable. Use the original public private-chain environment for the complete accelerated lifecycle.')
  para('业主月度缴费使用 Circle 测试 USDC。售电回款仍作为单独披露的经济模拟，其代币必须由独立资金账户预先持有。电站数据使用固定采集时间的真实记录回放，电价和未来现金流继续属于模型假设。本次部署未加入 Oracle，不能把报告上链解释为 API 数据已获得独立验证。','Household monthly payments use Circle test USDC. Grid-export receipts remain a separately disclosed economic simulation, funded from a prefunded independent treasury. Station observations use fixed recorded evidence; tariffs and future cashflows remain modeling assumptions. No oracle is added by this deployment, so anchoring a report does not independently validate API data.')
@@ -144,6 +150,7 @@ for lang in (['zh','en'] if A.language=='both' else [A.language]):
   shot=ROOT/'docs/manual/assets'/(image_name+'.'+lang+'.png')
   if shot.exists():
    landscape();figure(shot,L(z,e),'.90\\textheight');endland()
+ write_local(t,L,para,section,sub,esc)
  section('动态引导与交接','Dynamic guidance and handoffs')
  para('首次进入角色时，业务介绍说明设备、收益权、资金和参与者之间的关系。右侧操作引导显示当前产品、对象、必要条件、处理人和预期结果。可以暂停或收起引导，再从顶部“操作引导”恢复。完成状态来自业务与链上记录，不由“下一步”按钮决定。','The first-entry introduction explains equipment, rights, money and participant responsibilities. The guide panel identifies the product, object, prerequisites, handler and expected result. Pause or collapse it and reopen Operation guide from the top bar. Completion comes from business and chain state rather than a Next button.')
  para('参与者模式关注本人任务及交接等待。四角色演示模式可查看其他角色的待办，并打开角色登录入口，但仍需要切换到对应钱包并重新签名。它不是代签模式，也不会让投资者钱包获得中介权限。','Participant mode focuses on the connected participant’s tasks and handoffs. Four-role demonstration mode can inspect other roles’ tasks and open their login entry. The correct wallet and a new signature are still required. It does not sign on behalf of another role or grant intermediary authority to an investor.')
@@ -159,7 +166,7 @@ for lang in (['zh','en'] if A.language=='both' else [A.language]):
   new_group=code[0]!=last;last=code[0]
   landscape()
   if new_group:t(r'\section{'+esc(L(*groups[code[0]]))+'}')
-  sub(code+' '+title,code+' '+en[code][0]);para('本步由'+actor+'操作。进入'+where+'后，'+op,'This step is performed by '+en[code][1]+'. '+en[code][2]);para('操作成功后，'+result+'下一步，'+nextrole+'。','After this step, '+en[code][3][0].lower()+en[code][3][1:])
+  sub(code+' '+title,code+' '+en[code][0]);t(r'\label{step:'+code+'}');para('本步由'+actor+'操作。进入'+where+'后，'+op,'This step is performed by '+en[code][1]+'. '+en[code][2]);para('操作成功后，'+result+'下一步，'+nextrole+'。','After this step, '+en[code][3][0].lower()+en[code][3][1:])
   if notes and lang=='zh':para(notes[0],'')
   matches=[c for c in captures if c['action']==map_action.get(code)and c['language']==lang]
   if code.startswith('E'):matches=[c for c in matches if c['scope']=='month1']
