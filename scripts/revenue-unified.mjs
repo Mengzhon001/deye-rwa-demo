@@ -1,6 +1,7 @@
 import {readFileSync,writeFileSync,mkdirSync,existsSync,openSync,closeSync} from 'node:fs';
 import {resolve,join} from 'node:path';
 import {spawn,spawnSync} from 'node:child_process';
+import {checkUnifiedEntry} from '../infra/multinetwork/health.mjs';
 const root=resolve(import.meta.dirname,'..'),dir=resolve(process.env.REVENUE_UNIFIED_DATA_DIR||join(root,'.data/unified-app'));
 const file=join(dir,'config.json');
 function save(name,value){writeFileSync(join(dir,name),JSON.stringify(value,null,2)+'\n',{mode:0o600});}
@@ -44,11 +45,21 @@ function applyOrigins(c){
  }
 }
 async function tunnel(){
- if(running(pid('tunnel.json')))throw Error('The unified tunnel is already running');
  const binary=process.env.BASE_CLOUDFLARED;if(!binary)throw Error('Set BASE_CLOUDFLARED to the local cloudflared executable');
+ const current=read(),previous=pid('tunnel.json');
+ if(running(previous)){
+  const health=await checkUnifiedEntry(current.publicApp);
+  if(health.healthy)throw Error('The unified public endpoint is already healthy');
+  const command=spawnSync('ps',['-p',String(previous),'-o','command='],{encoding:'utf8'}).stdout?.trim()||'';
+  if(!command.startsWith(binary+' tunnel ')||!command.includes('--url http://127.0.0.1:4196'))throw Error('Refusing to stop an unrelated process recorded as the tunnel');
+  process.kill(previous,'SIGTERM');console.log('Replacing the unreachable unified tunnel: '+health.reason);
+ }
  const fd=openSync(join(dir,'tunnel.log'),'w',0o600),child=spawn(binary,['tunnel','--url','http://127.0.0.1:4196','--no-autoupdate'],{detached:true,stdio:['ignore',fd,fd]});child.unref();closeSync(fd);save('tunnel.json',{pid:child.pid});
  let app;for(let i=0;i<60;i++){app=readFileSync(join(dir,'tunnel.log'),'utf8').match(/https:\/\/[a-z0-9-]+\.trycloudflare\.com/)?.[0];if(app)break;await new Promise(r=>setTimeout(r,500));}if(!app)throw Error('Tunnel hostname unavailable');
- const c=read();c.publicApp=app;c.origins=[...new Set([...c.origins,app])];save('config.json',c);applyOrigins(c);stop();await new Promise(r=>setTimeout(r,500));await start();publishConfig(c);console.log(app+'/app/');
+ const c=read();c.publicApp=app;c.origins=[...new Set([...c.origins,app])];save('config.json',c);applyOrigins(c);stop();await new Promise(r=>setTimeout(r,500));await start();
+ let health;for(let i=0;i<6;i++){health=await checkUnifiedEntry(app);if(health.healthy)break;await new Promise(r=>setTimeout(r,500));}
+ if(!health?.healthy)throw Error('New public endpoint is not healthy; public configuration was not published: '+health?.reason);
+ publishConfig(c);console.log(app+'/app/');
 }
 const command=process.argv[2]||'status';
 try{
@@ -56,6 +67,6 @@ try{
  else if(command==='start'){const c=read();applyOrigins(c);await start();}
  else if(command==='tunnel')await tunnel();
  else if(command==='stop'){stop();const p=pid('tunnel.json');if(running(p))process.kill(p,'SIGTERM');}
- else if(command==='status'){const c=read();console.log(JSON.stringify({running:running(pid('process.json')),tunnel:running(pid('tunnel.json')),app:c.publicApp||'http://127.0.0.1:'+c.port,networks:c.networks.map(n=>({id:n.id,chainId:n.chainId}))}));}
+ else if(command==='status'){const c=read(),health=await checkUnifiedEntry(c.publicApp);console.log(JSON.stringify({running:running(pid('process.json')),tunnel:running(pid('tunnel.json')),publicReachable:health.healthy,...(!health.healthy?{reason:health.reason,recovery:'Run unified:tunnel to replace an unreachable temporary endpoint'}:{}),app:c.publicApp||'http://127.0.0.1:'+c.port,networks:c.networks.map(n=>({id:n.id,chainId:n.chainId}))}));if(!health.healthy)process.exitCode=1;}
  else throw Error('Commands: init, start, tunnel, status, stop');
 }catch(e){console.error(e.message);process.exitCode=1;}

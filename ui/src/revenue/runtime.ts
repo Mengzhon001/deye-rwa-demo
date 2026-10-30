@@ -167,8 +167,10 @@ export class RevenueRuntime {
     this.repo = new RevenueRepository(join(dataDir, "store.json"));
   }
   private publicProvider = publicTestnet() ? new PublicReadProvider(process.env.REVENUE_RPC_URL,84532,{staticNetwork:true,batchMaxCount:10,batchStallTime:30}) : undefined;
-  private eventCache = new EventCache(this.publicProvider||hre.ethers.provider,join(this.dataDir,"events"));
+  private historyProvider = publicTestnet()&&process.env.REVENUE_HISTORY_RPC_URL ? new PublicReadProvider(process.env.REVENUE_HISTORY_RPC_URL,84532,{staticNetwork:true,batchMaxCount:10,batchStallTime:30}) : undefined;
+  private eventCache = new EventCache(this.publicProvider||hre.ethers.provider,join(this.dataDir,"events"),this.historyProvider,Number(process.env.REVENUE_HISTORY_BLOCK_RANGE||200));
   async start(options: {allowDeployment?:boolean} = {}) {
+    if(this.historyProvider&&Number(BigInt(await this.historyProvider.send('eth_chainId',[])))!==84532)throw Error('Historical RPC chain mismatch');
     const connectedChainId = Number(
       (await hre.ethers.provider.getNetwork()).chainId
     );

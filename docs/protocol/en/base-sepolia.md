@@ -8,7 +8,7 @@ Base Sepolia uses Chain ID 84532 and test ETH for gas. The application backend s
 
 ## Unified entry and network switching
 
-The current [business application](https://necessity-magnificent-aids-lan.trycloudflare.com/app/) serves both networks. The private demonstration uses Chain ID 20261008 and Base Sepolia uses Chain ID 84532. Each network retains its own backend, store and deployed contracts. The shared entry does not merge assets or copy subscription orders.
+Select a network on the [GitHub homepage](https://mengzhon001.github.io/deye-rwa-demo/) and click Launch App to open the current application. Temporary tunnel addresses can change; reopen the application from the homepage when an old address stops working. The private demonstration uses Chain ID 20261008 and Base Sepolia uses Chain ID 84532. Each network retains its own backend, store and deployed contracts. The shared entry does not merge assets or copy subscription orders.
 
 Use the current-network button in the upper-right corner, choose the destination, confirm the network in your wallet and sign in again. The sign-in dialog also provides network selection. Page preferences and pending-operation records remain scoped to their chain, and unresolved operations must be reconciled before switching. A rejected switch or unavailable destination keeps the original application network. Switching is not a bridge. Private-chain balances do not appear on Base Sepolia, and each actual investor address needs test ETH and Circle USDC on the selected chain.
 

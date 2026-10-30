@@ -1,6 +1,6 @@
 > **Unified application / 统一业务入口**
 >
-> Both networks are available at https://necessity-magnificent-aids-lan.trycloudflare.com/app/. Use the network button in the upper-right corner to select Private demo (20261008) or Base Sepolia (84532). Confirm the wallet network and sign in again. Products, tokens and business records remain separate.
+> Open the current application through https://mengzhon001.github.io/deye-rwa-demo/ and Launch App. Temporary application addresses can change. Use the network button in the upper-right corner to select Private demo (20261008) or Base Sepolia (84532). Confirm the wallet network and sign in again. Products, tokens and business records remain separate.
 >
 > 两条链现在共用一个业务网站。请使用右上角网络按钮切换，核对钱包网络后重新登录。切换不会跨链转移资金。操作与维护说明见 `infra/multinetwork/README.md`。
 

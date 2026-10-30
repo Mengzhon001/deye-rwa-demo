@@ -8,7 +8,7 @@ Base Sepolia 的 Chain ID 为 84532，Gas 代币为测试 ETH。业务应用仍�
 
 ## 统一入口与网络切换
 
-当前统一入口为 [业务应用](https://necessity-magnificent-aids-lan.trycloudflare.com/app/)。私有演示链使用 Chain ID 20261008，Base Sepolia 使用 Chain ID 84532。两条链仍由各自的后端、数据存储和合约处理业务，共用入口不会合并资产或复制认购订单。
+请通过 [GitHub 首页](https://mengzhon001.github.io/deye-rwa-demo/) 选择网络并点击 Launch App。业务应用使用临时隧道地址；旧地址失效时，请从首页重新进入。私有演示链使用 Chain ID 20261008，Base Sepolia 使用 Chain ID 84532。两条链仍由各自的后端、数据存储和合约处理业务，共用入口不会合并资产或复制认购订单。
 
 点击右上角的当前网络按钮，选择目标链，在钱包确认后重新签名登录。登录窗口也提供网络选择。系统会保留各条链的页面选择和待确认记录，并在切换前核对是否还有未完成的操作。拒绝切换或目标服务不可用时不会进入另一条链。切换网络不等于跨链转账，私链测试余额不会出现在 Base Sepolia 上。实际使用的投资者地址也需要单独领取本链测试 ETH 和 Circle USDC。
 

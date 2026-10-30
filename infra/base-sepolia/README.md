@@ -39,3 +39,9 @@ To stage the reviewed GitHub Pages output, first build with `REVENUE_SITE_BASE=/
 A completed public test reuses its saved records by default. Set a fresh `BASE_TEST_RUN_ID` to execute another small subscription/refund run. Keep every previous operation journal so a restart cannot accidentally repeat an already broadcast payment.
 
 The preferred user entry is now the shared network-selection application described in `../multinetwork/README.md`. The dedicated Base service and its original HTTPS address remain available for backend diagnostics. The public Pages `networks.json` controls the shared user entry; keep it separate from both backend deployment manifests.
+
+## Historical event reads
+
+The optional `REVENUE_HISTORY_RPC_URL` selects a separate read-only RPC for historical logs. Set `REVENUE_HISTORY_BLOCK_RANGE` to a range that endpoint supports, between 1 and 50000. Without this configuration, the existing primary RPC and 200-block pages remain in use. Startup checks the history endpoint's Chain ID. The collector checks its historical boundary hash against the primary endpoint, reads the latest twelve blocks through the primary RPC, and commits its cursor only after every page and timestamp succeeds. A mismatch or failed page does not become a successful partial history.
+
+The current test backend uses `https://base-sepolia.gateway.tenderly.co` with 50000-block history pages. Wallet RPC and current contract reads continue to use `https://sepolia.base.org`. This is another public RPC, not a dedicated service, an oracle, or an independent audit. No keys, API credentials or station evidence are sent to the history endpoint.
