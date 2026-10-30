@@ -15,11 +15,11 @@
 \begin{document}
 \hypersetup{pdftitle={Deye RWA Platform Product and Operating Manual},pdfauthor={Deye RWA}}
 \begin{center}\textbf{Deye RWA Platform Product and Operating Manual}\end{center}
-Internal test edition, 29 October 2026
+Internal test edition, 30 October 2026
 
 This manual explains how the four participant roles use wallets to complete applications, valuation, fundraising, settlement, monthly distributions and exits. Equipment remains the owner’s property. Investors acquire shares in finite revenue rights, with no fixed coupon or guaranteed repayment of their original investment. All payments use demonstration funds.
 
-The instructions cover the dynamic guide, household wallet payments and V5 monthly-distribution release. The public test Chain ID is 20261008. Screenshots come from isolated tests and may show different contracts, balances or dates from the shared product. Check the product, account and network before acting.
+The instructions cover the dynamic guide, household wallet payments and V5 monthly-distribution release. The unified website provides the private demonstration on Chain ID 20261008 and public-chain testing on Base Sepolia, Chain ID 84532. Screenshots come from isolated tests and may show different contracts, balances or dates from the shared product. Check the product, account and network before acting.
 
 Every illustrated workflow step uses the English interface. The monthly payment and reconciliation images were captured for this release; unchanged issuance, exit and closure images retain the verified English captures. Station names use English display translations without changing energy observations. These examples do not imply that the shared product has reached the illustrated stage.
 
@@ -227,20 +227,26 @@ The demo operator supplies the private key through an internal channel. It is ex
 
 \end{landscape}
 \clearpage\section{Website, network and blockchain explorer}
+\subsection{Unified public entry}
+\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/}\par
+The addresses below were checked on 30 October 2026. The unified entry provides network selection for the private demonstration and Base Sepolia. Cloudflare temporary domains can change. If a bookmarked direct address stops working, open the public homepage and click Launch App to obtain the current entry.
+
 \subsection{Public homepage}
 \url{https://mengzhon001.github.io/deye-rwa-demo}\par
 \subsection{Business application}
-\url{https://necessity-magnificent-aids-lan.trycloudflare.com/networks/private/app/}\par
+\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/private/app/}\par
 \subsection{Blockchain explorer}
-\url{https://polyphonic-reduction-gratuit-pic.trycloudflare.com}\par
+\url{https://quizzes-faces-simplified-discuss.trycloudflare.com}\par
 \subsection{Wallet RPC}
-\url{https://sarah-reggae-calling-pat.trycloudflare.com}\par
+\url{https://mazda-lopez-stevens-pittsburgh.trycloudflare.com}\par
 The test network Chain ID is 20261008 and its gas token is DETH. Check the current RPC when adding the network. A tunnel change requires a new RPC URL but does not change the chain, accounts or existing balances. The address 127.0.0.1 points to the reader’s own computer and is not a remote access address.
 
 Click a confirmed transaction hash to open its Blockscout page. Alternatively, paste a full hash, account or contract into the explorer search field. Check status, sender, target and block, followed by token transfers and events. Login and agreement message signatures are off-chain and do not create transaction records.
 
 \subsection{Network selection and session isolation}
 One business website now provides access to the private demonstration and Base Sepolia. Select a network on the GitHub homepage and click Launch App. The network button in the upper-right corner shows the current chain. Its menu explains each chain and its Chain ID. Network selection is also available in the sign-in dialog, before authentication.
+
+After the wallet signature is verified, the role workspace and navigation appear first. Product metadata, wallet balances and saved records load independently. Transaction controls remain unavailable until the required business state is loaded, and a pending amount does not mean zero. An unavailable section can be retried separately. If business-state loading fails, sign-in is retained without repeatedly connecting or signing again.
 
 To switch, confirm the destination network in Rabby and sign in again with the intended role. Role addresses remain unchanged, while sessions, products, pending operations and page selections are isolated by chain. Switching does not convert or bridge private-chain mUSDC into Circle USDC. Reconcile any pending operation on its original page or in the transaction log before switching. A rejected wallet request or unavailable destination leaves the application on its original network.
 
@@ -249,7 +255,7 @@ To switch, confirm the destination network in Rabby and sign in again with the i
 The original public demonstration remains the environment for the full accelerated lifecycle. Base Sepolia is a separate environment for public-chain contracts and wallet transactions. Role addresses are shared, but contracts, balances and workflow records are independent. The complete lifecycle screenshots later in this manual illustrate the private-chain demonstration. Public-chain testing follows the real-time and funding restrictions in this section.
 
 \subsection{Entry and network configuration}
-Public-chain application\par\url{https://necessity-magnificent-aids-lan.trycloudflare.com/networks/base-sepolia/app/}\par
+Public-chain application\par\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/base-sepolia/app/}\par
 Public-chain explorer\par\url{https://base-sepolia.blockscout.com}\par
 Wallet RPC\par\url{https://sepolia.base.org}\par
 The Chain ID is 84532, gas is paid in test ETH, and payments use Circle test USDC. The homepage and application share one network-selection entry. Select Base Sepolia and verify the wallet network before signing in.

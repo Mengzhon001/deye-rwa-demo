@@ -15,11 +15,11 @@
 \begin{document}
 \hypersetup{pdftitle={Deye RWA 平台产品与操作说明书},pdfauthor={Deye RWA}}
 \begin{center}\textbf{Deye RWA 平台产品与操作说明书}\end{center}
-内部测试版　2026年10月29日
+内部测试版　2026年10月30日
 
 本说明书说明四类参与者如何使用钱包完成申请、估值、募集、结算、月度分配和退出。设备所有权始终由业主保留，投资者购买的是有限期限的收益权份额。所有支付均为演示资金，不存在固定票息或保证返还本金。
 
-正文对应本次上线的动态引导、业主钱包月度缴费及 V5 月度分配版本。当前公网链编号为20261008。截图在隔离测试环境中采集，具体合约、余额和日期可能与同事所在的共享产品不同。操作前应核对产品名称、钱包地址和链编号。
+正文对应本次上线的动态引导、业主钱包月度缴费及 V5 月度分配版本。统一网站同时提供私有演示链和 Base Sepolia 公链测试，链编号分别为20261008和84532。截图在隔离测试环境中采集，具体合约、余额和日期可能与同事所在的共享产品不同。操作前应核对产品名称、钱包地址和链编号。
 
 本文件保留发行、转让、赎回和到期等完整操作说明。月度缴费及确认步骤使用本次重新采集的中英文截图，其余未改变的操作沿用已核对的对应语言截图。截图不代表共享产品已经到达所示状态。
 
@@ -227,20 +227,26 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 
 \end{landscape}
 \clearpage\section{网站、网络与区块链浏览器}
+\subsection{统一公网入口}
+\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/}\par
+以下地址已于2026年10月30日核对。统一入口提供私有演示链和 Base Sepolia 的网络选择。Cloudflare 临时域名可能变化；如果收藏的直达地址失效，请通过公开首页点击 Launch App 获取当前入口。
+
 \subsection{公开首页}
 \url{https://mengzhon001.github.io/deye-rwa-demo}\par
 \subsection{业务应用}
-\url{https://necessity-magnificent-aids-lan.trycloudflare.com/networks/private/app/}\par
+\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/private/app/}\par
 \subsection{区块链浏览器}
-\url{https://polyphonic-reduction-gratuit-pic.trycloudflare.com}\par
+\url{https://quizzes-faces-simplified-discuss.trycloudflare.com}\par
 \subsection{钱包 RPC}
-\url{https://sarah-reggae-calling-pat.trycloudflare.com}\par
+\url{https://mazda-lopez-stevens-pittsburgh.trycloudflare.com}\par
 测试网络Chain ID为20261008，Gas代币为DETH。首次登录时允许添加此网络，并核对当前RPC地址。隧道地址变化时需要更新RPC，但链编号、钱包地址和原链余额不变。127.0.0.1只指向使用者自己的电脑，远程同事不应使用本机端口地址。
 
 在业务交易确认后点击交易哈希，即可打开对应的Blockscout页面。也可以将完整交易哈希、钱包地址或合约地址粘贴到浏览器顶部的搜索框。先核对状态、发送者、目标合约和区块，再检查代币转账与事件。登录和协议消息签名属于链下步骤，不会产生交易记录。
 
 \subsection{网络选择与会话隔离}
 现在可以通过同一个业务网站使用私有演示链和 Base Sepolia。进入 GitHub 首页后，选择需要测试的网络并点击 Launch App。业务页面右上角的网络按钮显示当前网络。点击按钮后，可以查看两条链各自的用途和 Chain ID，并选择另一条链。登录窗口也提供切换网络入口，因此无需先完成登录。
+
+钱包签名验证完成后，页面先显示角色工作台和导航，产品资料、钱包余额和已保存记录分别加载。完整业务状态尚未读取时，相关交易按钮保持不可用，不能把加载中的金额理解为零。某部分查询失败时，可以单独重试该部分；业务状态加载失败后，原登录仍会保留，无需反复连接钱包或签名。
 
 切换时，请先在 Rabby 确认目标网络，然后使用同一角色钱包重新签名登录。角色地址保持不变，但登录会话、产品、待确认操作和页面选择按链分别保存。切换不会把私链 mUSDC 兑换或转移为 Circle USDC。如果当前仍有待确认交易，系统会要求先在原页面或交易日志核对结果。拒绝钱包请求或目标服务不可用时，页面仍保留原网络。
 
@@ -249,7 +255,7 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 原公网演示继续用于完整生命周期演练。Base Sepolia 是另一个独立环境，用于检验公共链的合约和钱包交易。两者沿用同一组角色地址，但合约、余额和业务记录相互独立。后文的完整生命周期操作图以私链演示为例，公链测试应遵循本节的实际时间和资金限制。
 
 \subsection{入口与网络配置}
-公链测试应用\par\url{https://necessity-magnificent-aids-lan.trycloudflare.com/networks/base-sepolia/app/}\par
+公链测试应用\par\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/base-sepolia/app/}\par
 公链浏览器\par\url{https://base-sepolia.blockscout.com}\par
 钱包 RPC\par\url{https://sepolia.base.org}\par
 Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USDC。首页和业务应用共用网络选择入口。请选择 Base Sepolia，再在钱包中核对网络并登录。

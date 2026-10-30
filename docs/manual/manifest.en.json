@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-29",
+  "date": "2026-10-30",
   "language": "en",
   "internalTestKeys": false,
   "assets": [
@@ -111,5 +111,5 @@
     "network-menu.en.png",
     "wallet-import-3-crop.png"
   ],
-  "sourceSha256": "d132215f24226a00b73010419c993ce8d3b00301b28a941e559de93205e041ef"
+  "sourceSha256": "ae5f0725a738196286848c99d497cceed1fcb5910efaff6bbb2e48736459d3b5"
 }
