@@ -1,10 +1,11 @@
 {
-  "app": "https://icq-attorneys-frontpage-weekends.trycloudflare.com",
+  "app": "https://reuters-romance-arranged-bloggers.trycloudflare.com",
   "explorer": "https://base-sepolia.blockscout.com",
   "rpc": "https://sepolia.base.org",
   "chainId": 84532,
   "usdc": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
   "preferredWallet": "rabby",
   "walletEntryStatus": "verified",
-  "updatedAt": "2026-10-29T09:03:31.097Z"
+  "updatedAt": "2026-10-30T02:21:29.610Z",
+  "appPath": "/networks/base-sepolia/app/"
 }
