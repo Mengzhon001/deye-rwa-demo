@@ -1,5 +1,33 @@
 # Independent Base Sepolia deployment
 
+## 源码范围与查找方式 / Source layout
+
+Base Sepolia 的系统代码已包含在仓库的 `main` 分支。它与私有链版本共用业务实现，不是另一份独立前后端工程。部署脚本将 Chain ID 设置为 `84532`，指定 Circle 测试 USDC，并为公链建立独立存储。`npm run web3:up` 是本地私链入口；本页的 `base:*` 命令才是独立 Base Sepolia 部署入口。
+
+| 文件或目录 / Path | 职责 / Responsibility |
+| --- | --- |
+| [`../../scripts/revenue-base-sepolia.mjs`](../../scripts/revenue-base-sepolia.mjs) | 初始化、检查、构建、启动、隧道及停止 / Profile lifecycle |
+| [`../../ui/scripts/base-deploy.ts`](../../ui/scripts/base-deploy.ts) | 显式部署与验证入口 / Explicit deployment and verification |
+| [`../../onchain/scripts/deploy-revenue.ts`](../../onchain/scripts/deploy-revenue.ts) | 合约构造参数、部署交易持久化及恢复 / Contract deployment and recovery |
+| [`../../onchain/scripts/revenue-network.ts`](../../onchain/scripts/revenue-network.ts) | Chain ID、外部 USDC 校验及禁止公链时间推进等限制 / Network policy |
+| [`../../onchain/contracts/core/DeyeRWA.sol`](../../onchain/contracts/core/DeyeRWA.sol) | 电站收益权凭证 / Revenue-rights certificate |
+| [`../../onchain/contracts/revenue/`](../../onchain/contracts/revenue/) | V5 资产池、月度缴费及其继承合约 / Vault, billing and base contracts |
+| [`../../ui/src/revenue/`](../../ui/src/revenue/) | 共用鉴权、业务状态、RPC、事件缓存与交易恢复 / Shared backend |
+| [`../../ui/public/revenue/`](../../ui/public/revenue/) | 共用角色页面、钱包登录、引导与渐进加载 / Shared browser application |
+| [`../multinetwork/`](../multinetwork/) | 私有链和 Base Sepolia 的统一入口 / Shared network gateway |
+| [`../../scripts/test-base-sepolia.mjs`](../../scripts/test-base-sepolia.mjs) | 需要显式启用和专用资金的公链测试 / Opt-in public-chain integration test |
+| [`../../docs/manual/base-sepolia.public.json`](../../docs/manual/base-sepolia.public.json) | 公开的既有合约地址、角色地址和部署交易 / Public deployment metadata |
+
+This is one application with two network profiles. The source files above are included in `main`; `gh-pages` contains the published static site. No separate Sepolia copy of the backend or frontend is required. The profile generates its Compose file under the operator's ignored data directory. That generated configuration, the role wallet file, recorded evidence and live database are deployment inputs, not missing source code. A new deployment creates its own contracts and business state; the public address list alone does not reconstruct the existing hosted service.
+
+源码审查和离线网络策略回归不需要接触既有公网业务。安装依赖后可运行以下命令，它们不会广播公链交易。公共 RPC 测试使用本机模拟服务。
+
+```sh
+npm run base:test:unit
+```
+
+## Deployment
+
 This profile runs only the RWA application on port 4194. It does not start, restart or reconfigure the original public demo, its node, Blockscout or tunnels. Its Compose project and image are `deye-base-sepolia-test` and `deye-rwa-base-sepolia-app:local`.
 
 Use Node 22+, Docker with Compose, the repository lockfile and the official Circle Base Sepolia USDC contract. Keys and recorded station evidence are local inputs. The six role addresses can be reused without sharing application state or chain balances.

@@ -16,6 +16,25 @@
 - [中文操作手册（PDF）](https://mengzhon001.github.io/deye-rwa-demo/manual/manual.zh.pdf)及[English operating manual (PDF)](https://mengzhon001.github.io/deye-rwa-demo/manual/manual.en.pdf)包含角色交接、钱包操作、截图和月度缴费流程。两份公开手册均不含私钥。
 - 源码位于 `main` 分支，静态网站位于 `gh-pages` 分支。手册 PDF、LaTeX 源文件及配图也保存在 [docs/manual/](docs/manual/)。
 
+## Base Sepolia 源码入口 / Source entry
+
+**本仓库的 `main` 分支包含 Base Sepolia 系统源码。** 私有链与 Base Sepolia 共用合约、业务服务和四角色前端，通过网络策略和独立部署配置选择运行环境，因此没有复制一套独立的 Sepolia 前后端目录。`gh-pages` 仅包含静态发布内容，不能用来部署业务后端。
+
+| 查找内容 / Component | 源码入口 / Source |
+| --- | --- |
+| 部署、启动及配置要求 / Deployment and configuration | [infra/base-sepolia/README.md](infra/base-sepolia/README.md) |
+| `base:*` 命令 / Deployment CLI | [scripts/revenue-base-sepolia.mjs](scripts/revenue-base-sepolia.mjs) |
+| 公链部署、签名交易恢复 / Deployment and recovery | [ui/scripts/base-deploy.ts](ui/scripts/base-deploy.ts), [onchain/scripts/deploy-revenue.ts](onchain/scripts/deploy-revenue.ts) |
+| Chain ID、Circle USDC、公链能力限制 / Network policy | [onchain/scripts/revenue-network.ts](onchain/scripts/revenue-network.ts) |
+| 资产池及月度缴费合约 / Vault and billing contracts | [RevenueShareVaultV5.sol](onchain/contracts/revenue/RevenueShareVaultV5.sol), [HouseholdBilling.sol](onchain/contracts/revenue/HouseholdBilling.sol) |
+| 共用业务后端 / Shared backend | [ui/src/revenue/](ui/src/revenue/) |
+| 共用钱包前端 / Shared wallet application | [ui/public/revenue/](ui/public/revenue/) |
+| 网络切换网关 / Network routing | [infra/multinetwork/](infra/multinetwork/) |
+| 已部署地址和交易 / Existing deployment addresses and transactions | [docs/manual/base-sepolia.public.json](docs/manual/base-sepolia.public.json) |
+| 公链验证范围 / Public-chain validation | [中文记录](docs/validation/base-sepolia-2026-10-29.zh.md), [English report](docs/validation/base-sepolia-2026-10-29.en.md) |
+
+**The `main` branch includes the Base Sepolia implementation.** Both networks share the application and contract sources; network policy and separate deployment configuration select the environment. Start with the deployment guide above. The local-chain commands in the next section start a separate local environment and do not deploy to Base Sepolia. Private wallet configuration, station evidence, generated Compose files and live business state are local deployment inputs, so they are excluded from GitHub.
+
 ## 开始运行
 
 建议使用 Node.js 22.19 或更高的 22.x 版本、npm，以及已经启动的 Docker Desktop 或 Colima。当前完整部署主要在 Apple Silicon Mac 上使用，其他环境的限制见[安装说明](docs/SETUP.zh.md)。
