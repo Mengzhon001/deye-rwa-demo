@@ -13,6 +13,8 @@ COPY onchain onchain
 COPY offchain offchain
 COPY ui ui
 COPY docs/protocol docs/protocol
+COPY oracle/cre/monthly-bill/bill.ts oracle/cre/monthly-bill/deye-direct.ts oracle/cre/monthly-bill/
+COPY oracle/self-hosted/worker.ts oracle/self-hosted/tsconfig.json oracle/self-hosted/
 ENV DEYE_LOCAL_SOLC=1
 RUN npm run build --workspace onchain && npm run build --workspace offchain && npm run build --workspace ui
 

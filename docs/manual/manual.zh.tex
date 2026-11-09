@@ -266,9 +266,9 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 \subsection{业务应用}
 \url{https://sell-dec-sir-org.trycloudflare.com/networks/private/app/}\par
 \subsection{区块链浏览器}
-\url{https://quizzes-faces-simplified-discuss.trycloudflare.com}\par
+\url{https://cope-jim-itunes-emacs.trycloudflare.com}\par
 \subsection{钱包 RPC}
-\url{https://mazda-lopez-stevens-pittsburgh.trycloudflare.com}\par
+\url{https://affiliate-respond-shortly-technological.trycloudflare.com}\par
 测试网络Chain ID为20261008，Gas代币为DETH。首次登录时允许添加此网络，并核对当前RPC地址。隧道地址变化时需要更新RPC，但链编号、钱包地址和原链余额不变。127.0.0.1只指向使用者自己的电脑，远程同事不应使用本机端口地址。
 
 在业务交易确认后点击交易哈希，即可打开对应的Blockscout页面。也可以将完整交易哈希、钱包地址或合约地址粘贴到浏览器顶部的搜索框。先核对状态、发送者、目标合约和区块，再检查代币转账与事件。登录和协议消息签名属于链下步骤，不会产生交易记录。
@@ -417,7 +417,7 @@ npm run oracle:dry-run
 npm run oracle:validate-report
 npm run oracle:billable
 \end{verbatim}
-上述命令由持有本机受限配置的环境负责人执行。oracle:dry-run 只取数和计算，不提交交易。oracle:validate-report 登记仅验证报告；重复执行前应核对原报告及回执。oracle:billable 仅在政策获双受托批准、产品已结算且真实账期结束后运行。签名密钥与 Gas 提交账户分开保管，不进入浏览器、GitHub 或手册。售电回款仍由独立测试资金账户模拟，Oracle 报告不证明电网已经付款。
+上述命令由持有本机受限配置的环境负责人执行。oracle:dry-run 只取数和计算，不提交交易。oracle:validate-report 登记仅验证报告；重复执行前应核对原报告及回执。独立 Compose 环境还会启动常驻 Oracle 工作进程，每小时检查双受托批准、产品结算和真实账期截止日，条件满足后才读取 API 并提交可计费报告。oracle:billable 可供负责人手动检查同一流程。签名密钥与 Gas 提交账户分开保管，不进入浏览器、GitHub 或手册。售电回款仍由独立测试资金账户模拟，Oracle 报告不证明电网已经付款。
 
 \clearpage\section{本地部署与独立测试}
 \subsection{部署目的与默认环境}

@@ -16,8 +16,8 @@ Oracle 产品目前仍为发行准备状态。只有完成产品结算并到达�
 
 ## 现有私链演示的状态
 
-原私链 Anvil 数据卷未被本次 Oracle 部署修改。验收时发现其既有状态文件末尾损坏，导致原私链服务无法启动。现有可用备份的日期早于同事最近的测试交易。为避免覆盖这些记录，本次没有恢复旧备份；私链入口暂不可用，需另行决定数据恢复方式。原 Base Sepolia 服务及合约仍可访问。
+原私链 Anvil 数据卷未被本次 Oracle 部署修改。验收时发现其既有状态文件末尾损坏。经用户明确同意，已从 10 月 22 日的配套 Anvil、业务存储和 Blockscout 备份恢复私链；损坏前的现有数据另存于本机受限目录，以便核查。恢复后的 Chain ID 为 `20261008`，当前场景有一款已发布的投资者体验产品。10 月 22 日以后发生在原私链的测试交易不包含在恢复后的链上状态中。原 Base Sepolia 服务及合约未被重置。
 
 ## 运行与发布
 
-测试使用独立 Docker Compose 项目 `deye-oracle-base-sepolia` 和本机端口 `4198`。签名密钥、Gas 账户及德业 API 凭证只保存在 Git 忽略的本机受限文件中。公开页面只包含经过筛选的报告摘要、合约地址和交易链接。Cloudflare Quick Tunnel 地址会随重启变化，使用前应从 [GitHub Pages 入口](https://mengzhon001.github.io/deye-rwa-demo/)选择最新的测试环境地址。
+测试使用独立 Docker Compose 项目 `deye-oracle-base-sepolia` 和本机端口 `4198`。独立后台服务定时检查已批准参数和完整自然月数据，条件尚未满足时停止提交。签名密钥、Gas 账户及德业 API 凭证只保存在 Git 忽略的本机受限文件中。公开页面只包含经过筛选的报告摘要、合约地址和交易链接。Cloudflare Quick Tunnel 地址会随重启变化，使用前应从 [GitHub Pages 入口](https://mengzhon001.github.io/deye-rwa-demo/)选择最新的测试环境地址。

@@ -266,9 +266,9 @@ The unified entry currently shows the private demonstration, the original Base S
 \subsection{Business application}
 \url{https://sell-dec-sir-org.trycloudflare.com/networks/private/app/}\par
 \subsection{Blockchain explorer}
-\url{https://quizzes-faces-simplified-discuss.trycloudflare.com}\par
+\url{https://cope-jim-itunes-emacs.trycloudflare.com}\par
 \subsection{Wallet RPC}
-\url{https://mazda-lopez-stevens-pittsburgh.trycloudflare.com}\par
+\url{https://affiliate-respond-shortly-technological.trycloudflare.com}\par
 The test network Chain ID is 20261008 and its gas token is DETH. Check the current RPC when adding the network. A tunnel change requires a new RPC URL but does not change the chain, accounts or existing balances. The address 127.0.0.1 points to the reader’s own computer and is not a remote access address.
 
 Click a confirmed transaction hash to open its Blockscout page. Alternatively, paste a full hash, account or contract into the explorer search field. Check status, sender, target and block, followed by token transfers and events. Login and agreement message signatures are off-chain and do not create transaction records.
@@ -417,7 +417,7 @@ npm run oracle:dry-run
 npm run oracle:validate-report
 npm run oracle:billable
 \end{verbatim}
-The operator runs these commands using restricted local configuration. oracle:dry-run reads and calculates without submitting a transaction. oracle:validate-report registers a validation-only report; check the prior report and receipt before repeating it. oracle:billable runs only after both trustees approve the policy, the product settles and the real billing period ends. Reporter and gas-payer keys are stored separately and never enter the browser, GitHub or this manual. Export receipts remain simulated funding from an independent test account; an Oracle report does not prove payment by the grid.
+The operator runs these commands using restricted local configuration. oracle:dry-run reads and calculates without submitting a transaction. oracle:validate-report registers a validation-only report; check the prior report and receipt before repeating it. The isolated Compose environment also starts a persistent Oracle worker. It checks the two trustee approvals, product settlement and real monthly cutoff each hour. Only after those conditions pass does it read the API and submit a billable report. oracle:billable lets the operator inspect the same flow manually. Reporter and gas-payer keys are stored separately and never enter the browser, GitHub or this manual. Export receipts remain simulated funding from an independent test account; an Oracle report does not prove payment by the grid.
 
 \clearpage\section{Local deployment and independent testing}
 \subsection{Purpose and default environment}

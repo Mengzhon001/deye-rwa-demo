@@ -20,4 +20,4 @@
 
 ## 本机运行
 
-环境负责人在本机受限配置中保管 API 凭证、Oracle 签名密钥和 Gas 账户。`npm run oracle:dry-run` 只取数计算；`npm run oracle:validate-report` 登记仅验证报告；`npm run oracle:billable` 会检查双受托审批、产品结算和真实月度截止日。运行前应先用 `npm run oracle:check` 核对链与余额。以上密钥和原始观测记录均不进入公开源码、网页或手册。
+环境负责人在本机受限配置中保管 API 凭证、Oracle 签名密钥和 Gas 账户。独立 Compose 环境中的常驻 Oracle 工作进程每小时检查双受托审批、产品结算及真实月度截止日，只有条件满足后才读取 API 并提交可计费报告。`npm run oracle:dry-run` 只取数计算；`npm run oracle:validate-report` 登记仅验证报告；`npm run oracle:billable` 可手动检查同一计费流程。运行前应先用 `npm run oracle:check` 核对链与余额。以上密钥和原始观测记录均不进入公开源码、网页或手册。

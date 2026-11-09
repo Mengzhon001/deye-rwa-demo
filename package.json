@@ -124,6 +124,7 @@
     "oracle:watch": "node scripts/revenue-oracle-sepolia.mjs watch",
     "unified:init": "node scripts/revenue-unified.mjs init",
     "unified:start": "node scripts/revenue-unified.mjs start",
+    "unified:sync-origins": "node scripts/revenue-unified.mjs sync-origins",
     "unified:tunnel": "node scripts/revenue-unified.mjs tunnel",
     "unified:status": "node scripts/revenue-unified.mjs status",
     "unified:stop": "node scripts/revenue-unified.mjs stop",
@@ -137,5 +138,8 @@
   },
   "devDependencies": {
     "js-yaml": "4.1.0"
+  },
+  "dependencies": {
+    "viem": "2.54.2"
   }
 }

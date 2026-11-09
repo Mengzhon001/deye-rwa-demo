@@ -1,4 +1,4 @@
-import {readFileSync,writeFileSync,mkdirSync,existsSync,openSync,closeSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,existsSync,openSync,closeSync,cpSync,rmSync} from 'node:fs';
 import {resolve,join} from 'node:path';
 import {spawn,spawnSync} from 'node:child_process';
 import {checkUnifiedEntry} from '../infra/multinetwork/health.mjs';
@@ -9,8 +9,16 @@ const read=()=>JSON.parse(readFileSync(file));
 function pid(name){try{return JSON.parse(readFileSync(join(dir,name))).pid;}catch{return null;}}
 function running(p){if(!p)return false;try{process.kill(p,0);return true;}catch{return false;}}
 function stop(){const p=pid('process.json');if(running(p))process.kill(p,'SIGTERM');}
+function buildRuntimeSite(){
+ const result=spawnSync('npm',['run','build:site','--workspace','ui'],{cwd:root,env:{...process.env,REVENUE_SITE_BASE:'/'},stdio:'inherit'});
+ if(result.status!==0)throw Error('Could not build the unified runtime homepage');
+ const source=join(root,'ui/site-dist'),target=join(root,'ui/unified-dist');
+ rmSync(target,{recursive:true,force:true});cpSync(source,target,{recursive:true});
+ if(readFileSync(join(target,'index.html'),'utf8').includes('/deye-rwa-demo/site-assets/'))throw Error('Unified runtime site has a GitHub Pages base path');
+}
 async function start(){
  if(running(pid('process.json')))throw Error('Unified gateway already running');
+ buildRuntimeSite();
  const c=read();
  for(const n of c.networks){let healthy=false;for(let i=0;i<6;i++){try{const r=await fetch(n.upstream+'/api/network',{signal:AbortSignal.timeout(5000)});const j=await r.json();if(r.ok&&j.chainId===n.chainId&&(!j.environmentId||j.environmentId===n.id)){healthy=true;break;}}catch{}await new Promise(r=>setTimeout(r,1000));}if(!healthy){if(n.id==='oracle-base-sepolia')throw Error('Oracle backend unavailable: '+n.id);console.warn('Existing backend unavailable; gateway will return 503 for '+n.id);}}
  const fd=openSync(join(dir,'gateway.log'),'a',0o600),child=spawn(process.execPath,[join(root,'infra/multinetwork/gateway.mjs'),file],{detached:true,stdio:['ignore',fd,fd]});child.unref();closeSync(fd);save('process.json',{pid:child.pid});
@@ -29,10 +37,6 @@ async function init(){
 }
 function applyOrigins(c){
  for(const n of c.networks){
-  if(n.id==='private' && c.networks.some(item=>item.id==='oracle-base-sepolia')){
-    console.warn('Private demo data is being recovered; its container and origin settings are left untouched');
-    continue;
-  }
   const compose=JSON.parse(readFileSync(n.composeFile));
   const inCompose=typeof compose.services.app.environment?.REVENUE_ALLOWED_ORIGINS==='string';
   const target=inCompose?n.composeFile:n.envFile;
@@ -50,14 +54,14 @@ function applyOrigins(c){
  }
 }
 async function enableOracle(){
- const c=read();if(c.networks.some(n=>n.id==='oracle-base-sepolia')){c.site=join(root,'ui/site-dist');save('config.json',c);return console.log('Oracle environment and current site build configured');}
+ const c=read();if(c.networks.some(n=>n.id==='oracle-base-sepolia')){c.site=join(root,'ui/unified-dist');save('config.json',c);return console.log('Oracle environment and current site build configured');}
  const oracle=resolve(process.env.ORACLE_SEPOLIA_DATA_DIR||join(dataRoot,'.data/oracle-base-sepolia'));
  const envFile=join(oracle,'environment.env'),composeFile=join(oracle,'compose.json');
  const e=Object.fromEntries(readFileSync(envFile,'utf8').trim().split('\n').map(line=>{const i=line.indexOf('=');return[line.slice(0,i),line.slice(i+1)];}));
  if(e.REVENUE_CHAIN_ID!=='84532'||e.REVENUE_ENVIRONMENT_ID!=='oracle-base-sepolia'||e.REVENUE_ORACLE_MODE!=='self-hosted-signed-v1')throw Error('Oracle environment identity mismatch');
  const response=await fetch('http://127.0.0.1:4198/api/network',{signal:AbortSignal.timeout(30000)}),status=await response.json();
  if(!response.ok||status.chainId!==84532||status.environmentId!=='oracle-base-sepolia'||!status.oracleMode)throw Error('Oracle backend is not healthy');
- c.site=join(root,'ui/site-dist');
+ c.site=join(root,'ui/unified-dist');
  c.networks.push({id:'oracle-base-sepolia',chainId:84532,label:{zh:'Local Oracle on Sepolia',en:'Local Oracle on Sepolia'},upstream:'http://127.0.0.1:4198',cookieName:'revenue_session_4198',envFile,composeFile,project:'deye-oracle-base-sepolia'});
  save('config.json',c);console.log('Added independently verified Oracle backend; existing routes and stores unchanged.');
 }
@@ -83,8 +87,9 @@ try{
  if(command==='init')await init();
  else if(command==='enable-oracle')await enableOracle();
  else if(command==='start'){const c=read();applyOrigins(c);await start();}
+ else if(command==='sync-origins'){const c=read();applyOrigins(c);}
  else if(command==='tunnel')await tunnel();
  else if(command==='stop'){stop();const p=pid('tunnel.json');if(running(p))process.kill(p,'SIGTERM');}
  else if(command==='status'){const c=read(),health=await checkUnifiedEntry(c.publicApp);console.log(JSON.stringify({running:running(pid('process.json')),tunnel:running(pid('tunnel.json')),publicReachable:health.healthy,...(!health.healthy?{reason:health.reason,recovery:'Run unified:tunnel to replace an unreachable temporary endpoint'}:{}),app:c.publicApp||'http://127.0.0.1:'+c.port,networks:c.networks.map(n=>({id:n.id,chainId:n.chainId}))}));if(!health.healthy)process.exitCode=1;}
- else throw Error('Commands: init, start, tunnel, status, stop');
+ else throw Error('Commands: init, start, sync-origins, tunnel, status, stop');
 }catch(e){console.error(e.message);process.exitCode=1;}
