@@ -6,6 +6,7 @@ if(config.chainId!==84532||!old)throw Error('Explicit Base Sepolia and original 
 const response=await fetch(config.localApp+'/api/public/overview',{signal:AbortSignal.timeout(30000)});const status=await response.json();if(!response.ok||status.chainId!==84532||!status.chainAvailable)throw Error('Original Base Sepolia backend is not healthy');
 const oracleHealth=await fetch('http://127.0.0.1:4198/api/public/overview',{signal:AbortSignal.timeout(30000)});const oracleStatus=await oracleHealth.json();if(!oracleHealth.ok||oracleStatus.chainId!==84532||oracleStatus.environmentId!=='oracle-base-sepolia'||!oracleStatus.chainAvailable)throw Error('Oracle Base Sepolia backend is not healthy');
 let html=readFileSync(join(out,'index.html'),'utf8').replace(/<link[^>]*href="\/wallet-login.css"[^>]*>/g,'').replace(/<script[^>]*src="\/wallet-login.js"[^>]*><\/script>/g,'');
+if(!html.includes('src="/deye-rwa-demo/site-assets/')||!html.includes('href="/deye-rwa-demo/site-assets/'))throw Error('Build GitHub Pages with REVENUE_SITE_BASE=/deye-rwa-demo/ before staging');
 writeFileSync(join(out,'index.html'),html);
 const nav=JSON.parse(readFileSync(join(root,'docs/protocol/navigation.json')));
 for(const lang of['zh','en'])for(const slug of['',...nav]){const folder=join(out,'docs',lang,slug);mkdirSync(folder,{recursive:true});writeFileSync(join(folder,'index.html'),html);}
