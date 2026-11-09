@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "app": "https://reuters-romance-arranged-bloggers.trycloudflare.com",
+  "app": "https://sell-dec-sir-org.trycloudflare.com",
   "networks": [
     {
       "id": "private",
@@ -17,7 +17,15 @@
         "zh": "Base Sepolia",
         "en": "Base Sepolia"
       }
+    },
+    {
+      "id": "oracle-base-sepolia",
+      "chainId": 84532,
+      "label": {
+        "zh": "Local Oracle on Sepolia",
+        "en": "Local Oracle on Sepolia"
+      }
     }
   ],
-  "updatedAt": "2026-10-30T02:19:29.356Z"
+  "updatedAt": "2026-11-09T11:53:53.746Z"
 }
