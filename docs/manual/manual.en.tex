@@ -16,11 +16,11 @@
 \begin{document}
 \hypersetup{pdftitle={Deye RWA Platform Product and Operating Manual},pdfauthor={Deye RWA}}
 \begin{center}\textbf{Deye RWA Platform Product and Operating Manual}\end{center}
-Internal test edition, 30 October 2026
+Internal test edition, 9 November 2026
 
 This manual explains how the four participant roles use wallets to complete applications, valuation, fundraising, settlement, monthly distributions and exits. Equipment remains the owner’s property. Investors acquire shares in finite revenue rights, with no fixed coupon or guaranteed repayment of their original investment. All payments use demonstration funds.
 
-The instructions cover the dynamic guide, household wallet payments and V5 monthly-distribution release. The unified website provides the private demonstration on Chain ID 20261008 and public-chain testing on Base Sepolia, Chain ID 84532. Screenshots come from isolated tests and may show different contracts, balances or dates from the shared product. Check the product, account and network before acting.
+The instructions cover dynamic guidance, household wallet payments, monthly distributions and the separate self-hosted Oracle test environment. The unified site has three environments, two on Base Sepolia with Chain ID 84532 and one private demo on Chain ID 20261008. Screenshots come from isolated tests and may show different contracts, balances or dates. Verify the environment, product and wallet before acting.
 
 Every illustrated workflow step uses the English interface. The monthly payment and reconciliation images were captured for this release; unchanged issuance, exit and closure images retain the verified English captures. Station names use English display translations without changing energy observations. These examples do not imply that the shared product has reached the illustrated stage.
 
@@ -28,16 +28,17 @@ The payment release is tested through two consecutive months of household paymen
 
 \renewcommand{\contentsname}{Contents}\clearpage\tableofcontents
 \clearpage\section{Testing approaches and their purposes}
-There are three ways to use the system: the shared private demonstration, the Base Sepolia public-chain environment, and an independent deployment on your own computer. Select an approach according to the test objective rather than assuming that similar pages share the same environment. The private chain supports the complete business lifecycle under a controlled clock. Base Sepolia validates contracts and wallets under public-chain conditions and establishes a baseline for later oracle integration. A local deployment supports development, independent reproduction and regression testing.
+The unified site offers three business environments: the private demonstration, the original Base Sepolia product, and Local Oracle on Sepolia. A separate local deployment is also available. The private chain supports the complete lifecycle under a controlled clock. The original Base Sepolia product tests public-chain compatibility. The Oracle environment tests Deye API retrieval, signed report registration, and mandatory verification by the new billing contract. A local deployment supports development and regression testing.
 
 Local deployment is a hosting approach, not a third public blockchain. The default local profile creates its own private Anvil chain. The shared private chain and a new local chain run the same business logic but have different Chain IDs, contracts, account configuration and storage. Conversely, a backend running on your computer but connected to Base Sepolia is still a public-chain test and cannot advance or reset that chain.
 
 \begin{longtable}{L{2.5cm}L{4.2cm}L{4.5cm}L{3cm}}\toprule Approach & Main purpose & Recommended checks & Time and funding\\\midrule\endhead
 Shared private demo & Complete lifecycle demonstrations and multi-role business acceptance. & Applications, issuance, monthly payments, distributions, transfers, redemptions, servicing and closure. & 20261008; test mUSDC; intermediary-controlled demo time.\\\addlinespace
 Base Sepolia & Public-chain compatibility and a baseline for later oracle integration. & Wallets, gas, Circle USDC, approvals, subscriptions, refunds, receipts and recovery. & 84532; test ETH and USDC; real chain time.\\\addlinespace
+Local Oracle on Sepolia & Validate the independent self-hosted Oracle product and enforced report checks. & Direct Deye API reads, EIP-712 signing, on-chain registration and trustee policy approval. & Also 84532; wallet test-token balances are shared with the original Base product.\\\addlinespace
 Independent local deployment & Code changes, issue reproduction and repeatable isolated regression. & Build a product from an empty scene and check the UI, model, permissions and workflow. & Default 20260922; independent wallets and local test tokens.\\\addlinespace
 \bottomrule\end{longtable}
-The shared private chain and Base Sepolia reuse the business-role addresses, but balances, eligibility and holdings remain independent on each chain. A colleague initializing a fresh deployment receives another set of local accounts and must not substitute the shared-environment addresses. Record the Chain ID, wallet address, product contract and starting state for every test.
+The three business environments reuse the role addresses. Token balances are separate between the private chain and Base Sepolia. The two Base Sepolia environments share the same chain, so test ETH and Circle USDC balances in a given wallet are shared. Product contracts, eligibility, holdings, records and sign-in sessions remain isolated by environment. A fresh local instance normally generates different accounts.
 
 \clearpage
 \subsection{Selecting a test path}
@@ -46,14 +47,14 @@ The shared private chain and Base Sepolia reuse the business-role addresses, but
 \node[box] (private) at (0,-2.8) {Full lifecycle and handoffs};
 \node[box] (privateout) at (0,-5.6) {Shared private chain and illustrated steps A to H};
 \draw[->] (goal.south)--(private.north);\draw[->] (private.south)--(privateout.north);
-\node[box] (base) at (5,-2.8) {Public-chain tests and future oracle preparation};
-\node[box] (baseout) at (5,-5.6) {Small Base Sepolia transactions and reconciliation};
+\node[box] (base) at (5,-2.8) {Public-chain and Oracle tests};
+\node[box] (baseout) at (5,-5.6) {Reconcile the two Base Sepolia environments separately};
 \draw[->] (goal.south)--(base.north);\draw[->] (base.south)--(baseout.north);
 \node[box] (local) at (10,-2.8) {Development, reproduction and isolated regression};
 \node[box] (localout) at (10,-5.6) {Local Docker, independent chain and test wallets};
 \draw[->] (goal.south)--(local.north);\draw[->] (local.south)--(localout.north);
 \end{tikzpicture}\end{center}
-Readers learning the product or checking role handoffs can start with the shared private chain. Use your own local instance for code changes or an issuance from an empty scene. Prepare Base Sepolia test ETH and Circle test USDC when checking public-chain behavior or preparing the later oracle integration. Separate chapters explain each path; the subsequent full workflow illustrations apply to private and local environments according to their current state.
+Use the private-chain illustrations for the full lifecycle. Choose the original Base Sepolia product for public-chain transactions and the third entry for Oracle reports. Both public-chain environments follow real chain time; demonstration controls cannot bring a monthly bill forward.
 
 \clearpage\section{Product states and role handoffs}
 A product starts as a draft, opens fundraising after approval and issues DRS only on successful settlement. It then enters servicing. Failed fundraising allows refunds, and a live product is reconciled and closed when its rights expire. Contract deployment is distinct from publication, and escrowed subscriptions are distinct from issued shares.
@@ -257,13 +258,13 @@ The demo operator supplies the private key through an internal channel. It is ex
 \end{landscape}
 \clearpage\section{Website, network and blockchain explorer}
 \subsection{Unified public entry}
-\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/}\par
-The addresses below were checked on 30 October 2026. The unified entry provides network selection for the private demonstration and Base Sepolia. Cloudflare temporary domains can change. If a bookmarked direct address stops working, open the public homepage and click Launch App to obtain the current entry.
+\url{https://sell-dec-sir-org.trycloudflare.com/}\par
+The unified entry currently shows the private demonstration, the original Base Sepolia product and Local Oracle on Sepolia. Cloudflare addresses are temporary and may change; use the public homepage to find the current entry. If the private service is under maintenance, its unavailability does not imply an Oracle-environment failure.
 
 \subsection{Public homepage}
 \url{https://mengzhon001.github.io/deye-rwa-demo}\par
 \subsection{Business application}
-\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/private/app/}\par
+\url{https://sell-dec-sir-org.trycloudflare.com/networks/private/app/}\par
 \subsection{Blockchain explorer}
 \url{https://quizzes-faces-simplified-discuss.trycloudflare.com}\par
 \subsection{Wallet RPC}
@@ -273,7 +274,7 @@ The test network Chain ID is 20261008 and its gas token is DETH. Check the curre
 Click a confirmed transaction hash to open its Blockscout page. Alternatively, paste a full hash, account or contract into the explorer search field. Check status, sender, target and block, followed by token transfers and events. Login and agreement message signatures are off-chain and do not create transaction records.
 
 \subsection{Network selection and session isolation}
-One business website now provides access to the private demonstration and Base Sepolia. Select a network on the GitHub homepage and click Launch App. The network button in the upper-right corner shows the current chain. Its menu explains each chain and its Chain ID. Network selection is also available in the sign-in dialog, before authentication.
+Select an environment on the GitHub homepage and click Launch App. The network button in the application lists three environments and their Chain IDs. Both Base Sepolia entries use 84532. A switch between them does not require changing the wallet chain, but requires a new sign-in signature; records and sessions are not merged. The sign-in dialog also offers environment selection.
 
 After the wallet signature is verified, the role workspace and navigation appear first. Product metadata, wallet balances and saved records load independently. Transaction controls remain unavailable until the required business state is loaded, and a pending amount does not mean zero. An unavailable section can be retried separately. If business-state loading fails, sign-in is retained without repeatedly connecting or signing again.
 
@@ -287,7 +288,7 @@ The shared private demonstration checks the complete handoff of the revenue-righ
 Obtain the role test accounts from the operator and agree which product the group will use. A full walkthrough requires an owner, intermediary, investors A/B and trustees A/B. An investor-only check can use a prepared product that is published and still fundraising, without repeating the application and issuance preparation. If the product is already active, primary fundraising subscriptions are closed; select another fundraising product or ask the operator to prepare a new scene.
 
 \subsection{Entry and network confirmation}
-\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/private/app/}\par
+\url{https://sell-dec-sir-org.trycloudflare.com/networks/private/app/}\par
 Click Launch App on the public homepage and select Private demo in the upper-right network menu. Verify Chain ID 20261008 in Rabby, select the intended role and sign in. Check the product name and vault address. Wallet funds, escrowed orders and issued DRS are separate records. Claiming demo funds increases the wallet balance but does not submit a subscription.
 
 \subsection{Direct investor testing}
@@ -316,13 +317,13 @@ Products in the shared environment use the same chain clock. Advancing it can ex
 \clearpage\section{Base Sepolia public-chain testing}
 The original public demonstration remains the environment for the full accelerated lifecycle. Base Sepolia is a separate environment for public-chain contracts and wallet transactions. Role addresses are shared, but contracts, balances and workflow records are independent. The complete lifecycle screenshots later in this manual illustrate the private-chain demonstration. Public-chain testing follows the real-time and funding restrictions in this section.
 
-\subsection{Test objectives and later oracle integration}
+\subsection{Test objectives and the separate Oracle environment}
 Base Sepolia checks whether the business code handles wallet signatures, gas, Circle USDC approvals and transfers, contract calls, event reads and recovery on a real public chain. It also provides the foundation for later oracle integration, where report receivers, report digests, billing-period binding, permissions and failure handling can be tested on the same public test chain without disturbing the private-chain demonstration.
 
-The current deployment has no oracle integration. Present tests validate public-chain transactions and the existing report workflow; they do not establish independent oracle certification of station data. The later implementation must add off-chain retrieval and validation, report signatures or attestations, and on-chain receipt and enforcement, followed by deployment and testing of the affected components. An oracle attestation does not itself prove household payment; USDC receipts still require separate transaction reconciliation.
+The original Base Sepolia product in this chapter still uses its earlier billing contract and does not verify Oracle reports. The new feature belongs to another isolated product with a new billing contract, described in the next chapter. Both use Base Sepolia, but their business records must not be mixed.
 
 \subsection{Entry and network configuration}
-Public-chain application\par\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/base-sepolia/app/}\par
+Public-chain application\par\url{https://sell-dec-sir-org.trycloudflare.com/networks/base-sepolia/app/}\par
 Public-chain explorer\par\url{https://base-sepolia.blockscout.com}\par
 Wallet RPC\par\url{https://sepolia.base.org}\par
 The Chain ID is 84532, gas is paid in test ETH, and payments use Circle test USDC. The homepage and application share one network-selection entry. Select Base Sepolia and verify the wallet network before signing in.
@@ -361,7 +362,7 @@ This round is complete when actual transaction amounts agree with business recor
 \subsection{Real time and testing scope}
 The application cannot advance public-chain time. Monthly billing requires a settled product and the end of the relevant service period. The six-month transfer lock, redemption notice period and expiry remain unchanged. Reset and time-advance controls are therefore unavailable. Use the original public private-chain environment for the complete accelerated lifecycle.
 
-Household monthly payments use Circle test USDC. Grid-export receipts remain a separately disclosed economic simulation, funded from a prefunded independent treasury. Station observations use fixed recorded evidence; tariffs and future cashflows remain modeling assumptions. No oracle is added by this deployment, so anchoring a report does not independently validate API data.
+The original Base Sepolia product uses Circle test USDC for household payments. Grid-export receipts remain a disclosed economic simulation funded from a separate account. The original product has no mandatory Oracle verification in billing. The separate Oracle product and its data retrieval, signing and enforcement are described next.
 
 \clearpage
 \subsection{Transaction checks and recovery}
@@ -376,6 +377,48 @@ Monthly billing contract\par\nolinkurl{0xa2748E730069A38913b5E2e09a45C5aB546a090
 \clearpage\begin{landscape}
 \begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-wallet.en.png}\par Wallet balances and official-faucet instructions. The backend does not mint Circle USDC.\end{center}
 \end{landscape}
+\clearpage\section{Local Oracle on Sepolia testing}
+The third network-menu entry is Local Oracle on Sepolia. It runs on the same public Base Sepolia chain as the original product, with Chain ID 84532; it is not a third chain. Role wallets and their test ETH and Circle USDC balances are shared, while contracts, products, sign-in sessions and business records are isolated. Switching between the two environments does not require a chain switch, but it does require a new sign-in signature for the target backend.
+
+\subsection{Entry point and contracts}
+\url{https://sell-dec-sir-org.trycloudflare.com/networks/oracle-base-sepolia/app/}\par
+\url{https://base-sepolia.blockscout.com}\par
+Station credential\par\nolinkurl{0x18a88350eb54FD2A98902509DF110851097c6a9b}\par\smallskip
+Isolated vault\par\nolinkurl{0x0479eB8a2bb68D23bAa88de32B27Af63bFCf0C32}\par\smallskip
+Report registry\par\nolinkurl{0x49a3b54c2972786987B24dC44490332bcb5D41c6}\par\smallskip
+Enforced billing contract\par\nolinkurl{0xFa650D2619452E1763695c780F478bDeA7027D28}\par\smallskip
+This environment uses the same Circle test USDC contract as the original Base Sepolia product. Check the Chain ID, role account, product and transaction destination in the wallet. The read-only Oracle reports page shows the observation month, source and parameter digests, reporter and registration transaction. It does not reveal Deye API credentials or raw observations.
+
+\subsection{Data and transaction flow}
+\begin{center}\begin{tikzpicture}[>=Latex,box/.style={draw,align=center,text width=10cm,minimum height=1.05cm}]
+\node[box] (api) at (0,0.0) {Deye read-only API and complete-calendar-month checks};
+\node[box] (sign) at (0,-1.65) {Local Oracle signs an EIP-712 report with its separate key};
+\draw[->] (api.south)--(sign.north);
+\node[box] (registry) at (0,-3.3) {Base Sepolia registry and two trustee parameter approvals};
+\draw[->] (sign.south)--(registry.north);
+\node[box] (billing) at (0,-4.949999999999999) {New billing contract verifies and consumes the report atomically};
+\draw[->] (registry.south)--(billing.north);
+\node[box] (pay) at (0,-6.6) {Owner pays Circle USDC; intermediary separately reconciles simulated export funds};
+\draw[->] (billing.south)--(pay.north);
+\end{tikzpicture}\end{center}
+The Oracle service reads the authorized Deye API directly, checks each day and reconciles daily and monthly totals, then calculates six-decimal USDC amounts using the approved parameters. Missing data, an API failure or a parameter mismatch stops submission; there is no replay or synthetic fallback. A labeled recorded capture may support initial product preparation but cannot replace a monthly Oracle report. Deye has not digitally signed these observations, so the report proves checking and signing by our self-hosted Oracle, not independent certification by Deye or Chainlink.
+
+\subsection{Completed checks and the later billing period}
+As of 9 November 2026, the Oracle has actually read the complete August 2026 calendar month from the Deye API, signed a historical report and registered it on Base Sepolia. It is explicitly validation-only; the new billing contract rejects it as a source of a household bill. The registration transaction and report ID below can be checked independently in the Base Sepolia explorer.
+
+Report ID\par\nolinkurl{0x27a8e1073e45d570c03dcd07c48efe5f655ad23f37b045ef277359c323f7a965}\par
+Registration transaction\par\nolinkurl{0x3df71ae9d301c9a5736316fac0857e9f1507549492f5c39e6a79be41cf51e411}\par
+The new product still requires issuance, fundraising conditions and settlement. After settlement, the first complete calendar month is set, and trustees A and B separately approve the station, first observation month and parameter digest in their review queue. Only after both the service period and matching observation month end may the Oracle submit a billable report. The intermediary then generates the bill from that report, the owner pays USDC, and the intermediary confirms pool receipt before expenses and investor distributions follow actual cash. The full billable-report-to-distribution sequence has not yet passed on-chain acceptance. Historical report registration is not evidence of actual monthly collection.
+
+\subsection{Operation, reconciliation and limits}
+\begin{verbatim}
+npm run oracle:check
+npm run oracle:dry-run
+npm run oracle:validate-report
+npm run oracle:billable
+\end{verbatim}
+The operator runs these commands using restricted local configuration. oracle:dry-run reads and calculates without submitting a transaction. oracle:validate-report registers a validation-only report; check the prior report and receipt before repeating it. oracle:billable runs only after both trustees approve the policy, the product settles and the real billing period ends. Reporter and gas-payer keys are stored separately and never enter the browser, GitHub or this manual. Export receipts remain simulated funding from an independent test account; an Oracle report does not prove payment by the grid.
+
 \clearpage\section{Local deployment and independent testing}
 \subsection{Purpose and default environment}
 A local deployment lets developers reproduce issues, change the model and contracts, validate the interface and repeat a walkthrough from an empty scene. It needs no public tunnel and does not depend on the demonstration operator's Mac staying online. The commands below assume a fresh clone in an independent directory, not a working directory already hosting the shared demonstration.

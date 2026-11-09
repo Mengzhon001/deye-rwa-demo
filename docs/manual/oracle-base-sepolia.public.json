@@ -1,0 +1,20 @@
+{
+  "environmentId": "oracle-base-sepolia",
+  "app": "https://sell-dec-sir-org.trycloudflare.com/networks/oracle-base-sepolia/app/",
+  "chainId": 84532,
+  "explorer": "https://base-sepolia.blockscout.com",
+  "usdc": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+  "contracts": {
+    "station": "0x18a88350eb54FD2A98902509DF110851097c6a9b",
+    "vault": "0x0479eB8a2bb68D23bAa88de32B27Af63bFCf0C32",
+    "billing": "0xFa650D2619452E1763695c780F478bDeA7027D28",
+    "oracleRegistry": "0x49a3b54c2972786987B24dC44490332bcb5D41c6"
+  },
+  "validationReport": {
+    "observationMonth": "2026-08",
+    "reportId": "0x27a8e1073e45d570c03dcd07c48efe5f655ad23f37b045ef277359c323f7a965",
+    "registrationTransaction": "0x3df71ae9d301c9a5736316fac0857e9f1507549492f5c39e6a79be41cf51e411",
+    "purpose": "validation-only"
+  },
+  "checkedAt": "2026-11-09"
+}

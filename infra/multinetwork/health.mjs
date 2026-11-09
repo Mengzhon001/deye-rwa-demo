@@ -6,9 +6,10 @@ export async function checkUnifiedEntry(app, request = fetch) {
     });
     if (!response.ok) throw Error('HTTP ' + response.status);
     const data = await response.json();
-    if (data.version !== 1 || data.networks?.length !== 2 ||
+    if (data.version !== 1 || ![2,3].includes(data.networks?.length) ||
         !data.networks.some(n => n.id === 'private' && n.chainId === 20261008) ||
-        !data.networks.some(n => n.id === 'base-sepolia' && n.chainId === 84532)) {
+        !data.networks.some(n => n.id === 'base-sepolia' && n.chainId === 84532) ||
+        data.networks.length === 3 && !data.networks.some(n => n.id === 'oracle-base-sepolia' && n.chainId === 84532)) {
       throw Error('Public network descriptor mismatch');
     }
     return { healthy: true };

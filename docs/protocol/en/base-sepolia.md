@@ -1,5 +1,7 @@
 # Independent Base Sepolia test environment
 
+This chapter covers the original Base Sepolia product. The unified site also offers [Local Oracle on Sepolia](oracle-base-sepolia), an isolated product on the same Chain ID 84532 with a separate report registry and billing contract. Test ETH and Circle USDC balances in a given wallet are shared, while product records and sessions remain separate.
+
 ## Purpose and entry points
 
 This environment checks deployment, wallet authentication, permissions and stablecoin transactions on a public EVM testnet. The existing public private-chain demonstration remains available for the complete lifecycle. Its products, balances and financial clock are unaffected by these tests. Both chains now share one website. Select the network before clicking Launch App, or use the current-network button in the upper-right corner of the application to switch between the private demonstration and Base Sepolia.
@@ -34,7 +36,7 @@ This environment therefore validates public-chain operation rather than compress
 
 Open a confirmed transaction hash in Blockscout. Check the network, receipt status, sender, destination, method, decoded events and USDC transfers against the application record. Wallet submission, chain confirmation and explorer indexing are separate states. An indexing delay does not reverse a successful transaction.
 
-Station inputs are a fixed replay of previously collected real evidence. Tariffs, expenses, exchange rates, delivery factors and future cashflows remain disclosed modeling assumptions. Anchoring a digest does not turn a forecast into collected cash or establish that API observations are correct. This deployment does not include Chainlink or another oracle. Independent trustee review remains part of the current approval process.
+Station inputs are a fixed replay of previously collected real evidence. Tariffs, expenses, exchange rates, delivery factors and future cashflows remain disclosed modeling assumptions. Anchoring a digest does not turn a forecast into collected cash or establish that API observations are correct. This original product does not enforce Oracle reports in billing. The separate self-hosted Oracle environment can register signed reports, as its own chapter explains. It is not a Chainlink-operated service.
 
 ## Deployment and recovery
 

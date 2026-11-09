@@ -7,8 +7,13 @@ const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=
 const assetAliases={'/guidance-driver.js':'vendor/driver-1.9.0.js','/guidance-driver.css':'vendor/driver-1.9.0.css'};
 export function createGateway(config) {
   const networks=config.networks;
-  if(networks.length!==2 || networks.some(n=>!['private','base-sepolia'].includes(n.id)) || new Set(networks.map(n=>n.chainId)).size!==2)throw Error('Two distinct, configured test networks required');
-  for(const n of networks){const u=new URL(n.upstream);if(!['127.0.0.1','localhost','host.docker.internal'].includes(u.hostname)||u.protocol!=='http:'||u.pathname!=='/')throw Error('Only fixed local application backends are allowed');}
+  const expected={'private':20261008,'base-sepolia':84532,'oracle-base-sepolia':84532};
+  if(![2,3].includes(networks.length)||new Set(networks.map(n=>n.id)).size!==networks.length||
+    networks.some(n=>expected[n.id]!==n.chainId)||!networks.some(n=>n.id==='private')||!networks.some(n=>n.id==='base-sepolia')||
+    networks.length===3&&!networks.some(n=>n.id==='oracle-base-sepolia')||
+    new Set(networks.map(n=>n.cookieName)).size!==networks.length||new Set(networks.map(n=>n.upstream)).size!==networks.length)
+    throw Error('Invalid isolated application environments');
+  for(const n of networks){const u=new URL(n.upstream);if(!['127.0.0.1','localhost','host.docker.internal'].includes(u.hostname)||u.protocol!=='http:'||u.pathname!=='/'||u.search||u.hash)throw Error('Only fixed local application backends are allowed');}
   const hosts=new Set(config.origins.map(o=>new URL(o).host));
   const publicOrigins=new Set(config.publicReadOrigins||[]);
   const assets=resolve(config.assets),site=resolve(config.site);
@@ -20,7 +25,7 @@ export function createGateway(config) {
     res.setHeader('Content-Security-Policy',"default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'; connect-src 'self'; frame-ancestors 'none'");
     const json=(status,data)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
     if(path==='/networks.json'&&req.method==='GET')return json(200,{version:1,defaultNetwork:'private',networks:networks.map(({id,chainId,label})=>({id,chainId,label,appPath:`/networks/${id}/app/`}))});
-    const match=path.match(/^\/networks\/(private|base-sepolia)(\/.*)$/);
+    const match=path.match(/^\/networks\/(private|base-sepolia|oracle-base-sepolia)(\/.*)$/);
     const network=networks.find(n=>n.id===(match?.[1]||'private'));
     const localPath=match?.[2]||path;
     const publicRead=['/api/public/overview','/api/public/deployment'].includes(localPath);

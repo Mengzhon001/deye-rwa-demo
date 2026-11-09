@@ -1,0 +1,8 @@
+*.env
+*.env.*
+!*.env.example
+binary.wasm*
+*.wasm
+*.private.json
+node_modules/
+.cre_build_tmp*

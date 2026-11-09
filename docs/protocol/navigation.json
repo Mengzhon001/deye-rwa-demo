@@ -12,5 +12,6 @@
   "architecture",
   "walkthrough",
   "limitations",
-  "base-sepolia"
+  "base-sepolia",
+  "oracle-base-sepolia"
 ]

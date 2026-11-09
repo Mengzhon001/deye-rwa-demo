@@ -2,7 +2,7 @@ import {readFileSync,writeFileSync,mkdirSync,existsSync,openSync,closeSync} from
 import {resolve,join} from 'node:path';
 import {spawn,spawnSync} from 'node:child_process';
 import {checkUnifiedEntry} from '../infra/multinetwork/health.mjs';
-const root=resolve(import.meta.dirname,'..'),dir=resolve(process.env.REVENUE_UNIFIED_DATA_DIR||join(root,'.data/unified-app'));
+const root=resolve(import.meta.dirname,'..'),dataRoot=existsSync(join(root,'.data/unified-app/config.json'))?root:resolve(root,'../..'),dir=resolve(process.env.REVENUE_UNIFIED_DATA_DIR||join(dataRoot,'.data/unified-app'));
 const file=join(dir,'config.json');
 function save(name,value){writeFileSync(join(dir,name),JSON.stringify(value,null,2)+'\n',{mode:0o600});}
 const read=()=>JSON.parse(readFileSync(file));
@@ -12,7 +12,7 @@ function stop(){const p=pid('process.json');if(running(p))process.kill(p,'SIGTER
 async function start(){
  if(running(pid('process.json')))throw Error('Unified gateway already running');
  const c=read();
- for(const n of c.networks){let healthy=false;for(let i=0;i<60;i++){try{const r=await fetch(n.upstream+'/api/network',{signal:AbortSignal.timeout(5000)});if(r.ok&&(await r.json()).chainId===n.chainId){healthy=true;break;}}catch{}await new Promise(r=>setTimeout(r,1000));}if(!healthy)throw Error('Backend network mismatch or unavailable: '+n.id);}
+ for(const n of c.networks){let healthy=false;for(let i=0;i<6;i++){try{const r=await fetch(n.upstream+'/api/network',{signal:AbortSignal.timeout(5000)});const j=await r.json();if(r.ok&&j.chainId===n.chainId&&(!j.environmentId||j.environmentId===n.id)){healthy=true;break;}}catch{}await new Promise(r=>setTimeout(r,1000));}if(!healthy){if(n.id==='oracle-base-sepolia')throw Error('Oracle backend unavailable: '+n.id);console.warn('Existing backend unavailable; gateway will return 503 for '+n.id);}}
  const fd=openSync(join(dir,'gateway.log'),'a',0o600),child=spawn(process.execPath,[join(root,'infra/multinetwork/gateway.mjs'),file],{detached:true,stdio:['ignore',fd,fd]});child.unref();closeSync(fd);save('process.json',{pid:child.pid});
  for(let i=0;i<30;i++){try{const r=await fetch('http://127.0.0.1:'+c.port+'/networks.json');if(r.ok)return;}catch{}await new Promise(r=>setTimeout(r,200));}throw Error('Unified gateway did not start; inspect its private log');
 }
@@ -29,6 +29,10 @@ async function init(){
 }
 function applyOrigins(c){
  for(const n of c.networks){
+  if(n.id==='private' && c.networks.some(item=>item.id==='oracle-base-sepolia')){
+    console.warn('Private demo data is being recovered; its container and origin settings are left untouched');
+    continue;
+  }
   const compose=JSON.parse(readFileSync(n.composeFile));
   const inCompose=typeof compose.services.app.environment?.REVENUE_ALLOWED_ORIGINS==='string';
   const target=inCompose?n.composeFile:n.envFile;
@@ -39,10 +43,23 @@ function applyOrigins(c){
   if(inCompose){compose.services.app.environment.REVENUE_ALLOWED_ORIGINS=origins.join(',');text=JSON.stringify(compose,null,2)+'\n';}
   else text=text.replace(/^REVENUE_ALLOWED_ORIGINS=.*$/m,'REVENUE_ALLOWED_ORIGINS='+origins.join(','));
 
+  if(text===original)continue;
   const backup=join(dir,n.id+'.environment.before.private.json');if(!existsSync(backup))writeFileSync(backup,JSON.stringify({target,contents:original}),{mode:0o600});
   writeFileSync(target,text,{mode:0o600});
   const result=spawnSync('docker-compose',['--env-file',n.envFile,'-p',n.project,'-f',n.composeFile,'up','-d','--no-build','--no-deps','--force-recreate','app'],{stdio:'inherit'});if(result.status!==0)throw Error('Could not reload backend origin configuration');
  }
+}
+async function enableOracle(){
+ const c=read();if(c.networks.some(n=>n.id==='oracle-base-sepolia')){c.site=join(root,'ui/site-dist');save('config.json',c);return console.log('Oracle environment and current site build configured');}
+ const oracle=resolve(process.env.ORACLE_SEPOLIA_DATA_DIR||join(dataRoot,'.data/oracle-base-sepolia'));
+ const envFile=join(oracle,'environment.env'),composeFile=join(oracle,'compose.json');
+ const e=Object.fromEntries(readFileSync(envFile,'utf8').trim().split('\n').map(line=>{const i=line.indexOf('=');return[line.slice(0,i),line.slice(i+1)];}));
+ if(e.REVENUE_CHAIN_ID!=='84532'||e.REVENUE_ENVIRONMENT_ID!=='oracle-base-sepolia'||e.REVENUE_ORACLE_MODE!=='self-hosted-signed-v1')throw Error('Oracle environment identity mismatch');
+ const response=await fetch('http://127.0.0.1:4198/api/network',{signal:AbortSignal.timeout(30000)}),status=await response.json();
+ if(!response.ok||status.chainId!==84532||status.environmentId!=='oracle-base-sepolia'||!status.oracleMode)throw Error('Oracle backend is not healthy');
+ c.site=join(root,'ui/site-dist');
+ c.networks.push({id:'oracle-base-sepolia',chainId:84532,label:{zh:'Local Oracle on Sepolia',en:'Local Oracle on Sepolia'},upstream:'http://127.0.0.1:4198',cookieName:'revenue_session_4198',envFile,composeFile,project:'deye-oracle-base-sepolia'});
+ save('config.json',c);console.log('Added independently verified Oracle backend; existing routes and stores unchanged.');
 }
 async function tunnel(){
  const binary=process.env.BASE_CLOUDFLARED;if(!binary)throw Error('Set BASE_CLOUDFLARED to the local cloudflared executable');
@@ -64,6 +81,7 @@ async function tunnel(){
 const command=process.argv[2]||'status';
 try{
  if(command==='init')await init();
+ else if(command==='enable-oracle')await enableOracle();
  else if(command==='start'){const c=read();applyOrigins(c);await start();}
  else if(command==='tunnel')await tunnel();
  else if(command==='stop'){stop();const p=pid('tunnel.json');if(running(p))process.kill(p,'SIGTERM');}

@@ -1,0 +1,17 @@
+# Local-only target. Live deployment needs a separately reviewed configuration.
+local-shadow:
+  user-workflow:
+    workflow-name: deye-monthly-bill-shadow
+    deployment-registry: private
+  workflow-artifacts:
+    workflow-path: ./main.ts
+    config-path: ./config.example.json
+    secrets-path: ""
+direct-settings:
+  user-workflow:
+    workflow-name: deye-monthly-direct-validation
+    deployment-registry: private
+  workflow-artifacts:
+    workflow-path: ./main-direct.ts
+    config-path: ./config.direct.example.json
+    secrets-path: ../secrets.yaml

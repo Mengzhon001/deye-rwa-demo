@@ -74,7 +74,10 @@ const entries = [
   ["contracts/revenue/RevenueShareVaultV4.sol", "RevenueShareVaultV4"],
   ["contracts/revenue/RevenueShareVaultV5.sol", "RevenueShareVaultV5"],
   ["contracts/revenue/HouseholdBilling.sol", "HouseholdBilling"],
+  ["contracts/revenue/OracleReportRegistry.sol", "OracleReportRegistry"],
+  ["contracts/revenue/HouseholdBillingV2.sol", "HouseholdBillingV2"],
   ["contracts/mocks/MockUSDC.sol", "MockUSDC"],
+  ["contracts/mocks/MockOracleVault.sol", "MockOracleVault"],
 ];
 const contracts = [],
   sources = {};
@@ -118,6 +121,7 @@ put(
   readFileSync(join(root, "ui/source-package/OpenZeppelin-LICENSE.txt"))
 );
 put("scripts/monthly-code.ts",readFileSync(join(root,"onchain/scripts/monthly-code.ts")));
+put("scripts/revenue-network.ts",readFileSync(join(root,"onchain/scripts/revenue-network.ts")));
 put("test/revenue-monthly.spec.ts",readFileSync(join(root,"onchain/test/revenue-monthly.spec.ts")));
 const input = { language: "Solidity", sources, settings };
 put("compiler-input.json", JSON.stringify(input, null, 2) + "\n");
@@ -130,6 +134,7 @@ put(
   readFileSync(join(root, "onchain/test/revenue-share.spec.ts"))
 );
 put("test/household-billing.spec.ts",readFileSync(join(root,"onchain/test/household-billing.spec.ts")));
+put("test/oracle-billing.spec.ts",readFileSync(join(root,"onchain/test/oracle-billing.spec.ts")));
 put(
   "scripts/deploy-revenue.ts",
   readFileSync(join(root, "onchain/scripts/deploy-revenue.ts"))

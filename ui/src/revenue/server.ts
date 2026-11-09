@@ -175,6 +175,8 @@ export async function startRevenueServer(
         if (path === "/api/network") {
           json(res, 200, {
             chainId,
+            environmentId: process.env.REVENUE_ENVIRONMENT_ID || (chainId === 84532 ? "base-sepolia" : "private"),
+            oracleMode: Boolean(runtime.repo.read().manifest?.oracleMode),
             chainIdHex: `0x${chainId.toString(16)}`,
             chainName: process.env.REVENUE_CHAIN_NAME || "Deye RWA Local",
             rpcUrl: publicRpcUrl,

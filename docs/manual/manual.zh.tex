@@ -16,11 +16,11 @@
 \begin{document}
 \hypersetup{pdftitle={Deye RWA 平台产品与操作说明书},pdfauthor={Deye RWA}}
 \begin{center}\textbf{Deye RWA 平台产品与操作说明书}\end{center}
-内部测试版　2026年10月30日
+内部测试版　2026年11月9日
 
 本说明书说明四类参与者如何使用钱包完成申请、估值、募集、结算、月度分配和退出。设备所有权始终由业主保留，投资者购买的是有限期限的收益权份额。所有支付均为演示资金，不存在固定票息或保证返还本金。
 
-正文对应本次上线的动态引导、业主钱包月度缴费及 V5 月度分配版本。统一网站同时提供私有演示链和 Base Sepolia 公链测试，链编号分别为20261008和84532。截图在隔离测试环境中采集，具体合约、余额和日期可能与同事所在的共享产品不同。操作前应核对产品名称、钱包地址和链编号。
+正文对应动态引导、业主钱包月度缴费、月度分配及独立自托管 Oracle 测试环境。统一网站有三个环境，其中两个使用 Base Sepolia，均为 Chain ID 84532；私有演示链为20261008。截图来自隔离测试，具体合约、余额和日期可能不同。操作前应核对环境、产品和钱包。
 
 本文件保留发行、转让、赎回和到期等完整操作说明。月度缴费及确认步骤使用本次重新采集的中英文截图，其余未改变的操作沿用已核对的对应语言截图。截图不代表共享产品已经到达所示状态。
 
@@ -28,16 +28,17 @@
 
 \renewcommand{\contentsname}{目录}\clearpage\tableofcontents
 \clearpage\section{测试方式与适用范围}
-本系统提供三种使用方式，分别是通过统一网站访问共享私有演示链、访问 Base Sepolia 公链测试环境，以及在自己的电脑上部署独立本地实例。选择方式时应先确定测试目的，而不是仅根据网页能否打开判断环境是否相同。私有链用于在可控时间内验证完整业务，Base Sepolia 用于验证真实公链条件下的合约和钱包交互，并为后续 Oracle 集成建立基线；本地部署用于开发调试、独立复现和回归测试。
+统一网站提供三个业务环境，即私有演示链、原 Base Sepolia 产品和 Local Oracle on Sepolia。另可在自己的电脑上部署独立本地实例。私有链用于在可控时间内验证完整业务，原 Base Sepolia 产品用于公共链兼容性测试，Oracle 环境用于验证德业 API 取数、签名报告登记和新版账单强制核验。独立本地部署用于开发调试和回归测试。
 
 本地部署是一种部署方式，并不是第三条公共区块链。本手册的默认本地方案会创建自己的 Anvil 私有链。共享私链和新建本地链虽然运行相同业务逻辑，但使用不同的链编号、合约、账户配置和存储。相反，在本机打开一个连接 Base Sepolia 的后端，仍然属于公链测试，不能因此使用时间推进或重置功能。
 
 \begin{longtable}{L{2.5cm}L{4.2cm}L{4.5cm}L{3cm}}\toprule 测试方式 & 主要目的 & 建议验证内容 & 时间与资金\\\midrule\endhead
 共享私有演示链 & 完整生命周期演示及多角色业务验收。 & 申请、发行、月度缴费、分配、转让、赎回、处置和关闭。 & 20261008；测试 mUSDC；中介可推进演示时间。\\\addlinespace
 Base Sepolia & 验证公共链兼容性，并为后续 Oracle 接入准备基线。 & 钱包、Gas、Circle USDC、授权、认购、退款、回执和恢复。 & 84532；测试 ETH 与 USDC；使用真实链上时间。\\\addlinespace
+Local Oracle on Sepolia & 验证独立的自托管 Oracle 产品和强制报告校验。 & 德业 API 直读、EIP-712 签名、链上登记和受托参数审批。 & 同为84532；与原 Base 产品共享钱包测试币余额。\\\addlinespace
 独立本地部署 & 修改代码、复现问题并执行可重复的独立回归。 & 从空白场景建立产品，并验证页面、模型、权限和业务流程。 & 默认20260922；独立测试钱包和本地测试币。\\\addlinespace
 \bottomrule\end{longtable}
-共享私链与 Base Sepolia 沿用同一组业务角色地址，但一个地址在两条链上的余额、资格和持仓互不相通。新同事自行部署时，初始化工具默认生成另一组本地账户，不能直接用手册中共享环境的地址代替。每次开始测试都应记录链编号、钱包地址、产品合约和测试起始状态。
+三个业务环境沿用同一组角色地址。私链与 Base Sepolia 的代币余额彼此独立，两个 Base Sepolia 环境则使用同一条链，因此同一钱包的测试 ETH 和 Circle USDC 余额共享。产品合约、资格、持仓、业务记录和登录会话仍按环境隔离。新建本地实例通常生成另一组账户。
 
 \clearpage
 \subsection{测试路径选择图}
@@ -46,14 +47,14 @@ Base Sepolia & 验证公共链兼容性，并为后续 Oracle 接入准备基线
 \node[box] (private) at (0,-2.8) {完整业务与角色交接};
 \node[box] (privateout) at (0,-5.6) {共享私链与后文 A 至 H 操作图};
 \draw[->] (goal.south)--(private.north);\draw[->] (private.south)--(privateout.north);
-\node[box] (base) at (5,-2.8) {真实公链与后续 Oracle 准备};
-\node[box] (baseout) at (5,-5.6) {Base Sepolia 小额交易与链上核对};
+\node[box] (base) at (5,-2.8) {真实公链与 Oracle 验证};
+\node[box] (baseout) at (5,-5.6) {两个 Base Sepolia 环境分别核对};
 \draw[->] (goal.south)--(base.north);\draw[->] (base.south)--(baseout.north);
 \node[box] (local) at (10,-2.8) {开发、复现与独立回归};
 \node[box] (localout) at (10,-5.6) {本地 Docker、独立链与测试钱包};
 \draw[->] (goal.south)--(local.north);\draw[->] (local.south)--(localout.north);
 \end{tikzpicture}\end{center}
-第一次了解产品或检查角色交接的读者，可以从共享私有链开始。需要修改代码或从零发行产品时，应使用自己的本地实例。只有在验证公共链行为或准备后续 Oracle 集成时，才需要在 Base Sepolia 上准备真实的测试 ETH 和 Circle 测试 USDC。以下章节分别说明三条路径，后面的完整操作图供私链与本地环境按当前状态使用。
+完整生命周期仍以私链操作图为准。验证公开链交易时使用原 Base Sepolia 产品，核对 Oracle 报告时选择第三项。两个公链环境都遵守真实链上时间，不能通过演示工具提前形成月度账单。
 
 \clearpage\section{产品状态与角色交接}
 产品从草稿进入募集，募集满足资金与审批条件后统一结算并发行DRS，随后进入存续期。募集失败的产品提供退款，存续产品在收益权到期后完成清理和关闭。部署合约不等于发布产品，认购款进入托管也不等于已发行份额。
@@ -257,13 +258,13 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 \end{landscape}
 \clearpage\section{网站、网络与区块链浏览器}
 \subsection{统一公网入口}
-\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/}\par
-以下地址已于2026年10月30日核对。统一入口提供私有演示链和 Base Sepolia 的网络选择。Cloudflare 临时域名可能变化；如果收藏的直达地址失效，请通过公开首页点击 Launch App 获取当前入口。
+\url{https://sell-dec-sir-org.trycloudflare.com/}\par
+统一入口目前显示私有演示链、原 Base Sepolia 产品及 Local Oracle on Sepolia 三个环境。下列 Cloudflare 地址为临时域名，可能变化；请优先通过公开首页获取当前入口。私链服务如处于维护状态，页面会提示不可用，不应将其当作 Oracle 环境的故障。
 
 \subsection{公开首页}
 \url{https://mengzhon001.github.io/deye-rwa-demo}\par
 \subsection{业务应用}
-\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/private/app/}\par
+\url{https://sell-dec-sir-org.trycloudflare.com/networks/private/app/}\par
 \subsection{区块链浏览器}
 \url{https://quizzes-faces-simplified-discuss.trycloudflare.com}\par
 \subsection{钱包 RPC}
@@ -273,7 +274,7 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 在业务交易确认后点击交易哈希，即可打开对应的Blockscout页面。也可以将完整交易哈希、钱包地址或合约地址粘贴到浏览器顶部的搜索框。先核对状态、发送者、目标合约和区块，再检查代币转账与事件。登录和协议消息签名属于链下步骤，不会产生交易记录。
 
 \subsection{网络选择与会话隔离}
-现在可以通过同一个业务网站使用私有演示链和 Base Sepolia。进入 GitHub 首页后，选择需要测试的网络并点击 Launch App。业务页面右上角的网络按钮显示当前网络。点击按钮后，可以查看两条链各自的用途和 Chain ID，并选择另一条链。登录窗口也提供切换网络入口，因此无需先完成登录。
+进入 GitHub 首页后选择环境并点击 Launch App。业务页面右上角的网络按钮列出三个环境及链编号。两个 Base Sepolia 项目都使用84532，切换时无需重复切链，但必须在新环境重新签名登录，业务记录和会话不会合并。登录窗口同样可以切换环境。
 
 钱包签名验证完成后，页面先显示角色工作台和导航，产品资料、钱包余额和已保存记录分别加载。完整业务状态尚未读取时，相关交易按钮保持不可用，不能把加载中的金额理解为零。某部分查询失败时，可以单独重试该部分；业务状态加载失败后，原登录仍会保留，无需反复连接钱包或签名。
 
@@ -287,7 +288,7 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 开始前，请取得负责人提供的角色测试账户，并与其他测试者确认使用哪个产品。完整演练需要业主、中介、投资者 A/B 和受托人 A/B。只测试投资者路径时，可以使用已经发布且仍在募集的预置产品，不必再次完成业主申请和发行准备。如果产品已经存续，不能再按首次募集方式继续认购，应选择另一个募集中产品，或由负责人准备新的测试场景。
 
 \subsection{进入环境与确认网络}
-\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/private/app/}\par
+\url{https://sell-dec-sir-org.trycloudflare.com/networks/private/app/}\par
 从公开首页点击 Launch App，并在右上角选择“私有演示链”。在 Rabby 中核对 Chain ID 为20261008，然后选择角色并签名登录。登录后检查产品名称和资产池地址；钱包余额、托管订单和已发行 DRS 必须分别查看。领取测试资金只增加钱包内的测试余额，不会自动形成认购订单。
 
 \subsection{投资者直接测试路径}
@@ -316,13 +317,13 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 \clearpage\section{Base Sepolia 公链测试}
 原公网演示继续用于完整生命周期演练。Base Sepolia 是另一个独立环境，用于检验公共链的合约和钱包交易。两者沿用同一组角色地址，但合约、余额和业务记录相互独立。后文的完整生命周期操作图以私链演示为例，公链测试应遵循本节的实际时间和资金限制。
 
-\subsection{测试目标与后续 Oracle 接入}
+\subsection{测试目标与独立 Oracle 环境}
 Base Sepolia 用于验证同一业务代码在真实公共链上能否正确完成钱包签名、Gas 支付、Circle USDC 授权与转账、合约调用、事件读取和中断恢复。它也是后续 Oracle 集成的测试基础，便于在同一条公共测试链上验证报告接收合约、报告摘要、账期绑定、权限与错误处理，而不影响私链的完整演示。
 
-当前部署尚未接入 Oracle。现阶段能够验证的是公共链交易和现有报告流程，不能据此认定电站数据已获得独立 Oracle 认证。后续实施时，需要按 Oracle 方案增加链下取数与核验、报告签名或认证、链上接收与强制校验，并重新部署和测试受影响的组件。Oracle 认证本身也不能证明业主已经付款，USDC 到账仍须通过独立交易核对。
+本节的原 Base Sepolia 产品仍使用原账单合约，不核验 Oracle 报告。新功能只属于另一个独立产品和新版账单合约，具体操作见下一节。两者处于同一条 Base Sepolia 链，但业务数据不得混用。
 
 \subsection{入口与网络配置}
-公链测试应用\par\url{https://reuters-romance-arranged-bloggers.trycloudflare.com/networks/base-sepolia/app/}\par
+公链测试应用\par\url{https://sell-dec-sir-org.trycloudflare.com/networks/base-sepolia/app/}\par
 公链浏览器\par\url{https://base-sepolia.blockscout.com}\par
 钱包 RPC\par\url{https://sepolia.base.org}\par
 Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USDC。首页和业务应用共用网络选择入口。请选择 Base Sepolia，再在钱包中核对网络并登录。
@@ -361,7 +362,7 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \subsection{真实时间与测试范围}
 公共链不能由应用提前推进时间。月度缴费需要产品已经结算，并到达对应服务期末。六个月转让锁定、赎回通知期和到期时间也保持不变。页面因此不提供重置和时间推进。完整生命周期演示仍应使用原公网私链环境。
 
-业主月度缴费使用 Circle 测试 USDC。售电回款仍作为单独披露的经济模拟，其代币必须由独立资金账户预先持有。电站数据使用固定采集时间的真实记录回放，电价和未来现金流继续属于模型假设。本次部署未加入 Oracle，不能把报告上链解释为 API 数据已获得独立验证。
+原 Base Sepolia 产品的业主缴费使用 Circle 测试 USDC。售电回款仍为明确标注的经济模拟，代币须由独立资金账户持有。原产品没有 Oracle 强制账单核验。独立 Oracle 产品的取数、签名和强制核验见下一节。
 
 \clearpage
 \subsection{交易核对与恢复}
@@ -376,6 +377,48 @@ Chain ID 为 84532，Gas 代币为测试 ETH，支付代币为 Circle 测试 USD
 \clearpage\begin{landscape}
 \begin{center}\includegraphics[width=\linewidth,height=.90\textheight,keepaspectratio]{assets/base-wallet.zh.png}\par 钱包余额与官方水龙头说明。此页面不会通过后台增发 Circle USDC。\end{center}
 \end{landscape}
+\clearpage\section{Local Oracle on Sepolia 测试}
+第三个网络菜单项的完整名称为 Local Oracle on Sepolia。它与原 Base Sepolia 产品处于同一条公共测试链，Chain ID 均为84532，不是第三条链。两个环境沿用同一组角色钱包，因此测试 ETH 与 Circle USDC 余额共享，但合约、产品、登录会话与业务记录相互隔离。切换环境时无需再次切链，仍需向目标后端重新签名登录。
+
+\subsection{访问入口与合约}
+\url{https://sell-dec-sir-org.trycloudflare.com/networks/oracle-base-sepolia/app/}\par
+\url{https://base-sepolia.blockscout.com}\par
+电站凭证合约\par\nolinkurl{0x18a88350eb54FD2A98902509DF110851097c6a9b}\par\smallskip
+独立资产池\par\nolinkurl{0x0479eB8a2bb68D23bAa88de32B27Af63bFCf0C32}\par\smallskip
+报告登记合约\par\nolinkurl{0x49a3b54c2972786987B24dC44490332bcb5D41c6}\par\smallskip
+强制核验账单合约\par\nolinkurl{0xFa650D2619452E1763695c780F478bDeA7027D28}\par\smallskip
+这个环境使用 Circle 测试 USDC，代币合约与原 Base Sepolia 产品相同。请在钱包中核对 Chain ID、角色地址、产品合约和交易目标。页面右侧的“Oracle 报告”可只读查看观测月、数据摘要、参数摘要、签名者及报告登记交易，不会显示德业 API 凭证或原始记录。
+
+\subsection{数据与交易流程}
+\begin{center}\begin{tikzpicture}[>=Latex,box/.style={draw,align=center,text width=10cm,minimum height=1.05cm}]
+\node[box] (api) at (0,0.0) {德业只读 API 与完整自然月检查};
+\node[box] (sign) at (0,-1.65) {本机 Oracle 以独立密钥签署 EIP-712 报告};
+\draw[->] (api.south)--(sign.north);
+\node[box] (registry) at (0,-3.3) {Base Sepolia 登记报告及两名受托人的参数批准};
+\draw[->] (sign.south)--(registry.north);
+\node[box] (billing) at (0,-4.949999999999999) {新版账单合约在同一交易中核验并占用报告};
+\draw[->] (registry.south)--(billing.north);
+\node[box] (pay) at (0,-6.6) {业主钱包支付 Circle USDC，中介另行核对售电模拟款};
+\draw[->] (billing.south)--(pay.north);
+\end{tikzpicture}\end{center}
+Oracle 服务直接读取已授权的德业 API，逐日检查数据完整性并核对日月汇总，然后按获批准的参数计算六位精度的 USDC 金额。数据缺失、API 故障或参数不一致时停止提交，不回退到记录回放或合成数据。初始产品发行准备可使用明确标注的历史记录回放，但这份材料不能代替月度 Oracle 报告。德业当前没有为观测值提供数字签名，因此报告只证明自托管 Oracle 已核对并签署，不能称为德业或 Chainlink 独立认证。
+
+\subsection{已完成验收与待完成账期}
+截至2026年11月9日，Oracle 已从德业 API 实际读取2026年8月完整自然月的数据，完成签名并在 Base Sepolia 登记历史报告。该报告明确标记为“仅验证”，新版账单合约拒绝用它生成业主账单。登记交易与报告编号如下，读者可在 Base Sepolia 浏览器独立核对。
+
+报告编号\par\nolinkurl{0x27a8e1073e45d570c03dcd07c48efe5f655ad23f37b045ef277359c323f7a965}\par
+登记交易\par\nolinkurl{0x3df71ae9d301c9a5736316fac0857e9f1507549492f5c39e6a79be41cf51e411}\par
+新产品仍需完成发行、募集合规条件与结算。结算后，从首个完整自然月开始，受托人 A 和 B 分别在审核队列批准电站、首个观测月及参数摘要。服务期与对应观测月都结束后，Oracle 才能提交可计费报告；中介随后使用报告生成账单，业主支付 USDC，中介确认入池，再按真实回款处理费用和投资者分配。以上可计费报告至投资者分配的链上全段尚未完成验收，不能把历史报告登记解释为已完成真实月度收款。
+
+\subsection{运行、核对与限制}
+\begin{verbatim}
+npm run oracle:check
+npm run oracle:dry-run
+npm run oracle:validate-report
+npm run oracle:billable
+\end{verbatim}
+上述命令由持有本机受限配置的环境负责人执行。oracle:dry-run 只取数和计算，不提交交易。oracle:validate-report 登记仅验证报告；重复执行前应核对原报告及回执。oracle:billable 仅在政策获双受托批准、产品已结算且真实账期结束后运行。签名密钥与 Gas 提交账户分开保管，不进入浏览器、GitHub 或手册。售电回款仍由独立测试资金账户模拟，Oracle 报告不证明电网已经付款。
+
 \clearpage\section{本地部署与独立测试}
 \subsection{部署目的与默认环境}
 本地部署供开发人员在自己的电脑上复现问题、修改模型和合约、验证界面，并从空白场景反复演练。它不需要公网隧道，也不依赖演示负责人的 Mac 持续在线。以下命令针对从公开仓库新克隆的独立目录，不应在已经承载共享演示的工作目录中直接执行。

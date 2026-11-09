@@ -41,11 +41,11 @@ type UnifiedConfig = { app: string; version: number; networks: {id: string; chai
 const unifiedConfig: Promise<UnifiedConfig | null> = pagesMode
   ? fetch(sitePath("networks.json"), {cache:"no-store"}).then(r=>r.ok?r.json():null).then(c=>{
       if(!c)return null;const u=new URL(c.app);
-      if(c.version!==1 || u.protocol!=="https:" || !u.hostname.endsWith(".trycloudflare.com") || u.pathname!=="/" || u.username || u.password || u.port || u.search || u.hash || c.networks?.length!==2 || !c.networks.some((n:any)=>n.id==="private"&&n.chainId===20261008) || !c.networks.some((n:any)=>n.id==="base-sepolia"&&n.chainId===84532))throw Error("Invalid unified network entry");
+      if(c.version!==1 || u.protocol!=="https:" || !u.hostname.endsWith(".trycloudflare.com") || u.pathname!=="/" || u.username || u.password || u.port || u.search || u.hash || ![2,3].includes(c.networks?.length) || !c.networks.some((n:any)=>n.id==="private"&&n.chainId===20261008) || !c.networks.some((n:any)=>n.id==="base-sepolia"&&n.chainId===84532) || c.networks.length===3&&!c.networks.some((n:any)=>n.id==="oracle-base-sepolia"&&n.chainId===84532))throw Error("Invalid unified network entry");
       return c;
     }).catch(()=>null) : Promise.resolve(null);
 let selectedNetwork=new URLSearchParams(location.search).get("network") || localStorage.getItem("revenue.preferred-network") || "private";
-if(!["private","base-sepolia"].includes(selectedNetwork))selectedNetwork="private";
+if(!["private","base-sepolia","oracle-base-sepolia"].includes(selectedNetwork))selectedNetwork="private";
 async function publicRead(path: string, timeout = 10000) {
   if(pagesMode){
     const c=await unifiedConfig;if(!c)throw Error("Remote environment unavailable");
@@ -93,7 +93,7 @@ function header() {
   )}</a><a class="nav-secondary" href="${link()}">Documentation ↗</a><button class="language" data-language>${tr(
     "EN",
     "中文"
-  )}</button>${pagesMode ? renderNetworkPicker(selectedNetwork as "private" | "base-sepolia", lang) : ""}${launch}</nav></header>`;
+  )}</button>${pagesMode ? renderNetworkPicker(selectedNetwork as "private" | "base-sepolia" | "oracle-base-sepolia", lang) : ""}${launch}</nav></header>`;
 }
 function footer() {
   return `<footer class="site-footer"><a class="wordmark" href="${siteBase}"><strong>Deye</strong><span>RWA</span></a><span>${tr(
@@ -167,7 +167,7 @@ function home() {
     )}</small></div><div class="metric"><span class="metric-label">${tr(
       "网络",
       "Network"
-    )}</span><strong data-network-name>${selectedNetwork==="base-sepolia"?"Base Sepolia":tr("私有演示链","Private demo")}</strong><small data-network>${tr(
+    )}</span><strong data-network-name>${selectedNetwork==="oracle-base-sepolia"?"Local Oracle on Sepolia":selectedNetwork==="base-sepolia"?"Base Sepolia":tr("私有演示链","Private demo")}</strong><small data-network>${tr(
       "正在读取网络状态",
       "Checking network status"
     )}</small></div></div></section>
@@ -351,7 +351,7 @@ function home() {
 let overviewRequest=0;
 function refreshHomeOverview(){
   const request=++overviewRequest;
-  const name=document.querySelector("[data-network-name]");if(name)name.textContent=selectedNetwork==="base-sepolia"?"Base Sepolia":tr("私有演示链","Private demo");
+  const name=document.querySelector("[data-network-name]");if(name)name.textContent=selectedNetwork==="oracle-base-sepolia"?"Local Oracle on Sepolia":selectedNetwork==="base-sepolia"?"Base Sepolia":tr("私有演示链","Private demo");
   document.querySelectorAll("[data-stat]").forEach(el=>el.textContent="—");
   document.querySelectorAll("[data-modes], [data-network]").forEach(el=>el.textContent=tr("正在读取网络状态","Checking network status"));
   publicRead("/api/public/overview")
@@ -361,7 +361,7 @@ function refreshHomeOverview(){
     })
     .then((data) => {
       if(request!==overviewRequest || !document.querySelector("[data-stat]"))return;
-      if((pagesMode||window.RevenueNetworks?.active)&&data.chainId!==(selectedNetwork==="base-sepolia"?84532:20261008))throw new Error("Network metadata mismatch");
+      if((pagesMode||window.RevenueNetworks?.active)&&(data.chainId!==(selectedNetwork==="private"?20261008:84532)||(data.environmentId&&data.environmentId!==selectedNetwork)))throw new Error("Environment metadata mismatch");
       const observedName=document.querySelector("[data-network-name]");if(observedName)observedName.textContent=data.chainId===84532?"Base Sepolia":tr("私有演示链","Private demo");
       document.querySelectorAll<HTMLElement>("[data-stat]").forEach((el) => {
         el.textContent =
@@ -600,7 +600,7 @@ document.addEventListener("click", async (e) => {
       const c=await unifiedConfig;if(!c)throw Error("Unified entry unavailable");
       const path=`/networks/${selectedNetwork}`;
       const r=await fetch(c.app+path+"/api/public/overview",{credentials:"omit",signal:AbortSignal.timeout(20000),cache:"no-store"});
-      const status=await r.json();if(!r.ok||!status.chainAvailable||status.chainId!==(selectedNetwork==="private"?20261008:84532))throw Error("Selected network unavailable");
+      const status=await r.json();if(!r.ok||!status.chainAvailable||status.chainId!==(selectedNetwork==="private"?20261008:84532)||(status.environmentId&&status.environmentId!==selectedNetwork))throw Error("Selected environment unavailable");
       location.href=`${c.app}${path}/app/?lang=${lang}&wallet=rabby`;
     }catch{showLaunchError();}finally{el.removeAttribute("disabled");}
   }

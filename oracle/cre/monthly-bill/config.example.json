@@ -1,0 +1,6 @@
+{
+  "mode": "local-shadow",
+  "schedule": "0 0 1 1 *",
+  "sourceUrl": "http://127.0.0.1:18955/month",
+  "expectedInputDigest": "0x9e3613a6caba0d57b400a7539d71ab02e42e5a86baec50bf4eb6392c83692f80"
+}

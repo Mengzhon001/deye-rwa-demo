@@ -1,0 +1,62 @@
+{
+  "date": "2026-11-03",
+  "scope": "CRE direct-source and local-shadow validation",
+  "versions": {
+    "cli": "1.39.0",
+    "sdk": "1.23.0",
+    "bun": "1.4.4",
+    "typescript": "5.9.3"
+  },
+  "account": {
+    "authenticated": true,
+    "privateRegistryAvailable": true,
+    "deployAccess": "not-enabled",
+    "accessRequest": "CLI returned submitted for review"
+  },
+  "checks": {
+    "typecheck": "pass",
+    "unitTests": {
+      "passed": 29,
+      "failed": 0
+    },
+    "replayComparisons": {
+      "passed": 140,
+      "failed": 0,
+      "ineligibleObservedMonths": 1
+    },
+    "officialCLISimulations": {
+      "synthetic": "pass",
+      "authorizedPlatformReplay": "pass",
+      "syntheticMissingEnergy": "rejected as expected"
+    },
+    "baseSepoliaRead": "official Circle USDC decimals = 6",
+    "resultParserTests": {
+      "passed": 3,
+      "failed": 0
+    },
+    "directDeyeSimulation": {
+      "status": "pass",
+      "observationMonth": "2026-08",
+      "coveredDays": 31,
+      "dailyMonthlyReconciliation": "exact",
+      "sameAsPriorCapture": true,
+      "execution": "local CRE simulator",
+      "source": "Deye regional API directly; not localhost replay",
+      "upstreamRevisionKind": "normalized content digest; no Deye signature claimed"
+    },
+    "fixedIssues": [
+      "Bounded daily history windows satisfy Deye query limits",
+      "Identical overlap is deduplicated and conflicting overlap is rejected",
+      "Final structured CLI output is parsed even when user logs are truncated"
+    ]
+  },
+  "limitations": [
+    "DON deployment access is still not enabled",
+    "No DON workflow or receiver contract has been deployed",
+    "Current reports remain provisional and independentSourceVerified=false",
+    "Parameter snapshots are pinned locally, not onchain-approved Oracle parameters",
+    "No credentials were uploaded to the CRE secret service",
+    "No chain transactions or existing service/data changes"
+  ],
+  "dataAuthorization": "User explicitly authorized Chainlink nodes to read the selected Deye station via read-only API"
+}

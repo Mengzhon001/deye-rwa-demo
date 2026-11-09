@@ -130,6 +130,7 @@ export type RevenueStore = {
     amountUSDC6: string;
     billing?: ReturnType<typeof import("../../../offchain/src/revenue/model").monthlyRevenue>;
     sourceHash: string;
+    oracleReportId?: string;
     collected: boolean;
     payment?: {
       version: "household-usdc.v1";

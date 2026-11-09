@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1, "chainId": 84532, "sourceKind": "synthetic",
+  "stationKey": "0x1111111111111111111111111111111111111111111111111111111111111111",
+  "observationMonth": "2026-08", "servicePeriod": 1, "sourceTimezone": "Asia/Shanghai",
+  "sourceRevision": "illustrative-example.v1", "mappingVersion": "illustrative-monthly.v1",
+  "complete": true, "provisional": true, "generationWh": "1000000", "exportWh": "400000",
+  "parameters": {
+    "version": "illustrative-parameters.v1", "currency": "CNY",
+    "gridTariffLocalPerKWh": "0.60", "exportTariffLocalPerKWh": "0.35",
+    "selfUseDeliveryBps": 9000, "householdPaymentBps": 8000, "shareBps": 10000,
+    "costsLocal": "100", "fxUSDCPerLocal": "0.14"
+  }
+}

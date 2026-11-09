@@ -44,6 +44,8 @@ export async function publicOverview(
     capturedAt: new Date().toISOString(),
     scenarioId: manifest.scenarioId,
     chainId: manifest.chainId,
+    environmentId: process.env.REVENUE_ENVIRONMENT_ID || (manifest.chainId === 84532 ? "base-sepolia" : "private"),
+    oracleMode: Boolean(manifest.oracleMode),
     explorerUrl,
     contracts: manifest.addresses,
     telemetryStations: s.stations.length,
@@ -97,7 +99,8 @@ export async function deploymentSources(
       const name = {
         usdc: "MockUSDC",
         station: "DeyeRWA",
-        billing: "HouseholdBilling",
+        billing: manifest.oracleMode ? "HouseholdBillingV2" : "HouseholdBilling",
+        oracleRegistry: "OracleReportRegistry",
         vault: manifest.contractName || "RevenueShareVault",
       }[key]!;
       const artifact = bundle.contracts.find((c: any) => c.name === name);
@@ -108,7 +111,8 @@ export async function deploymentSources(
         source: artifact?.source,
         deploymentTransaction:manifest.deploymentTransactions?.[key],
         constructorArguments:
-          key === "billing" ? [manifest.addresses.usdc,manifest.addresses.vault,manifest.accounts.agent,manifest.accounts.treasury] : key === "vault"
+          key === "billing" ? [manifest.addresses.usdc,manifest.addresses.vault,manifest.accounts.agent,manifest.accounts.treasury,...(manifest.oracleMode?[manifest.addresses.oracleRegistry]:[])] : key === "oracleRegistry"
+            ? [manifest.accounts.admin,manifest.accounts.trustee,manifest.accounts.trustee2,manifest.oracleReporter,manifest.addresses.vault,manifest.addresses.usdc] : key === "vault"
             ? [
                 manifest.accounts.admin,
                 manifest.accounts.agent,

@@ -6,6 +6,7 @@ import {readTogether,readNativeBalances,ViewCall,MULTICALL3} from "./multiread";
 import { paymentAmounts } from "./household-billing";
 import {
   Contract,
+  AbiCoder,
   HDNodeWallet,
   TransactionRequest,
   keccak256,
@@ -103,6 +104,7 @@ const access: Record<string, readonly Role[]> = {
   admit: ["agent"],
   "prepare-valuation": ["agent"],
   "approve-valuation": ["trustee"],
+  "approve-oracle-policy": ["trustee"],
   publish: ["agent"],
   eligible: ["agent"],
   "apply-eligibility": ["investor"],
@@ -162,6 +164,7 @@ export class RevenueRuntime {
   vault!: Contract;
   usdc!: Contract;
   billing?: Contract;
+  oracleRegistry?: Contract;
   station!: Contract;
   constructor(readonly dataDir: string) {
     this.repo = new RevenueRepository(join(dataDir, "store.json"));
@@ -194,6 +197,8 @@ export class RevenueRuntime {
       );
     }
     const m = s.manifest!;
+    if (Boolean(m.oracleMode) !== (process.env.REVENUE_ORACLE_MODE === "self-hosted-signed-v1"))
+      throw new Error("Oracle mode and deployment manifest disagree");
     if (m.chainId !== connectedChainId)
       throw new Error("Deployment manifest belongs to another chain");
     if (
@@ -267,9 +272,19 @@ export class RevenueRuntime {
       writeFileSync(join(this.dataDir,"deployment.json"),JSON.stringify(m,null,2),{mode:0o600});
     }
     if(m.addresses.billing){
-      this.billing=await hre.ethers.getContractAt("HouseholdBilling",m.addresses.billing);
+      this.billing=await hre.ethers.getContractAt(m.oracleMode?"HouseholdBillingV2":"HouseholdBilling",m.addresses.billing);
       if(this.publicProvider)this.billing=new Contract(m.addresses.billing,this.billing.interface,this.publicProvider);
       if(getAddress(await this.billing.vault())!==getAddress(m.addresses.vault)||getAddress(await this.billing.usdc())!==getAddress(m.addresses.usdc)||getAddress(await this.billing.manager())!==getAddress(m.accounts.agent)||getAddress(await this.billing.exportTreasury())!==getAddress(m.accounts.treasury))throw new Error("Billing contract does not match this product and roles");
+      if(m.oracleMode){
+        if(!m.addresses.oracleRegistry)throw new Error("Oracle registry missing from manifest");
+        this.oracleRegistry=await hre.ethers.getContractAt("OracleReportRegistry",m.addresses.oracleRegistry);
+        if(this.publicProvider)this.oracleRegistry=new Contract(m.addresses.oracleRegistry,this.oracleRegistry.interface,this.publicProvider);
+        if(getAddress(await this.oracleRegistry.billing())!==getAddress(m.addresses.billing)||
+          getAddress(await this.oracleRegistry.vault())!==getAddress(m.addresses.vault)||
+          getAddress(await this.oracleRegistry.paymentToken())!==getAddress(m.addresses.usdc)||
+          await this.vault.hasRole(await this.vault.TREASURY(),m.accounts.treasury))
+          throw new Error("Oracle billing or vault permissions do not match the isolated product");
+      }
       await this.reconcileHouseholdPayments();
     }
     await this.reconcileRevertedApprovals();
@@ -930,6 +945,7 @@ export class RevenueRuntime {
     const app = () => this.app(b.applicationId);
     switch (action) {
       case "source": {
+        if (s.manifest?.oracleMode) throw new Error("The Oracle product's station source is fixed. Monthly reports require a fresh direct Deye API read.");
         const mode = z.enum(["synthetic", "live", "replay"]).parse(b.mode);
         if (s.applications.length)
           throw new Error(
@@ -1417,6 +1433,30 @@ export class RevenueRuntime {
         });
         return;
       }
+      case "approve-oracle-policy": {
+        if (!s.manifest?.oracleMode || !this.oracleRegistry) throw new Error("This product has no Oracle policy");
+        if (Number(await vault.phase()) !== 2) throw new Error("Settle the Oracle product before approving its billing calendar");
+        if (b.reviewed !== true) throw new Error("Review the observation month and parameter digest before approval");
+        const statusFile = process.env.REVENUE_ORACLE_STATUS_FILE;
+        if (!statusFile || !existsSync(statusFile)) throw new Error("Oracle parameter evidence is unavailable");
+        const reports = JSON.parse(readFileSync(statusFile, "utf8")).reports;
+        const evidence = Array.isArray(reports) ? reports.find((r) => r.purpose === "validation-only" && r.status === "registered") : undefined;
+        const pooled = s.applications.find((a) => a.status === "pooled");
+        if (!evidence || !pooled || evidence.stationKey?.toLowerCase() !== pooled.stationId.toLowerCase())
+          throw new Error("A registered direct Deye API validation report for the pooled station is required");
+        const local = new Date((Number(await vault.settledAt()) + 8 * 3600) * 1000);
+        let year = local.getUTCFullYear(), month = local.getUTCMonth() + 1;
+        if (local.getUTCDate() !== 1 || local.getUTCHours() !== 0 || local.getUTCMinutes() !== 0 || local.getUTCSeconds() !== 0) {
+          month += 1;
+          if (month === 13) { month = 1; year += 1; }
+        }
+        const firstMonth = year * 100 + month;
+        const stationKey = pooled.stationId, paramsHash = evidence.paramsHash;
+        const policyId = await this.oracleRegistry.policyHash(stationKey, paramsHash, firstMonth);
+        if (await this.oracleRegistry.policyVotes(policyId, this.address(actor))) throw new Error("This trustee has already approved the parameter snapshot");
+        await transact("approve-policy", this.oracleRegistry, "approvePolicy", [stationKey, paramsHash, firstMonth]);
+        return { policyId, firstMonth, paramsHash };
+      }
       case "apply-eligibility": {
         if (b.riskAccepted !== true || b.demoAcknowledged !== true)
           throw new Error(
@@ -1651,6 +1691,25 @@ export class RevenueRuntime {
         if (a.status !== "pooled" || Number(await vault.phase()) !== 2)
           throw new Error("Active admitted rights required");
         const period = z.number().int().min(1).max(60).parse(b.period);
+        if(s.manifest?.oracleMode){
+          if(!this.oracleRegistry||!this.billing)throw new Error("Oracle billing is unavailable");
+          const id=hash({station:a.stationId,period});
+          if(s.income.some(i=>i.id===id))throw new Error("Period already booked");
+          const key=keccak256(AbiCoder.defaultAbiCoder().encode(["address","bytes32","uint16"],[s.manifest.addresses.vault,a.stationId,period]));
+          const reportId=String(await this.oracleRegistry.latestBillable(key));
+          if(reportId==="0x"+"0".repeat(64))throw new Error("A signed, billable Oracle report for this service period is required / 本期尚无可计费的链上 Oracle 报告");
+          const report=await this.oracleRegistry.getReport(reportId),r=report.report;
+          if(!report.exists||report.revoked||report.consumed||Number(r.purpose)!==1||
+            Number(r.servicePeriod)!==period||r.stationKey.toLowerCase()!==a.stationId.toLowerCase()||
+            r.billId.toLowerCase()!==id.toLowerCase()||getAddress(r.payer)!==getAddress(a.owner))
+            throw new Error("Oracle report is unavailable or does not match this household and service period / 报告与业主或服务期不匹配");
+          const payments={householdUSDC6:String(r.householdAmount),exportUSDC6:String(r.exportAmount),costsUSDC6:String(r.costsAmount),assignedUSDC6:String(r.assignedAmount),retainedUSDC6:String(r.householdAmount+r.exportAmount-r.costsAmount-r.assignedAmount),roundingDeltaUSDC6:"0"};
+          await transact("invalidate",vault,"invalidateValuation");
+          await transact("publish-bill",this.billing,"publishBill",[id,reportId]);
+          this.repo.update(v=>v.income.push({id,stationId:a.stationId,period,amountUSDC6:payments.assignedUSDC6,sourceHash:reportId,collected:false,
+            oracleReportId:reportId,payment:{version:"household-usdc.v1",payer:a.owner,...payments,householdPaid:payments.householdUSDC6==="0",exportPaid:payments.exportUSDC6==="0",confirmed:false}}));
+          return {id,reportId,amountUSDC6:payments.assignedUSDC6,householdPaymentRequired:true};
+        }
         const start = Number(await vault.settledAt());
         if (addMonths(start, period) > now)
           throw new Error("Service period has not ended");
@@ -1692,6 +1751,7 @@ export class RevenueRuntime {
         return { id, amountUSDC6: value, simulated: !payments, householdPaymentRequired:!!payments };
       }
       case "publish-household-bill": {
+        if(s.manifest?.oracleMode)throw new Error("Oracle product bills must use registered reports / Oracle 产品只能依据已登记报告发布账单");
         const r=s.income.find(i=>i.id===b.incomeId);
         if(!r||!r.billing||r.collected||r.payment||!this.billing)throw new Error("An unpaid legacy receivable and enabled billing contract are required / 仅可将未收款的旧账单发布为钱包缴费账单");
         const a=s.applications.find(a=>a.stationId===r.stationId)!;const terms=this.effectiveAssumptions(a);const payments=paymentAmounts(r.billing,terms.fxUSDC,terms.shareBps);
@@ -2354,6 +2414,32 @@ export class RevenueRuntime {
     chain.subscriptionReviewRequired = ["RevenueShareVaultV3", "RevenueShareVaultV4", "RevenueShareVaultV5"].includes(s.manifest?.contractName || "");
     chain.subscriptionTopUpsAllowed = ["RevenueShareVaultV4", "RevenueShareVaultV5"].includes(s.manifest?.contractName || "");
     chain.distributionIntervalMonths=s.manifest?.contractName==="RevenueShareVaultV5"?1:3;
+    let oraclePolicy: null | { stationKey: string; paramsHash: string; firstMonth: number; policyId: string; votes: number; active: boolean; approvedBy: Record<string, boolean> } = null;
+    const oracleStatusFile = process.env.REVENUE_ORACLE_STATUS_FILE;
+    const oracleReports = (() => {
+      if (!s.manifest?.oracleMode || !oracleStatusFile || !existsSync(oracleStatusFile)) return [];
+      try { const data = JSON.parse(readFileSync(oracleStatusFile, "utf8")); return Array.isArray(data.reports) ? data.reports : []; }
+      catch { return []; }
+    })();
+    if (s.manifest?.oracleMode && this.oracleRegistry && Number(chain.phase) === 2) {
+      const pooled = s.applications.find(a => a.status === "pooled");
+      const evidence = oracleReports.find((r: any) => r.purpose === "validation-only" && r.status === "registered" && r.stationKey?.toLowerCase() === pooled?.stationId.toLowerCase());
+      if (pooled && evidence?.paramsHash) {
+        const local = new Date((Number(chain.settledAt) + 8 * 3600) * 1000);
+        let year = local.getUTCFullYear(), month = local.getUTCMonth() + 1;
+        if (local.getUTCDate() !== 1 || local.getUTCHours() !== 0 || local.getUTCMinutes() !== 0 || local.getUTCSeconds() !== 0) {
+          month += 1; if (month === 13) { month = 1; year += 1; }
+        }
+        const firstMonth = year * 100 + month;
+        const policyId = await this.oracleRegistry.policyHash(pooled.stationId, evidence.paramsHash, firstMonth);
+        const [votes, activeId, trusteeA, trusteeB] = await Promise.all([
+          this.oracleRegistry.policyVoteCount(policyId), this.oracleRegistry.activePolicy(pooled.stationId),
+          this.oracleRegistry.policyVotes(policyId, this.address("trustee")), this.oracleRegistry.policyVotes(policyId, this.address("trustee2")),
+        ]);
+        oraclePolicy = { stationKey: pooled.stationId, paramsHash: evidence.paramsHash, firstMonth, policyId,
+          votes: Number(votes), active: activeId === policyId, approvedBy: { trustee: trusteeA, trustee2: trusteeB } };
+      }
+    }
     const [approvedValuation,proposedValuation,vaultCash] = primary.slice(names.length);
     Object.assign(chain, {
       proposedValuationOutdated: await this.proposalOutdated(proposedValuation.report),
@@ -2684,6 +2770,9 @@ export class RevenueRuntime {
         return {...r,collected:chain.confirmed,payment:{...r.payment,householdPaid:chain.householdPaid,exportPaid:chain.exportPaid,confirmed:chain.confirmed,refunded:chain.refunded}};
       })),
       householdPaymentsEnabled:!!this.billing,
+      oracleMode:!!s.manifest?.oracleMode,
+      oracleReports,
+      oraclePolicy,
       financialTime,
       valuationChecks,
       chain,

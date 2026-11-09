@@ -96,6 +96,7 @@ const walletChainActions = new Set([
 ]);
 const nav = {
   investor: [
+    ["oracle_reports", "Oracle reports", "Oracle 报告"],
     ["product_hall", "Product hall", "产品大厅"],
     ["pool_detail", "Pool details", "资产池详情"],
     ["investor_eligibility", "Investor qualification", "投资资格"],
@@ -106,6 +107,7 @@ const nav = {
     ["message_center", "Messages & receipts", "消息与凭证"],
   ],
   owner: [
+    ["oracle_reports", "Oracle reports", "Oracle 报告"],
     ["owner_kyc", "Household profile", "业主认证"],
     ["owner_stations", "My stations", "我的电站"],
     ["owner_station_detail", "Station details", "电站详情"],
@@ -114,6 +116,7 @@ const nav = {
     ["owner_funds", "Funds & monthly bills", "资金与月度缴费"],
   ],
   agent: [
+    ["oracle_reports", "Oracle reports", "Oracle 报告"],
     ["agent_apply_review", "Application review", "申请审核"],
     ["agent_financing", "Offers & valuation", "报价与估值"],
     ["agent_pool", "Pool management", "资产池管理"],
@@ -123,6 +126,7 @@ const nav = {
     ["agent_monitor", "Monitoring & evidence", "监控与证据"],
   ],
   trustee: [
+    ["oracle_reports", "Oracle reports", "Oracle 报告"],
     ["trustee_events", "Review queue", "审核队列"],
     ["trustee_review", "Servicing cases", "服务事件审核"],
   ],
@@ -560,6 +564,11 @@ function operations() {
 function content() {
   const c = state.chain;
   switch (page) {
+    case "oracle_reports":
+      return card(t("Self-hosted Oracle reports", "自托管 Oracle 报告"),
+        `<p>${t("This service checks Deye's read-only API and signs a monthly report. Deye has not digitally signed the observations, and this is not a Chainlink operated network. A validation-only historical report cannot create a household bill.","本机 Oracle 核对德业只读 API 后签署月度报告。观测值目前没有德业数字签名，服务也并非由 Chainlink 运营。历史月份的仅验证报告不能生成业主账单。")}</p>
+        <p>${t("Registry", "报告登记合约")}: <a href="${esc(networkConfig.explorerUrl)}/address/${esc(state.manifest.addresses.oracleRegistry)}" target="_blank" rel="noopener noreferrer" class="mono">${esc(state.manifest.addresses.oracleRegistry)}</a></p>
+        ${state.oracleReports?.length ? table([t("Observation month","观测月"),t("Purpose","用途"),t("Source digest","数据摘要"),t("Parameters digest","参数摘要"),t("Reporter","签名者"),t("Registry transaction","登记交易"),t("Bill transaction","账单交易"),t("Payment transaction","付款交易")],state.oracleReports.map(r=>{const bill=state.income.find(i=>i.oracleReportId===r.reportId),op=state.operations.find(o=>o.action==="book-revenue"&&o.result?.reportId===r.reportId);const tx=(hash)=>hash?`<a href="${esc(networkConfig.explorerUrl)}/tx/${esc(hash)}" target="_blank" rel="noopener noreferrer" class="mono">${esc(hash.slice(0,10))}…</a>`:"—";return [esc(r.observationMonth),r.purpose==="billable"?t("Billable","可计费"):t("Validation only","仅验证"),`<span class="mono" title="${esc(r.sourceDigest)}">${esc(r.sourceDigest?.slice(0,14))}…</span>`,`<span class="mono" title="${esc(r.paramsHash)}">${esc(r.paramsHash?.slice(0,14))}…</span>`,esc(r.reporter?.slice(0,14))+"…",tx(r.transaction),tx(op?.steps?.["publish-bill"]?.hash),tx(bill?.payment?.ownerTransaction)];})):`<p>${t("No signed report has been registered for this product.","本产品尚无已登记签名报告。")}</p>`}`);
     case "product_hall":
       return investorCatalog();
     case "pool_detail":
@@ -684,7 +693,7 @@ function content() {
           `<p>${t(
             "Live, recorded replay and synthetic are explicit modes. API errors never switch modes. Credentials stay on the server.",
             "实时、录制回放和合成数据为明确区分的模式。API 错误不会切换模式。凭据仅保存在服务端。"
-          )}</p>${form(
+          )}</p>${state.oracleMode?`<p>${t("The initial station evidence is recorded replay for product setup. Monthly Oracle reports are fetched directly from Deye and cannot fall back to replay.","初始电站凭证使用标注的记录回放完成发行准备；月度 Oracle 报告直接读取德业 API，读取失败不会回退到回放。")}</p>`:form(
             "source",
             t("Select source", "选择数据源"),
             select(
@@ -697,10 +706,10 @@ function content() {
               ],
               state.mode
             )
-          )}${button(
+          )+button(
             "discover",
             t("Discover accessible stations", "发现可访问电站")
-          )}${form(
+          )+form(
             "sync",
             t("Capture live station", "采集实时电站"),
             input(
@@ -710,7 +719,7 @@ function content() {
               "text",
               "required"
             )
-          )}<p>${t("Live acceptance", "实时验收")}: ${
+          )+`<p>${t("Live acceptance", "实时验收")}: ${
             state.liveAcceptance.retrieved && state.liveAcceptance.mapped
               ? t("Retrieved and mapped", "已获取并映射")
               : t(
@@ -719,11 +728,11 @@ function content() {
                 )
           }</p>${
             state.lastSyncError ? `<p>${esc(state.lastSyncError)}</p>` : ""
-          }`
+          }`}`
         ) +
         card(
           t("Monthly billing and receipt reconciliation", "月度账单与收款核对"),
-          `<p>${t(
+          `<p>${state.oracleMode?t("The self-hosted Oracle must first register a billable report for the exact completed calendar month. This form consumes that on-chain report. No replay or locally edited amount is accepted.","自托管 Oracle 必须先为已结束的完整自然月登记可计费报告。本表单随后消耗该链上报告，不接受回放数据或手改金额。"):t(
             "Select historical generation and export evidence. The signed model calculates household electricity payments plus export revenue, less agreed station costs. Tariffs and FX are demo assumptions. After publication, the household pays demo USDC with its wallet. Only grid export funding is simulated. This does not create live telemetry.",
             "为演示期间选择历史发电与上网证据。按签约模型计算业主电费与售电收入，再扣除约定站点费用。电价和汇率为演示假设。发布账单后，由业主钱包实际支付测试 USDC，只有电网售电回款单独模拟，不产生新的实时遥测。"
           )}</p>${form(
@@ -737,16 +746,16 @@ function content() {
                 "number",
                 "min=1 max=60 required"
               ) +
-              input(
+              (state.oracleMode?`<p>${t("Available billable report", "可计费报告")}: ${esc(state.oracleReports?.find(r=>r.purpose==="billable"&&r.servicePeriod===Number(productModel().unbookedPeriods[0]?.period||Math.max(1,Number(c.feeMonths)))&&r.status==="registered")?.reportId||t("None yet","尚无"))}</p>`:input(
                 "historyMonth",
                 t("Observed historical month", "观测历史月份"),
                 state.stations[0]?.history.filter(h=>h.complete&&h.exportKWh!==null&&h.generationKWh!==null).at(-1)?.month || "",
                 "month",
                 "required"
-              )
+              ))
           )}${agentBillsView()}${state.income.length ? table(
               [t("Period", "期数"), t("Currency", "本币"), t("Household bill", "业主电费"), t("Export receipts", "售电收入"), t("Station costs", "站点费用"), t("Assigned USDC", "受让现金流 USDC"), t("Status", "状态")],
-              state.income.map(r => [r.period, esc(state.stations.find(s => s.id === r.stationId)?.currency || ""), dsCash(r.billing?.householdPaymentLocal), dsCash(r.billing?.exportRevenueLocal), dsCash(r.billing?.costsLocal), money(r.amountUSDC6), r.collected ? t("Collected", "已归集") : t("Receivable", "待收款")])
+              state.income.map(r => [r.period, esc(state.stations.find(s => s.id === r.stationId)?.currency || ""), r.oracleReportId?money(r.payment?.householdUSDC6)+" USDC":dsCash(r.billing?.householdPaymentLocal), r.oracleReportId?money(r.payment?.exportUSDC6)+" USDC":dsCash(r.billing?.exportRevenueLocal), r.oracleReportId?money(r.payment?.costsUSDC6)+" USDC":dsCash(r.billing?.costsLocal), money(r.amountUSDC6), r.collected ? t("Collected", "已归集") : t("Receivable", "待收款")])
             ) : ""}`
         ) +
         card(
@@ -777,6 +786,16 @@ function content() {
       return (
         productDistributionHandoff() + wfPoolGuide() +
         applications("trustee") +
+        (state.oracleMode ? card(
+          t("Approve Oracle billing parameters", "审批 Oracle 计费参数"),
+          state.oraclePolicy
+            ? `<p>${t("The first billable observation month starts after settlement at the next complete calendar month. Review the registered Deye API validation report and the parameter digest. Both distinct trustees must approve before billable reports can be registered.", "首次可计费观测月从结算后的下一个完整自然月开始。请核对已登记的德业 API 验证报告及参数摘要。两名不同受托人均批准后，Oracle 才能登记可计费报告。")}</p>
+              <p>${t("First month", "首个观测月")}: ${esc(String(state.oraclePolicy.firstMonth))} · ${t("Votes", "已批准人数")}: ${esc(String(state.oraclePolicy.votes))}/2 · ${state.oraclePolicy.active?t("Active", "已生效"):t("Awaiting approval", "待批准")}</p>
+              <p class="mono">${t("Station", "电站")}: ${esc(state.oraclePolicy.stationKey)}<br>${t("Parameters", "参数摘要")}: ${esc(state.oraclePolicy.paramsHash)}</p>
+              ${state.oraclePolicy.approvedBy?.[actor]?`<p>${t("This trustee has approved this exact snapshot.", "当前受托人已批准此参数快照。")}</p>`:form("approve-oracle-policy", t("Approve this parameter snapshot", "批准此参数快照"), `<label class="checkline"><input name="reviewed" type="checkbox" required>${t("I reviewed the station, first full calendar month and parameter digest against the registered report.", "我已核对电站、首个完整自然月及登记报告的参数摘要。")}</label>`)}
+              ${productNav(t("Review signed report", "查看签名报告"), "trustee", "oracle_reports")}`
+            : `<p>${t("Settle the product and register a direct Deye API validation report before the two trustees approve the billing calendar.", "请先完成产品结算，并登记德业 API 直读验证报告，再由两名受托人审批计费日历。")}</p>`
+        ) : "") +
         card(
           t("Approve prepared monthly valuation", "批准已编制月度估值"),
           ((productModel().proposalExpired || productModel().proposalOutdated) ? `<div class="notice-bar" data-pool-valuation-expired><strong>${productModel().proposalOutdated?t("Financial inputs changed after this report","原报告编制后账务已变化"):t("Prepared valuation expired","待批准估值已过期")}</strong><p>${productModel().proposalOutdated?t("Reconcile current cash, receivables and expenses, prepare a new report, then return for independent approval.","请由中介核对最新现金、应收款及费用，重新编制报告后，再返回本页独立审批。"):t("Demo time has passed the report validity date. Ask the intermediary to prepare a new valuation, then return to review it. Retrying a reverted approval cannot extend the original report.","演示时间已超过原报告有效期。请由中介重新编制当前估值，再返回本页审核。重试失败交易不能延长原报告有效期。")}</p>${productNav(t("Open intermediary valuation preparation","打开中介估值编制"),"agent","agent_pool")}</div>` : "")+form(
@@ -1182,7 +1201,7 @@ function renderWorkspaceChrome() {
     lang === "en" ? "中文" : "English";
   document.querySelector("#nav").innerHTML =
     `<div class="nav-group-title">${t(...names[role])}</div>` +
-    nav[role]
+    nav[role].filter(n=>state?.oracleMode||networkConfig?.oracleMode||n[0]!=="oracle_reports")
       .map(
         ([id, en, zh]) =>
           `<button class="nav-item ${
@@ -1316,10 +1335,10 @@ function render() {
       if(task.action==='book-revenue'){
         const form=document.querySelector('form[data-action="book-revenue"]');
         const period=form?.querySelector('[name="period"]'),application=form?.querySelector('[name="applicationId"]'),historyMonth=form?.querySelector('[name="historyMonth"]');
-        if(!period||!application||!historyMonth)throw new Error(t('The monthly billing form could not load completely. Refresh the page and retry.','月度账单表单未完整加载，请刷新页面后重试。'));
+        if(!period||!application||(!state.oracleMode&&!historyMonth))throw new Error(t('The monthly billing form could not load completely. Refresh the page and retry.','月度账单表单未完整加载，请刷新页面后重试。'));
         period.value=String(task.period);application.value=task.applicationId;
         const stationId=state.applications.find(a=>a.id===task.applicationId)?.stationId;
-        historyMonth.value=state.stations.find(s=>s.id===stationId)?.history.filter(h=>h.complete&&h.exportKWh!==null&&h.generationKWh!==null).at(-1)?.month||'';
+        if(historyMonth)historyMonth.value=state.stations.find(s=>s.id===stationId)?.history.filter(h=>h.complete&&h.exportKWh!==null&&h.generationKWh!==null).at(-1)?.month||'';
       }
       document.querySelector("#main").scrollTop = 0;
     },

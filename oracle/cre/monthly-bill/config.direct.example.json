@@ -1,0 +1,26 @@
+{
+  "mode": "local-direct-simulation",
+  "schedule": "0 0 1 1 *",
+  "region": "eu",
+  "stationId": "123",
+  "stationKey": "0x6f32e15909557d94be5dbdf29b174ead33f318bc3bbb1f57db092bf65b9e0845",
+  "observationMonth": "2026-08",
+  "servicePeriod": 1,
+  "sourceTimezone": "Asia/Shanghai",
+  "observationStartUtc": 1785513600,
+  "observationEndUtc": 1788192000,
+  "expectedDays": 31,
+  "mappingVersion": "deye.generationValue-gridValue.kWh.v1",
+  "parameters": {
+    "version": "illustrative-parameters.v1",
+    "currency": "CNY",
+    "gridTariffLocalPerKWh": "0.60",
+    "exportTariffLocalPerKWh": "0.35",
+    "selfUseDeliveryBps": 9000,
+    "householdPaymentBps": 8000,
+    "shareBps": 10000,
+    "costsLocal": "100",
+    "fxUSDCPerLocal": "0.14"
+  },
+  "expectedParametersHash": "0xb2f8c80402262c8902bc8d0452c9a449f3845658e6c85bf3e9c235630788782f"
+}

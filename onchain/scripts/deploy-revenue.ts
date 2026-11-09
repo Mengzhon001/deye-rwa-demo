@@ -9,11 +9,13 @@ export type RevenueManifest = {
   network: string;
   deployedBlock: number;
   deployedBlockHash: string;
-  addresses: { usdc: string; station: string; vault: string; billing?: string };
+  addresses: { usdc: string; station: string; vault: string; billing?: string; oracleRegistry?: string };
   accounts: Record<string, string>;
   paymentToken?: {kind:"circle-test-usdc";symbol:"USDC";decimals:6};
   deploymentTransactions?: Record<string,string>;
   billingDeployment?: {transaction: string; block: number};
+  oracleMode?: "self-hosted-signed-v1";
+  oracleReporter?: string;
   scenarioId: string;
   localMaintenance?: {kind:"anvil-local-code-maintenance";previousCodeHash:string;codeHash:string;at:string;record:string};
   contractName?: "RevenueShareVaultV3" | "RevenueShareVaultV4" | "RevenueShareVaultV5";
@@ -25,6 +27,8 @@ function configured(name: string, fallback: string) {
 export async function deployRevenue(): Promise<RevenueManifest> {
   const chainId=Number((await hre.ethers.provider.getNetwork()).chainId);
   assertPublicConfiguration(chainId);
+  const oracleMode=process.env.REVENUE_ORACLE_MODE==="self-hosted-signed-v1";
+  if(oracleMode && (chainId!==84532 || process.env.REVENUE_HOUSEHOLD_PAYMENTS_ENABLED==="false" || !process.env.REVENUE_ORACLE_REPORTER_ADDRESS))throw new Error("Oracle billing requires Base Sepolia, household payments and an independent reporter");
   const signers = await hre.ethers.getSigners();
   if (signers.length < 8) throw new Error("Revenue deployment requires eight funded accounts");
   const [deployer, managerSigner, trusteeSigner, trustee2Signer, treasurySigner] =
@@ -88,12 +92,27 @@ export async function deployRevenue(): Promise<RevenueManifest> {
   if(!await station.hasRole(await station.ISSUER_ROLE(),accounts.agent))
     await (await station.grantRole(await station.ISSUER_ROLE(), accounts.agent)).wait();
   let billingAddress: string | undefined;
+  let oracleRegistryAddress: string | undefined;
   let billingDeployment: RevenueManifest["billingDeployment"];
   if (process.env.REVENUE_HOUSEHOLD_PAYMENTS_ENABLED !== "false") {
-    const billing=await deployOne("billing","HouseholdBilling",[await usdc.getAddress(),await vault.getAddress(),accounts.agent,accounts.treasury]);
+    let oracle:any;
+    if(oracleMode){
+      const reporter=getAddress(process.env.REVENUE_ORACLE_REPORTER_ADDRESS || "0x0000000000000000000000000000000000000000");
+      if(reporter==="0x0000000000000000000000000000000000000000")throw new Error("Independent Oracle reporter address required");
+      oracle=await deployOne("oracleRegistry","OracleReportRegistry",[accounts.admin,accounts.trustee,accounts.trustee2,reporter,await vault.getAddress(),await usdc.getAddress()]);
+      oracleRegistryAddress=await oracle.getAddress();
+    }
+    const billing=oracleMode
+      ?await deployOne("billing","HouseholdBillingV2",[await usdc.getAddress(),await vault.getAddress(),accounts.agent,accounts.treasury,oracleRegistryAddress])
+      :await deployOne("billing","HouseholdBilling",[await usdc.getAddress(),await vault.getAddress(),accounts.agent,accounts.treasury]);
     await billing.waitForDeployment();billingAddress=await billing.getAddress();
     const receipt=await hre.ethers.provider.getTransactionReceipt(deploymentTransactions.billing);billingDeployment={transaction:receipt!.hash,block:receipt!.blockNumber};
     if(!await vault.hasRole(await vault.TREASURY(),billingAddress))await (await vault.grantRole(await vault.TREASURY(), billingAddress)).wait();
+    if(oracleMode){
+      if(await oracle.billing()==="0x0000000000000000000000000000000000000000")await(await oracle.bindBilling(billingAddress!)).wait();
+      if(getAddress(await oracle.billing())!==getAddress(billingAddress!))throw new Error("Oracle registry bound to another billing contract");
+      if(await vault.hasRole(await vault.TREASURY(),accounts.treasury))await(await vault.revokeRole(await vault.TREASURY(),accounts.treasury)).wait();
+    }
   }
   const block = (await hre.ethers.provider.getBlock("latest"))!;
   return {
@@ -111,7 +130,9 @@ export async function deployRevenue(): Promise<RevenueManifest> {
       station: await station.getAddress(),
       vault: await vault.getAddress(),
       ...(billingAddress ? {billing:billingAddress}:{}),
+      ...(oracleRegistryAddress ? {oracleRegistry:oracleRegistryAddress}:{}),
     },
+    ...(oracleMode?{oracleMode:"self-hosted-signed-v1" as const,oracleReporter:getAddress(process.env.REVENUE_ORACLE_REPORTER_ADDRESS!)}:{}),
     accounts,
     deploymentTransactions: {...deploymentTransactions,...(billingDeployment?{billing:billingDeployment.transaction}:{})},
     ...(external?{paymentToken:{kind:"circle-test-usdc" as const,symbol:"USDC" as const,decimals:6 as const}}:{}),
@@ -150,7 +171,8 @@ export async function verifyRevenue(manifest: RevenueManifest) {
       ],
     },
   ];
-  if (manifest.addresses.billing) items.push({address:manifest.addresses.billing,source:"contracts/revenue/HouseholdBilling.sol",name:"HouseholdBilling",types:Array(4).fill("address"),args:[manifest.addresses.usdc,manifest.addresses.vault,manifest.accounts.agent,manifest.accounts.treasury]});
+  if (manifest.addresses.oracleRegistry) items.push({address:manifest.addresses.oracleRegistry,source:"contracts/revenue/OracleReportRegistry.sol",name:"OracleReportRegistry",types:Array(6).fill("address"),args:[manifest.accounts.admin,manifest.accounts.trustee,manifest.accounts.trustee2,manifest.oracleReporter!,manifest.addresses.vault,manifest.addresses.usdc]});
+  if (manifest.addresses.billing) items.push({address:manifest.addresses.billing,source:`contracts/revenue/${manifest.oracleMode?"HouseholdBillingV2":"HouseholdBilling"}.sol`,name:manifest.oracleMode?"HouseholdBillingV2":"HouseholdBilling",types:Array(manifest.oracleMode?5:4).fill("address"),args:[manifest.addresses.usdc,manifest.addresses.vault,manifest.accounts.agent,manifest.accounts.treasury,...(manifest.oracleMode?[manifest.addresses.oracleRegistry!]:[])]});
   const results: Array<{ address: string; verified: boolean; message: string }> = [];
   const api = process.env.REVENUE_EXPLORER_API_URL?.replace(/\/$/u, "");
   for (const item of items) {

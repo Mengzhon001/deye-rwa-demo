@@ -4,13 +4,13 @@ The Chinese and English PDFs cover the four-role workflow, system composition, t
 
 中文和英文 PDF 说明四角色流程、系统构成与四类架构、钱包准备、追加认购、月度分配、退出和链上核对。本仓库不包含账户私钥，测试负责人应通过内部渠道提供导入资料。
 
-The manuals were updated on 30 October 2026. They show bill publication, household wallet approval and USDC payment, separate simulated export funding, intermediary receipt reconciliation, and monthly distributions. The monthly sequence diagrams and nine illustrated monthly steps come from a two-month isolated walkthrough. Every illustrated English step uses the English interface; the Chinese language-switch button names the alternative language. Station display text is translated without altering recorded energy observations or collection times. Screenshots do not represent the shared product's current balances or stage.
+The manuals were updated on 9 November 2026. They show bill publication, household wallet approval and USDC payment, separate simulated export funding, intermediary receipt reconciliation, and monthly distributions. A new chapter explains the isolated self-hosted Oracle environment on Base Sepolia, its contracts, the actual validation-only report, and the later billable-period acceptance boundary. The monthly sequence diagrams and nine illustrated monthly steps come from a two-month isolated walkthrough. Every illustrated English step uses the English interface; the Chinese language-switch button names the alternative language. Screenshots do not represent the shared product's current balances or stage.
 
-The 30 October revision updates the unified application to https://reuters-romance-arranged-bloggers.trycloudflare.com/, both network-specific application paths and the private-chain RPC and explorer. It also explains progressive workspace loading. Temporary addresses were checked against the running services; the stable homepage remains https://mengzhon001.github.io/deye-rwa-demo/.
+The current unified application uses https://sell-dec-sir-org.trycloudflare.com/. It exposes three environment routes. Cloudflare Quick Tunnel addresses are temporary; the stable homepage remains https://mengzhon001.github.io/deye-rwa-demo/. The original private-chain service is under recovery because its saved Anvil state is damaged. Its business data has not been reset or replaced.
 
 Both languages now begin with a comparison of the shared private chain, Base Sepolia and a fresh local Docker deployment. Dedicated chapters cover private-chain lifecycle acceptance, public-chain transaction checks and future oracle preparation, and local installation, wallets, data sources, regression, shutdown and recovery. The lifecycle checklist links to the illustrated steps. Local deployment creates a separate private chain (20260922); it is not another public chain and does not reuse shared products or wallet roles by default.
 
-两版手册均增加三种测试路径的用途对照和独立操作章节。共享私链（20261008）用于完整生命周期，Base Sepolia（84532）用于真实公链兼容性验证及后续 Oracle 接入准备，本地 Docker 部署（默认20260922）用于开发、复现和独立回归。当前版本尚未接入 Oracle。本地部署命令已与仓库脚本逐项核对；本次文档修订不代表重新执行了新机器部署或链上生命周期。
+两版手册说明统一网站的三个业务环境与独立本地部署。共享私链（20261008）用于完整生命周期，原 Base Sepolia 产品（84532）用于真实公链兼容性验证，Local Oracle on Sepolia（同为84532）用于自托管 Oracle 报告与新版账单核验。独立本地 Docker（默认20260922）用于开发、复现和回归。Oracle 的历史“仅验证”报告已经登记，真实月度计费与收款仍待产品结算和月末验收。
 
 本地交付目录为项目根目录下可见的 `docs/manual/`。中英文手册已经合并私有演示链和 Base Sepolia 的说明，不需要从隐藏的 `.data` 目录寻找另一份公链手册。2026 年 10 月 30 日修订同步更新了网址、网络配置与分区加载说明。
 
@@ -23,7 +23,7 @@ The 22 October monthly walkthrough used authenticated browser pages and dedicate
 Install Python 3.12+ and XeLaTeX. Keep `scripts/manual/testing_paths.py` alongside `build.py`. Typography uses the macOS Songti collection at `/System/Library/Fonts/Supplemental/Songti.ttc`. Adjust the font declarations in the generator on another operating system. From the repository root, generate one language or both.
 
 ```sh
-python3 scripts/manual/build.py --language both --work output/manual --public-config docs/manual/deployment.public.json --legacy-assets docs/manual/assets --example docs/manual/example.json --english-screenshots docs/manual/screenshots.en.json
+python3 scripts/manual/build.py --language both --work output/manual --public-config docs/manual/deployment.public.json --oracle-config docs/manual/oracle-base-sepolia.public.json --legacy-assets docs/manual/assets --example docs/manual/example.json --english-screenshots docs/manual/screenshots.en.json
 cd output/manual
 xelatex -interaction=nonstopmode -halt-on-error manual.zh.tex
 xelatex -interaction=nonstopmode -halt-on-error manual.zh.tex

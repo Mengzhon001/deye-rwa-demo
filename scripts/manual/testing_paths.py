@@ -3,36 +3,37 @@
 
 def write_overview(t, L, para, section, sub, esc):
     section('测试方式与适用范围', 'Testing approaches and their purposes')
-    para('本系统提供三种使用方式，分别是通过统一网站访问共享私有演示链、访问 Base Sepolia 公链测试环境，以及在自己的电脑上部署独立本地实例。选择方式时应先确定测试目的，而不是仅根据网页能否打开判断环境是否相同。私有链用于在可控时间内验证完整业务，Base Sepolia 用于验证真实公链条件下的合约和钱包交互，并为后续 Oracle 集成建立基线；本地部署用于开发调试、独立复现和回归测试。',
-         'There are three ways to use the system: the shared private demonstration, the Base Sepolia public-chain environment, and an independent deployment on your own computer. Select an approach according to the test objective rather than assuming that similar pages share the same environment. The private chain supports the complete business lifecycle under a controlled clock. Base Sepolia validates contracts and wallets under public-chain conditions and establishes a baseline for later oracle integration. A local deployment supports development, independent reproduction and regression testing.')
+    para('统一网站提供三个业务环境，即私有演示链、原 Base Sepolia 产品和 Local Oracle on Sepolia。另可在自己的电脑上部署独立本地实例。私有链用于在可控时间内验证完整业务，原 Base Sepolia 产品用于公共链兼容性测试，Oracle 环境用于验证德业 API 取数、签名报告登记和新版账单强制核验。独立本地部署用于开发调试和回归测试。',
+         'The unified site offers three business environments: the private demonstration, the original Base Sepolia product, and Local Oracle on Sepolia. A separate local deployment is also available. The private chain supports the complete lifecycle under a controlled clock. The original Base Sepolia product tests public-chain compatibility. The Oracle environment tests Deye API retrieval, signed report registration, and mandatory verification by the new billing contract. A local deployment supports development and regression testing.')
     para('本地部署是一种部署方式，并不是第三条公共区块链。本手册的默认本地方案会创建自己的 Anvil 私有链。共享私链和新建本地链虽然运行相同业务逻辑，但使用不同的链编号、合约、账户配置和存储。相反，在本机打开一个连接 Base Sepolia 的后端，仍然属于公链测试，不能因此使用时间推进或重置功能。',
          'Local deployment is a hosting approach, not a third public blockchain. The default local profile creates its own private Anvil chain. The shared private chain and a new local chain run the same business logic but have different Chain IDs, contracts, account configuration and storage. Conversely, a backend running on your computer but connected to Base Sepolia is still a public-chain test and cannot advance or reset that chain.')
     t(r'\begin{longtable}{L{2.5cm}L{4.2cm}L{4.5cm}L{3cm}}\toprule ' + L('测试方式 & 主要目的 & 建议验证内容 & 时间与资金', 'Approach & Main purpose & Recommended checks & Time and funding') + r'\\\midrule\endhead')
     rows = [
         ('共享私有演示链', 'Shared private demo', '完整生命周期演示及多角色业务验收。', 'Complete lifecycle demonstrations and multi-role business acceptance.', '申请、发行、月度缴费、分配、转让、赎回、处置和关闭。', 'Applications, issuance, monthly payments, distributions, transfers, redemptions, servicing and closure.', '20261008；测试 mUSDC；中介可推进演示时间。', '20261008; test mUSDC; intermediary-controlled demo time.'),
         ('Base Sepolia', 'Base Sepolia', '验证公共链兼容性，并为后续 Oracle 接入准备基线。', 'Public-chain compatibility and a baseline for later oracle integration.', '钱包、Gas、Circle USDC、授权、认购、退款、回执和恢复。', 'Wallets, gas, Circle USDC, approvals, subscriptions, refunds, receipts and recovery.', '84532；测试 ETH 与 USDC；使用真实链上时间。', '84532; test ETH and USDC; real chain time.'),
+        ('Local Oracle on Sepolia', 'Local Oracle on Sepolia', '验证独立的自托管 Oracle 产品和强制报告校验。', 'Validate the independent self-hosted Oracle product and enforced report checks.', '德业 API 直读、EIP-712 签名、链上登记和受托参数审批。', 'Direct Deye API reads, EIP-712 signing, on-chain registration and trustee policy approval.', '同为84532；与原 Base 产品共享钱包测试币余额。', 'Also 84532; wallet test-token balances are shared with the original Base product.'),
         ('独立本地部署', 'Independent local deployment', '修改代码、复现问题并执行可重复的独立回归。', 'Code changes, issue reproduction and repeatable isolated regression.', '从空白场景建立产品，并验证页面、模型、权限和业务流程。', 'Build a product from an empty scene and check the UI, model, permissions and workflow.', '默认20260922；独立测试钱包和本地测试币。', 'Default 20260922; independent wallets and local test tokens.'),
     ]
     for row in rows:
         t(' & '.join(esc(L(row[i], row[i+1])) for i in range(0, 8, 2)) + r'\\\addlinespace')
     t(r'\bottomrule\end{longtable}')
-    para('共享私链与 Base Sepolia 沿用同一组业务角色地址，但一个地址在两条链上的余额、资格和持仓互不相通。新同事自行部署时，初始化工具默认生成另一组本地账户，不能直接用手册中共享环境的地址代替。每次开始测试都应记录链编号、钱包地址、产品合约和测试起始状态。',
-         'The shared private chain and Base Sepolia reuse the business-role addresses, but balances, eligibility and holdings remain independent on each chain. A colleague initializing a fresh deployment receives another set of local accounts and must not substitute the shared-environment addresses. Record the Chain ID, wallet address, product contract and starting state for every test.')
+    para('三个业务环境沿用同一组角色地址。私链与 Base Sepolia 的代币余额彼此独立，两个 Base Sepolia 环境则使用同一条链，因此同一钱包的测试 ETH 和 Circle USDC 余额共享。产品合约、资格、持仓、业务记录和登录会话仍按环境隔离。新建本地实例通常生成另一组账户。',
+         'The three business environments reuse the role addresses. Token balances are separate between the private chain and Base Sepolia. The two Base Sepolia environments share the same chain, so test ETH and Circle USDC balances in a given wallet are shared. Product contracts, eligibility, holdings, records and sign-in sessions remain isolated by environment. A fresh local instance normally generates different accounts.')
     t(r'\clearpage')
     sub('测试路径选择图', 'Selecting a test path')
     t(r'\begin{center}\begin{tikzpicture}[>=Latex,box/.style={draw,align=center,text width=4.1cm,minimum height=1.5cm,inner sep=5pt}]')
     t(r'\node[box] (goal) at (5,0) {' + L('确认测试目标', 'Identify the test objective') + '};')
     for name, x, zh, en, out_zh, out_en in [
         ('private', 0, '完整业务与角色交接', 'Full lifecycle and handoffs', '共享私链与后文 A 至 H 操作图', 'Shared private chain and illustrated steps A to H'),
-        ('base', 5, '真实公链与后续 Oracle 准备', 'Public-chain tests and future oracle preparation', 'Base Sepolia 小额交易与链上核对', 'Small Base Sepolia transactions and reconciliation'),
+        ('base', 5, '真实公链与 Oracle 验证', 'Public-chain and Oracle tests', '两个 Base Sepolia 环境分别核对', 'Reconcile the two Base Sepolia environments separately'),
         ('local', 10, '开发、复现与独立回归', 'Development, reproduction and isolated regression', '本地 Docker、独立链与测试钱包', 'Local Docker, independent chain and test wallets'),
     ]:
         t(f'\\node[box] ({name}) at ({x},-2.8) {{{esc(L(zh,en))}}};')
         t(f'\\node[box] ({name}out) at ({x},-5.6) {{{esc(L(out_zh,out_en))}}};')
         t(f'\\draw[->] (goal.south)--({name}.north);\\draw[->] ({name}.south)--({name}out.north);')
     t(r'\end{tikzpicture}\end{center}')
-    para('第一次了解产品或检查角色交接的读者，可以从共享私有链开始。需要修改代码或从零发行产品时，应使用自己的本地实例。只有在验证公共链行为或准备后续 Oracle 集成时，才需要在 Base Sepolia 上准备真实的测试 ETH 和 Circle 测试 USDC。以下章节分别说明三条路径，后面的完整操作图供私链与本地环境按当前状态使用。',
-         'Readers learning the product or checking role handoffs can start with the shared private chain. Use your own local instance for code changes or an issuance from an empty scene. Prepare Base Sepolia test ETH and Circle test USDC when checking public-chain behavior or preparing the later oracle integration. Separate chapters explain each path; the subsequent full workflow illustrations apply to private and local environments according to their current state.')
+    para('完整生命周期仍以私链操作图为准。验证公开链交易时使用原 Base Sepolia 产品，核对 Oracle 报告时选择第三项。两个公链环境都遵守真实链上时间，不能通过演示工具提前形成月度账单。',
+         'Use the private-chain illustrations for the full lifecycle. Choose the original Base Sepolia product for public-chain transactions and the third entry for Oracle reports. Both public-chain environments follow real chain time; demonstration controls cannot bring a monthly bill forward.')
 
 
 def write_private(t, L, para, section, sub, esc, pub):
@@ -79,11 +80,11 @@ def write_private(t, L, para, section, sub, esc, pub):
 
 
 def write_base_purpose(para, sub):
-    sub('测试目标与后续 Oracle 接入', 'Test objectives and later oracle integration')
+    sub('测试目标与独立 Oracle 环境', 'Test objectives and the separate Oracle environment')
     para('Base Sepolia 用于验证同一业务代码在真实公共链上能否正确完成钱包签名、Gas 支付、Circle USDC 授权与转账、合约调用、事件读取和中断恢复。它也是后续 Oracle 集成的测试基础，便于在同一条公共测试链上验证报告接收合约、报告摘要、账期绑定、权限与错误处理，而不影响私链的完整演示。',
          'Base Sepolia checks whether the business code handles wallet signatures, gas, Circle USDC approvals and transfers, contract calls, event reads and recovery on a real public chain. It also provides the foundation for later oracle integration, where report receivers, report digests, billing-period binding, permissions and failure handling can be tested on the same public test chain without disturbing the private-chain demonstration.')
-    para('当前部署尚未接入 Oracle。现阶段能够验证的是公共链交易和现有报告流程，不能据此认定电站数据已获得独立 Oracle 认证。后续实施时，需要按 Oracle 方案增加链下取数与核验、报告签名或认证、链上接收与强制校验，并重新部署和测试受影响的组件。Oracle 认证本身也不能证明业主已经付款，USDC 到账仍须通过独立交易核对。',
-         'The current deployment has no oracle integration. Present tests validate public-chain transactions and the existing report workflow; they do not establish independent oracle certification of station data. The later implementation must add off-chain retrieval and validation, report signatures or attestations, and on-chain receipt and enforcement, followed by deployment and testing of the affected components. An oracle attestation does not itself prove household payment; USDC receipts still require separate transaction reconciliation.')
+    para('本节的原 Base Sepolia 产品仍使用原账单合约，不核验 Oracle 报告。新功能只属于另一个独立产品和新版账单合约，具体操作见下一节。两者处于同一条 Base Sepolia 链，但业务数据不得混用。',
+         'The original Base Sepolia product in this chapter still uses its earlier billing contract and does not verify Oracle reports. The new feature belongs to another isolated product with a new billing contract, described in the next chapter. Both use Base Sepolia, but their business records must not be mixed.')
 
 
 def write_base_checks(t, L, para, sub):
@@ -92,6 +93,40 @@ def write_base_checks(t, L, para, sub):
          'Start with one investor account and test sign-in, eligibility, USDC approval, a small subscription and its refund. Then check the intermediary and trustee permissions using their own accounts. Verify the network and balance before each transaction, and reconcile its receipt, events and token transfers in the public explorer. While fundraising is open, add a subscription and check that the intermediary reviews the latest cumulative amount. Retain and reconfirm the original hash when a submitted transaction is slow to appear rather than paying again.')
     para('这一轮的完成标准是实际交易金额与业务记录一致、错误钱包与网络被正确拦截、刷新或重启后可以恢复原记录。若没有达到足额结算或真实月度截止日，应将结算、缴费和分配记录为“本轮未执行”，并说明原因。少量测试币和短时间观察不等于已经完成生命周期验收；完整路径应转到私有演示链或自己的本地实例。',
          'This round is complete when actual transaction amounts agree with business records, wrong wallets and networks are rejected, and records recover after refresh or restart. If settlement funding or the real monthly cutoff has not been reached, record settlement, billing and distribution as not executed in this round and explain why. Small test balances and a short observation window do not amount to lifecycle acceptance; use the private demonstration or your own local instance for that path.')
+
+
+def write_oracle(t, L, para, section, sub, esc, cfg):
+    section('Local Oracle on Sepolia 测试', 'Local Oracle on Sepolia testing')
+    para('第三个网络菜单项的完整名称为 Local Oracle on Sepolia。它与原 Base Sepolia 产品处于同一条公共测试链，Chain ID 均为84532，不是第三条链。两个环境沿用同一组角色钱包，因此测试 ETH 与 Circle USDC 余额共享，但合约、产品、登录会话与业务记录相互隔离。切换环境时无需再次切链，仍需向目标后端重新签名登录。',
+         'The third network-menu entry is Local Oracle on Sepolia. It runs on the same public Base Sepolia chain as the original product, with Chain ID 84532; it is not a third chain. Role wallets and their test ETH and Circle USDC balances are shared, while contracts, products, sign-in sessions and business records are isolated. Switching between the two environments does not require a chain switch, but it does require a new sign-in signature for the target backend.')
+    sub('访问入口与合约', 'Entry point and contracts')
+    t(r'\url{' + cfg['app'] + r'}\par')
+    t(r'\url{' + cfg['explorer'] + r'}\par')
+    for key, zh, en in [('station','电站凭证合约','Station credential'),('vault','独立资产池','Isolated vault'),('oracleRegistry','报告登记合约','Report registry'),('billing','强制核验账单合约','Enforced billing contract')]:
+        t(esc(L(zh,en)) + r'\par\nolinkurl{' + cfg['contracts'][key] + r'}\par\smallskip')
+    para('这个环境使用 Circle 测试 USDC，代币合约与原 Base Sepolia 产品相同。请在钱包中核对 Chain ID、角色地址、产品合约和交易目标。页面右侧的“Oracle 报告”可只读查看观测月、数据摘要、参数摘要、签名者及报告登记交易，不会显示德业 API 凭证或原始记录。',
+         'This environment uses the same Circle test USDC contract as the original Base Sepolia product. Check the Chain ID, role account, product and transaction destination in the wallet. The read-only Oracle reports page shows the observation month, source and parameter digests, reporter and registration transaction. It does not reveal Deye API credentials or raw observations.')
+    sub('数据与交易流程', 'Data and transaction flow')
+    t(r'\begin{center}\begin{tikzpicture}[>=Latex,box/.style={draw,align=center,text width=10cm,minimum height=1.05cm}]')
+    labels=[('api','德业只读 API 与完整自然月检查','Deye read-only API and complete-calendar-month checks'),('sign','本机 Oracle 以独立密钥签署 EIP-712 报告','Local Oracle signs an EIP-712 report with its separate key'),('registry','Base Sepolia 登记报告及两名受托人的参数批准','Base Sepolia registry and two trustee parameter approvals'),('billing','新版账单合约在同一交易中核验并占用报告','New billing contract verifies and consumes the report atomically'),('pay','业主钱包支付 Circle USDC，中介另行核对售电模拟款','Owner pays Circle USDC; intermediary separately reconciles simulated export funds')]
+    for i,(name,zh,en) in enumerate(labels):
+        t(f'\\node[box] ({name}) at (0,{-i*1.65}) {{{esc(L(zh,en))}}};')
+        if i: t(f'\\draw[->] ({labels[i-1][0]}.south)--({name}.north);')
+    t(r'\end{tikzpicture}\end{center}')
+    para('Oracle 服务直接读取已授权的德业 API，逐日检查数据完整性并核对日月汇总，然后按获批准的参数计算六位精度的 USDC 金额。数据缺失、API 故障或参数不一致时停止提交，不回退到记录回放或合成数据。初始产品发行准备可使用明确标注的历史记录回放，但这份材料不能代替月度 Oracle 报告。德业当前没有为观测值提供数字签名，因此报告只证明自托管 Oracle 已核对并签署，不能称为德业或 Chainlink 独立认证。',
+         'The Oracle service reads the authorized Deye API directly, checks each day and reconciles daily and monthly totals, then calculates six-decimal USDC amounts using the approved parameters. Missing data, an API failure or a parameter mismatch stops submission; there is no replay or synthetic fallback. A labeled recorded capture may support initial product preparation but cannot replace a monthly Oracle report. Deye has not digitally signed these observations, so the report proves checking and signing by our self-hosted Oracle, not independent certification by Deye or Chainlink.')
+    sub('已完成验收与待完成账期', 'Completed checks and the later billing period')
+    report=cfg['validationReport']
+    para('截至2026年11月9日，Oracle 已从德业 API 实际读取2026年8月完整自然月的数据，完成签名并在 Base Sepolia 登记历史报告。该报告明确标记为“仅验证”，新版账单合约拒绝用它生成业主账单。登记交易与报告编号如下，读者可在 Base Sepolia 浏览器独立核对。',
+         'As of 9 November 2026, the Oracle has actually read the complete August 2026 calendar month from the Deye API, signed a historical report and registered it on Base Sepolia. It is explicitly validation-only; the new billing contract rejects it as a source of a household bill. The registration transaction and report ID below can be checked independently in the Base Sepolia explorer.')
+    t(esc(L('报告编号','Report ID'))+r'\par\nolinkurl{'+report['reportId']+r'}\par')
+    t(esc(L('登记交易','Registration transaction'))+r'\par\nolinkurl{'+report['registrationTransaction']+r'}\par')
+    para('新产品仍需完成发行、募集合规条件与结算。结算后，从首个完整自然月开始，受托人 A 和 B 分别在审核队列批准电站、首个观测月及参数摘要。服务期与对应观测月都结束后，Oracle 才能提交可计费报告；中介随后使用报告生成账单，业主支付 USDC，中介确认入池，再按真实回款处理费用和投资者分配。以上可计费报告至投资者分配的链上全段尚未完成验收，不能把历史报告登记解释为已完成真实月度收款。',
+         'The new product still requires issuance, fundraising conditions and settlement. After settlement, the first complete calendar month is set, and trustees A and B separately approve the station, first observation month and parameter digest in their review queue. Only after both the service period and matching observation month end may the Oracle submit a billable report. The intermediary then generates the bill from that report, the owner pays USDC, and the intermediary confirms pool receipt before expenses and investor distributions follow actual cash. The full billable-report-to-distribution sequence has not yet passed on-chain acceptance. Historical report registration is not evidence of actual monthly collection.')
+    sub('运行、核对与限制', 'Operation, reconciliation and limits')
+    t(r'\begin{verbatim}\n'.replace('\\n','\n')+'npm run oracle:check\nnpm run oracle:dry-run\nnpm run oracle:validate-report\nnpm run oracle:billable\n'+r'\end{verbatim}')
+    para('上述命令由持有本机受限配置的环境负责人执行。oracle:dry-run 只取数和计算，不提交交易。oracle:validate-report 登记仅验证报告；重复执行前应核对原报告及回执。oracle:billable 仅在政策获双受托批准、产品已结算且真实账期结束后运行。签名密钥与 Gas 提交账户分开保管，不进入浏览器、GitHub 或手册。售电回款仍由独立测试资金账户模拟，Oracle 报告不证明电网已经付款。',
+         'The operator runs these commands using restricted local configuration. oracle:dry-run reads and calculates without submitting a transaction. oracle:validate-report registers a validation-only report; check the prior report and receipt before repeating it. oracle:billable runs only after both trustees approve the policy, the product settles and the real billing period ends. Reporter and gas-payer keys are stored separately and never enter the browser, GitHub or this manual. Export receipts remain simulated funding from an independent test account; an Oracle report does not prove payment by the grid.')
 
 
 def write_local(t, L, para, section, sub, esc):
