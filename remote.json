@@ -1,13 +1,13 @@
 {
-  "app": "https://reuters-romance-arranged-bloggers.trycloudflare.com",
-  "explorer": "https://quizzes-faces-simplified-discuss.trycloudflare.com",
-  "rpc": "https://mazda-lopez-stevens-pittsburgh.trycloudflare.com",
+  "app": "https://upgrades-handles-tomatoes-soc.trycloudflare.com",
+  "explorer": "https://cope-jim-itunes-emacs.trycloudflare.com",
+  "rpc": "https://affiliate-respond-shortly-technological.trycloudflare.com",
   "chainId": 20261008,
-  "walletEntryStatus": "verified",
+  "walletEntryStatus": "unverified",
   "preferredWallet": "rabby",
   "wallets": {
-    "rabby": "verified",
+    "rabby": "unverified",
     "metamask": "unverified"
   },
-  "updatedAt": "2026-10-30T02:21:29.607Z"
+  "updatedAt": "2026-11-09"
 }
