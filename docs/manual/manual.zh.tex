@@ -214,6 +214,109 @@ API电量、模型预测、审核状态与链上确认分别记录。应收转�
 \draw[arrow] (e) -- (f);
 \end{tikzpicture}\end{center}
 \end{landscape}
+\clearpage\section{智能合约整体架构与业务时序}
+本节描述当前三种测试环境实际使用的收益权合约，而不是把源码目录中的历史原型都视为同一产品。私有演示链和原 Base Sepolia 产品使用月度账单合约 HouseholdBilling。独立的 Local Oracle on Sepolia 产品以 OracleReportRegistry 和 HouseholdBillingV2 替代该账单路径。三个环境分别部署电站凭证与资产池，互不共用产品状态；两个 Base Sepolia 环境只共用公共测试链及 Circle 测试 USDC。
+
+\clearpage\begin{landscape}
+\subsection{当前部署的合约整体架构图}
+\begin{center}\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,contract/.style={draw=blue!55!black,fill=blue!5,rounded corners=2pt,align=center,text width=5.1cm,minimum height=1.35cm,inner sep=5pt},oracle/.style={contract,draw=orange!70!black,fill=orange!7},offchain/.style={draw=gray!65,dashed,rounded corners=2pt,align=center,text width=5.1cm,minimum height=1.15cm,inner sep=5pt},flow/.style={->,line width=.7pt,draw=blue!60!black},oflow/.style={->,line width=.7pt,draw=orange!75!black},note/.style={font=\scriptsize,fill=white,inner sep=2pt,align=center}]
+\node[offchain] (wallet) at (10,6.0) {角色钱包与业务应用};
+\node[offchain] (worker) at (20,6.0) {德业 API 与自托管 Oracle 服务};
+\node[contract] (station) at (2,2.6) {DeyeRWA\\电站 ERC-721 凭证};
+\node[contract] (vault) at (10,2.6) {RevenueShareVaultV5\\资产池与 DRS 份额};
+\node[oracle] (registry) at (20,2.6) {OracleReportRegistry\\签名报告与参数审批};
+\node[contract] (token) at (2,-1.0) {支付代币\\私链 MockUSDC / 公链 Circle USDC};
+\node[contract] (bill1) at (10,-1.0) {HouseholdBilling\\原账单路径};
+\node[oracle] (bill2) at (20,-1.0) {HouseholdBillingV2\\强制核验报告的账单路径};
+\draw[flow] (wallet.south) -- node[note,right]{角色签名与业务调用} (vault.north);
+\draw[flow] (vault.west) -- node[note,above]{ERC-721 托管} (station.east);
+\draw[flow] (vault.south west) -- node[note,sloped,above]{USDC 转账} (token.north east);
+\draw[flow] (bill1.north) -- node[note,right]{净回款入池} (vault.south);
+\draw[oflow,dashed] (worker.south) -- node[note,right]{签名报告} (registry.north);
+\draw[oflow] (bill2.north) -- node[note,right]{占用报告} (registry.south);
+\draw[oflow] (bill2.west) to[bend left=17] node[note,above]{净回款入池} (vault.east);
+\node[font=\scriptsize,align=center,fill=white] at (11,-2.65) {蓝色为两条常规路径共用的合约或调用；橙色仅用于独立 Oracle 产品。两种账单合约不会在同一产品中同时启用。};
+\end{tikzpicture}\end{center}
+\end{landscape}
+\subsection{合约职责与部署边界}
+\begin{longtable}{L{4cm}L{10.5cm}}\toprule 合约或组件 & 在当前产品中的作用\\\midrule\endhead
+DeyeRWA & 中介铸造电站 ERC-721 凭证。业主授权后，资产池在入池交易中接收凭证，并在募集失败或关闭后返还。凭证记录摘要，不转移设备本身的所有权。\\\addlinespace
+RevenueShareVaultV5 & 资产池合约本身也是六位精度的 DRS ERC-20 份额合约。它管理资格、募集与托管、结算、估值、回款、费用、月度分配、转让、赎回、服务事件和到期关闭。没有另一个单独部署的 DRS 代币合约。\\\addlinespace
+HouseholdBilling & 原私链和原 Base Sepolia 产品使用的账单合约。中介按照链下已核对的金额发布账单；业主以 USDC 缴费，独立测试资金账户提供模拟售电款；中介确认后，合约调用资产池归集净回款。它本身不检查 Oracle 报告。\\\addlinespace
+OracleReportRegistry & 仅用于 Oracle 产品。两位受托人分别批准计费参数，登记合约验证 Oracle 的 EIP-712 签名、产品、自然月、服务期、有效期和修订状态。它不持有业主缴费。\\\addlinespace
+HouseholdBillingV2 & 仅用于 Oracle 产品。发布账单时，它在同一笔交易中调用登记合约的 consume，并直接使用报告中的金额。后续业主缴费、模拟售电款和中介确认仍需各自的交易。\\\addlinespace
+USDC / MockUSDC & 私链部署 MockUSDC 供测试；两个 Base Sepolia 产品使用同一个 Circle 测试 USDC 合约。支付币与 DRS 份额不同；同链共享的 USDC 余额不会使两套产品的订单和持仓共享。\\\addlinespace
+\bottomrule\end{longtable}
+Calendar 是编入资产池的内部日历计算库，不另行部署为可交互合约。源码目录还保留 DBondMarket、RWAVault、EnergyRevenue 等早期原型和旧版资产池，用于历史场景或兼容性核对，但它们不参与本节所示的当前收益权业务路径。合约地址应按所选环境的部署清单核对，不能只凭同一 Chain ID 判断正在操作的产品。
+
+\clearpage\begin{landscape}
+\subsection{跨合约业务时序图（发行与结算）}
+\begin{center}\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,lane/.style={draw=blue!45!black,fill=blue!5,rounded corners=2pt,minimum width=3.55cm,minimum height=.72cm,align=center,font=\scriptsize},call/.style={->,line width=.65pt,draw=blue!60!black},oraclecall/.style={->,line width=.75pt,draw=orange!75!black},fund/.style={->,line width=.75pt,draw=green!45!black},label/.style={font=\scriptsize,fill=white,inner sep=1pt,align=center}]
+\node[lane] at (0,0) {参与者钱包 / 服务账户};
+\draw[dashed,gray!55] (0,-.43)--(0,-11.409999999999998);
+\node[lane] at (4.35,0) {DeyeRWA\\电站 NFT};
+\draw[dashed,gray!55] (4.35,-.43)--(4.35,-11.409999999999998);
+\node[lane] at (8.7,0) {RevenueShareVaultV5\\资产池 / DRS};
+\draw[dashed,gray!55] (8.7,-.43)--(8.7,-11.409999999999998);
+\node[lane] at (13.05,0) {USDC 或 MockUSDC};
+\draw[dashed,gray!55] (13.05,-.43)--(13.05,-11.409999999999998);
+\node[lane] at (17.4,0) {OracleReportRegistry};
+\draw[dashed,gray!55] (17.4,-.43)--(17.4,-11.409999999999998);
+\node[lane] at (21.75,0) {HouseholdBilling\\或 HouseholdBillingV2};
+\draw[dashed,gray!55] (21.75,-.43)--(21.75,-11.409999999999998);
+\draw[call] (0,-1.1) -- node[label,above] {中介：mintFacility} (4.35,-1.1);
+\draw[call] (0,-1.9300000000000002) -- node[label,above] {业主：approve(资产池)} (4.35,-1.9300000000000002);
+\draw[call] (0,-2.76) -- node[label,above] {中介：admit} (8.7,-2.76);
+\draw[call] (8.7,-3.59) -- node[label,above] {safeTransferFrom：NFT 入池} (4.35,-3.59);
+\draw[call] (0,-4.42) -- node[label,above] {中介编制、受托批准估值} (8.7,-4.42);
+\draw[call] (0,-5.25) -- node[label,above] {中介：publish 募集} (8.7,-5.25);
+\draw[fund] (0,-6.08) -- node[label,above] {投资者：approve(资产池)} (13.05,-6.08);
+\draw[call] (0,-6.91) -- node[label,above] {投资者：subscribe} (8.7,-6.91);
+\draw[fund] (8.7,-7.74) -- node[label,above] {transferFrom：认购款进入托管} (13.05,-7.74);
+\draw[call] (0,-8.57) -- node[label,above] {中介：reviewSubscription} (8.7,-8.57);
+\draw[call] (0,-9.399999999999999) -- node[label,above] {中介：settle} (8.7,-9.399999999999999);
+\draw[fund] (8.7,-10.229999999999999) -- node[label,above] {支付业主购买价} (13.05,-10.229999999999999);
+\draw[call] (8.7,-11.059999999999999) -- node[label,above] {向投资者铸造 DRS 份额} (0,-11.059999999999999);
+\end{tikzpicture}\end{center}
+\end{landscape}
+上图按交易发生顺序展示发行主路径。申请审核、协议正文、模型计算和普通钱包登录属于链下流程；只有相应的铸造、授权、托管、估值审批、认购与结算调用才产生链上状态。投资者认购款先留在资产池托管，结算后资产池支付业主购买价并在自身合约内铸造 DRS 份额。
+
+\clearpage\begin{landscape}
+\subsection{跨合约业务时序图（账单、分配与退出）}
+\begin{center}\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,lane/.style={draw=blue!45!black,fill=blue!5,rounded corners=2pt,minimum width=3.55cm,minimum height=.72cm,align=center,font=\scriptsize},call/.style={->,line width=.65pt,draw=blue!60!black},oraclecall/.style={->,line width=.75pt,draw=orange!75!black},fund/.style={->,line width=.75pt,draw=green!45!black},label/.style={font=\scriptsize,fill=white,inner sep=1pt,align=center}]
+\node[lane] at (0,0) {参与者钱包 / 服务账户};
+\draw[dashed,gray!55] (0,-.43)--(0,-12.969999999999999);
+\node[lane] at (4.35,0) {DeyeRWA\\电站 NFT};
+\draw[dashed,gray!55] (4.35,-.43)--(4.35,-12.969999999999999);
+\node[lane] at (8.7,0) {RevenueShareVaultV5\\资产池 / DRS};
+\draw[dashed,gray!55] (8.7,-.43)--(8.7,-12.969999999999999);
+\node[lane] at (13.05,0) {USDC 或 MockUSDC};
+\draw[dashed,gray!55] (13.05,-.43)--(13.05,-12.969999999999999);
+\node[lane] at (17.4,0) {OracleReportRegistry};
+\draw[dashed,gray!55] (17.4,-.43)--(17.4,-12.969999999999999);
+\node[lane] at (21.75,0) {HouseholdBilling\\或 HouseholdBillingV2};
+\draw[dashed,gray!55] (21.75,-.43)--(21.75,-12.969999999999999);
+\draw[oraclecall] (0,-1.1) -- node[label,above] {Oracle 路径：两位受托人 approvePolicy} (17.4,-1.1);
+\draw[oraclecall] (0,-1.82) -- node[label,above] {报告签名后由独立账户 registerReport} (17.4,-1.82);
+\draw[call] (0,-2.54) -- node[label,above] {中介：publishBill} (21.75,-2.54);
+\draw[oraclecall] (21.75,-3.2600000000000002) -- node[label,above] {仅 V2：consume(reportId)} (17.4,-3.2600000000000002);
+\draw[fund] (0,-3.98) -- node[label,above] {业主：approve(账单合约)} (13.05,-3.98);
+\draw[call] (0,-4.699999999999999) -- node[label,above] {业主：payBill} (21.75,-4.699999999999999);
+\draw[fund] (21.75,-5.42) -- node[label,above] {transferFrom：业主电费} (13.05,-5.42);
+\draw[call] (0,-6.140000000000001) -- node[label,above] {测试资金账户：fundExport} (21.75,-6.140000000000001);
+\draw[fund] (21.75,-6.859999999999999) -- node[label,above] {transferFrom：模拟售电款} (13.05,-6.859999999999999);
+\draw[call] (0,-7.58) -- node[label,above] {中介：confirmReceipt} (21.75,-7.58);
+\draw[fund] (21.75,-8.299999999999999) -- node[label,above] {receiveRevenue：净额入池} (8.7,-8.299999999999999);
+\draw[fund] (8.7,-9.02) -- node[label,above] {transferFrom：账单合约到资产池} (13.05,-9.02);
+\draw[call] (0,-9.74) -- node[label,above] {受托审估值；中介计费和月度分配} (8.7,-9.74);
+\draw[call] (0,-10.459999999999999) -- node[label,above] {投资者：claim；转让或赎回} (8.7,-10.459999999999999);
+\draw[fund] (8.7,-11.18) -- node[label,above] {支付分配或退出款} (13.05,-11.18);
+\draw[call] (0,-11.899999999999999) -- node[label,above] {服务事件审批；到期 closeProduct} (8.7,-11.899999999999999);
+\draw[call] (8.7,-12.62) -- node[label,above] {releaseStation：返还 NFT} (4.35,-12.62);
+\end{tikzpicture}\end{center}
+\end{landscape}
+第二张图延续同一产品的时间线。原账单合约的 publishBill 使用链下核对的金额，不经过 OracleReportRegistry；仅 Oracle 产品在发布账单时由 HouseholdBillingV2 调用登记合约的 consume，因此“仅验证报告”不能生成收费账单。业主缴费与模拟售电款分别转入账单合约，中介确认后才将净额归集到资产池。分配、领取、转让、赎回、服务事件和关闭均由资产池处理，USDC 的实际转账则通过支付代币合约完成。到期关闭或募集失败后的电站凭证返还属于独立交易，不代表设备产权转移。
+
 \clearpage\section{钱包与测试账户}
 请从Rabby官网进入浏览器扩展的官方安装入口。安装后选择已有地址，再选择私钥导入，将对应测试账户导入钱包扩展并核对完整地址。私钥只应输入钱包扩展，业务网站不需要私钥。
 

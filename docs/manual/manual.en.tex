@@ -214,6 +214,109 @@ Wallets sign on the client. The backend checks sender, target, method, arguments
 \draw[arrow] (e) -- (f);
 \end{tikzpicture}\end{center}
 \end{landscape}
+\clearpage\section{Smart contract architecture and business sequence}
+This section describes the revenue-rights contracts used by the three current test environments. Historical prototypes in the source tree are not combined into one product. The private demonstration and original Base Sepolia product use HouseholdBilling. The independent Local Oracle on Sepolia product replaces that billing path with OracleReportRegistry and HouseholdBillingV2. Each environment has its own station credential and vault. The two Base Sepolia environments share only the public test chain and Circle test USDC.
+
+\clearpage\begin{landscape}
+\subsection{Architecture of the currently deployed contracts}
+\begin{center}\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,contract/.style={draw=blue!55!black,fill=blue!5,rounded corners=2pt,align=center,text width=5.1cm,minimum height=1.35cm,inner sep=5pt},oracle/.style={contract,draw=orange!70!black,fill=orange!7},offchain/.style={draw=gray!65,dashed,rounded corners=2pt,align=center,text width=5.1cm,minimum height=1.15cm,inner sep=5pt},flow/.style={->,line width=.7pt,draw=blue!60!black},oflow/.style={->,line width=.7pt,draw=orange!75!black},note/.style={font=\scriptsize,fill=white,inner sep=2pt,align=center}]
+\node[offchain] (wallet) at (10,6.0) {Role wallets and application};
+\node[offchain] (worker) at (20,6.0) {Deye API and self-hosted Oracle};
+\node[contract] (station) at (2,2.6) {DeyeRWA\\Station ERC-721 credential};
+\node[contract] (vault) at (10,2.6) {RevenueShareVaultV5\\Vault and DRS shares};
+\node[oracle] (registry) at (20,2.6) {OracleReportRegistry\\Signed reports and policy approval};
+\node[contract] (token) at (2,-1.0) {Payment token\\Private MockUSDC / public Circle USDC};
+\node[contract] (bill1) at (10,-1.0) {HouseholdBilling\\Original billing path};
+\node[oracle] (bill2) at (20,-1.0) {HouseholdBillingV2\\Report-enforced billing path};
+\draw[flow] (wallet.south) -- node[note,right]{Wallet calls} (vault.north);
+\draw[flow] (vault.west) -- node[note,above]{ERC-721 custody} (station.east);
+\draw[flow] (vault.south west) -- node[note,sloped,above]{USDC transfers} (token.north east);
+\draw[flow] (bill1.north) -- node[note,right]{Net receipts} (vault.south);
+\draw[oflow,dashed] (worker.south) -- node[note,right]{Signed report} (registry.north);
+\draw[oflow] (bill2.north) -- node[note,right]{consume(reportId)} (registry.south);
+\draw[oflow] (bill2.west) to[bend left=17] node[note,above]{Net receipts} (vault.east);
+\node[font=\scriptsize,align=center,fill=white] at (11,-2.65) {Blue denotes the shared contract path; orange is used only by the independent Oracle product. A product does not activate both billing contracts.};
+\end{tikzpicture}\end{center}
+\end{landscape}
+\subsection{Contract responsibilities and deployment boundaries}
+\begin{longtable}{L{4cm}L{10.5cm}}\toprule Contract or component & Role in the current product\\\midrule\endhead
+DeyeRWA & The intermediary mints the station ERC-721 credential. After owner approval, the vault receives it on admission and returns it after failure or closure. Its hashes do not transfer ownership of the physical equipment.\\\addlinespace
+RevenueShareVaultV5 & The vault is itself the six-decimal DRS ERC-20 share contract. It manages eligibility, subscription custody, settlement, valuation, receipts, fees, monthly distributions, transfers, redemption, servicing cases and closure. There is no separately deployed DRS token.\\\addlinespace
+HouseholdBilling & The private and original Base Sepolia products use this bill contract. The intermediary publishes off-chain reviewed amounts. The owner pays USDC, a separate test treasury provides simulated export funding, and the intermediary confirms the net receipt into the vault. It does not verify an Oracle report.\\\addlinespace
+OracleReportRegistry & Only the Oracle product uses this registry. Two distinct trustees approve billing parameters. The registry verifies the Oracle EIP-712 signature, product, calendar month, service period, expiry and revision state. It does not hold owner payments.\\\addlinespace
+HouseholdBillingV2 & Only the Oracle product uses this version. Bill publication calls consume on the registry in the same transaction and uses the amounts in the report. Owner payment, simulated export funding and intermediary confirmation remain separate transactions.\\\addlinespace
+USDC / MockUSDC & The private chain deploys MockUSDC. Both Base Sepolia products use the same Circle test USDC contract. The payment token differs from DRS shares; a shared on-chain USDC balance does not merge product orders or holdings.\\\addlinespace
+\bottomrule\end{longtable}
+Calendar is an internal calendar library compiled into the vault, not a separate interactive deployment. The source tree also retains earlier prototypes such as DBondMarket, RWAVault and EnergyRevenue, and older vault versions for historical scenarios or compatibility checks; they are outside the current revenue-rights path shown here. Check contract addresses against the selected environment manifest. The same Chain ID alone does not identify the product.
+
+\clearpage\begin{landscape}
+\subsection{Cross-contract sequence (issuance and settlement)}
+\begin{center}\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,lane/.style={draw=blue!45!black,fill=blue!5,rounded corners=2pt,minimum width=3.55cm,minimum height=.72cm,align=center,font=\scriptsize},call/.style={->,line width=.65pt,draw=blue!60!black},oraclecall/.style={->,line width=.75pt,draw=orange!75!black},fund/.style={->,line width=.75pt,draw=green!45!black},label/.style={font=\scriptsize,fill=white,inner sep=1pt,align=center}]
+\node[lane] at (0,0) {Wallet / service account};
+\draw[dashed,gray!55] (0,-.43)--(0,-11.409999999999998);
+\node[lane] at (4.35,0) {DeyeRWA\\Station NFT};
+\draw[dashed,gray!55] (4.35,-.43)--(4.35,-11.409999999999998);
+\node[lane] at (8.7,0) {RevenueShareVaultV5\\Vault / DRS};
+\draw[dashed,gray!55] (8.7,-.43)--(8.7,-11.409999999999998);
+\node[lane] at (13.05,0) {USDC or MockUSDC};
+\draw[dashed,gray!55] (13.05,-.43)--(13.05,-11.409999999999998);
+\node[lane] at (17.4,0) {OracleReportRegistry};
+\draw[dashed,gray!55] (17.4,-.43)--(17.4,-11.409999999999998);
+\node[lane] at (21.75,0) {HouseholdBilling\\or HouseholdBillingV2};
+\draw[dashed,gray!55] (21.75,-.43)--(21.75,-11.409999999999998);
+\draw[call] (0,-1.1) -- node[label,above] {Intermediary: mintFacility} (4.35,-1.1);
+\draw[call] (0,-1.9300000000000002) -- node[label,above] {Owner: approve(vault)} (4.35,-1.9300000000000002);
+\draw[call] (0,-2.76) -- node[label,above] {Intermediary: admit} (8.7,-2.76);
+\draw[call] (8.7,-3.59) -- node[label,above] {safeTransferFrom: NFT custody} (4.35,-3.59);
+\draw[call] (0,-4.42) -- node[label,above] {Intermediary proposes; trustee approves NAV} (8.7,-4.42);
+\draw[call] (0,-5.25) -- node[label,above] {Intermediary: publish offering} (8.7,-5.25);
+\draw[fund] (0,-6.08) -- node[label,above] {Investor: approve(vault)} (13.05,-6.08);
+\draw[call] (0,-6.91) -- node[label,above] {Investor: subscribe} (8.7,-6.91);
+\draw[fund] (8.7,-7.74) -- node[label,above] {transferFrom: subscription into custody} (13.05,-7.74);
+\draw[call] (0,-8.57) -- node[label,above] {Intermediary: reviewSubscription} (8.7,-8.57);
+\draw[call] (0,-9.399999999999999) -- node[label,above] {Intermediary: settle} (8.7,-9.399999999999999);
+\draw[fund] (8.7,-10.229999999999999) -- node[label,above] {Pay owner purchase price} (13.05,-10.229999999999999);
+\draw[call] (8.7,-11.059999999999999) -- node[label,above] {Mint DRS shares to investors} (0,-11.059999999999999);
+\end{tikzpicture}\end{center}
+\end{landscape}
+The first sequence shows the issuance path in transaction order. Application review, agreement text, model calculations and ordinary wallet sign-in are off-chain steps. Only the corresponding mint, approval, custody, valuation approval, subscription and settlement calls change on-chain state. Subscription USDC first remains in vault custody. At settlement, the vault pays the owner and mints DRS shares within the same vault contract.
+
+\clearpage\begin{landscape}
+\subsection{Cross-contract sequence (billing, distributions and exit)}
+\begin{center}\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,lane/.style={draw=blue!45!black,fill=blue!5,rounded corners=2pt,minimum width=3.55cm,minimum height=.72cm,align=center,font=\scriptsize},call/.style={->,line width=.65pt,draw=blue!60!black},oraclecall/.style={->,line width=.75pt,draw=orange!75!black},fund/.style={->,line width=.75pt,draw=green!45!black},label/.style={font=\scriptsize,fill=white,inner sep=1pt,align=center}]
+\node[lane] at (0,0) {Wallet / service account};
+\draw[dashed,gray!55] (0,-.43)--(0,-12.969999999999999);
+\node[lane] at (4.35,0) {DeyeRWA\\Station NFT};
+\draw[dashed,gray!55] (4.35,-.43)--(4.35,-12.969999999999999);
+\node[lane] at (8.7,0) {RevenueShareVaultV5\\Vault / DRS};
+\draw[dashed,gray!55] (8.7,-.43)--(8.7,-12.969999999999999);
+\node[lane] at (13.05,0) {USDC or MockUSDC};
+\draw[dashed,gray!55] (13.05,-.43)--(13.05,-12.969999999999999);
+\node[lane] at (17.4,0) {OracleReportRegistry};
+\draw[dashed,gray!55] (17.4,-.43)--(17.4,-12.969999999999999);
+\node[lane] at (21.75,0) {HouseholdBilling\\or HouseholdBillingV2};
+\draw[dashed,gray!55] (21.75,-.43)--(21.75,-12.969999999999999);
+\draw[oraclecall] (0,-1.1) -- node[label,above] {Oracle path: two trustees approvePolicy} (17.4,-1.1);
+\draw[oraclecall] (0,-1.82) -- node[label,above] {Signed report: relayer registerReport} (17.4,-1.82);
+\draw[call] (0,-2.54) -- node[label,above] {Intermediary: publishBill} (21.75,-2.54);
+\draw[oraclecall] (21.75,-3.2600000000000002) -- node[label,above] {V2 only: consume(reportId)} (17.4,-3.2600000000000002);
+\draw[fund] (0,-3.98) -- node[label,above] {Owner: approve(billing)} (13.05,-3.98);
+\draw[call] (0,-4.699999999999999) -- node[label,above] {Owner: payBill} (21.75,-4.699999999999999);
+\draw[fund] (21.75,-5.42) -- node[label,above] {transferFrom: owner bill} (13.05,-5.42);
+\draw[call] (0,-6.140000000000001) -- node[label,above] {Test treasury: fundExport} (21.75,-6.140000000000001);
+\draw[fund] (21.75,-6.859999999999999) -- node[label,above] {transferFrom: simulated export funding} (13.05,-6.859999999999999);
+\draw[call] (0,-7.58) -- node[label,above] {Intermediary: confirmReceipt} (21.75,-7.58);
+\draw[fund] (21.75,-8.299999999999999) -- node[label,above] {receiveRevenue: net cash into vault} (8.7,-8.299999999999999);
+\draw[fund] (8.7,-9.02) -- node[label,above] {transferFrom: billing to vault} (13.05,-9.02);
+\draw[call] (0,-9.74) -- node[label,above] {Trustee NAV; intermediary fees and distribution} (8.7,-9.74);
+\draw[call] (0,-10.459999999999999) -- node[label,above] {Investor: claim; transfer or redeem} (8.7,-10.459999999999999);
+\draw[fund] (8.7,-11.18) -- node[label,above] {Pay distributions or exit proceeds} (13.05,-11.18);
+\draw[call] (0,-11.899999999999999) -- node[label,above] {Servicing approval; closeProduct at expiry} (8.7,-11.899999999999999);
+\draw[call] (8.7,-12.62) -- node[label,above] {releaseStation: return NFT} (4.35,-12.62);
+\end{tikzpicture}\end{center}
+\end{landscape}
+The second sequence continues the same product timeline. The original HouseholdBilling publishes off-chain reviewed amounts without calling OracleReportRegistry. Only the Oracle product has HouseholdBillingV2 consume a registered report during bill publication; a validation-only report cannot become a payable bill. Owner payments and simulated export funding enter the billing contract separately. Net cash reaches the vault only after intermediary confirmation. The vault handles distributions, claims, transfers, redemptions, servicing cases and closure, while actual USDC transfers occur through the payment-token contract. Returning the station credential after failure or closure is a separate transaction and does not transfer physical equipment title.
+
 \clearpage\section{Wallets and test accounts}
 Install the browser extension through Rabby’s official website. Choose an existing address and private-key import, then verify the resulting full address. Enter private keys only inside the wallet extension. The business website never needs them.
 

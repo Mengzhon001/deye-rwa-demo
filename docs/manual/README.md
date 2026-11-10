@@ -2,6 +2,8 @@
 
 The Chinese and English PDFs cover the four-role workflow, system composition, the four architecture views, wallet setup, repeated subscriptions, monthly distributions, exits and on-chain reconciliation. Repository copies omit private keys. The demonstration operator supplies account import material through an internal channel.
 
+Both PDFs now include a dedicated smart contract architecture chapter. Its diagram distinguishes the original HouseholdBilling path from the OracleReportRegistry and HouseholdBillingV2 path, while identifying DeyeRWA, RevenueShareVaultV5 and the payment token shared by each product. Two cross-contract sequence diagrams cover issuance and settlement, followed by monthly billing, owner payment, intermediary receipt confirmation, distribution and exit. The diagrams show the current contract family rather than historical prototypes.
+
 中文和英文 PDF 说明四角色流程、系统构成与四类架构、钱包准备、追加认购、月度分配、退出和链上核对。本仓库不包含账户私钥，测试负责人应通过内部渠道提供导入资料。
 
 The manuals were updated on 9 November 2026. They show bill publication, household wallet approval and USDC payment, separate simulated export funding, intermediary receipt reconciliation, and monthly distributions. A new chapter explains the isolated self-hosted Oracle environment on Base Sepolia, its contracts, the actual validation-only report, and the later billable-period acceptance boundary. The monthly sequence diagrams and nine illustrated monthly steps come from a two-month isolated walkthrough. Every illustrated English step uses the English interface; the Chinese language-switch button names the alternative language. Screenshots do not represent the shared product's current balances or stage.
@@ -20,7 +22,7 @@ The 22 October monthly walkthrough used authenticated browser pages and dedicate
 
 ## Rebuilding
 
-Install Python 3.12+ and XeLaTeX. Keep `scripts/manual/testing_paths.py` alongside `build.py`. Typography uses the macOS Songti collection at `/System/Library/Fonts/Supplemental/Songti.ttc`. Adjust the font declarations in the generator on another operating system. From the repository root, generate one language or both.
+Install Python 3.12+ and XeLaTeX. Keep `scripts/manual/testing_paths.py` and `scripts/manual/contract_architecture.py` alongside `build.py`. Typography uses the macOS Songti collection at `/System/Library/Fonts/Supplemental/Songti.ttc`. Adjust the font declarations in the generator on another operating system. From the repository root, generate one language or both.
 
 ```sh
 python3 scripts/manual/build.py --language both --work output/manual --public-config docs/manual/deployment.public.json --oracle-config docs/manual/oracle-base-sepolia.public.json --legacy-assets docs/manual/assets --example docs/manual/example.json --english-screenshots docs/manual/screenshots.en.json
