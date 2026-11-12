@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { gunzipSync } from "node:zlib";
 import { createHash } from "node:crypto";
 import {
-  fetchPvgisProfile, profileFromPvgis, pvgisEnergyForPeriod,
+  fetchPvgisProfile, profileFromPvgis, pvgisEnergyForPeriod, pvgisProfileHash,
   PvgisConfig, PvgisProfileSchema,
 } from "./pvgis";
 import { forecast, valuationBlockReason } from "./model";
@@ -15,6 +15,7 @@ import { syntheticStation, demoAssumptions } from "./fixtures";
 const config: PvgisConfig = {
   latitude: 31.23, longitude: 121.47, dcCapacityKWp: 10,
   tiltDeg: 25, aspectDeg: 0, nonagingLossPct: 10,
+  parameterStatus: "provisional",
   locationEvidence: "Site installation drawing with verified GPS coordinates",
   designEvidence: "Reviewed DC module schedule, tilt and azimuth drawing",
 };
@@ -42,6 +43,7 @@ test("PVGIS hourly records are complete, parameter-matched and archived with the
       return new Response(raw,{status:200,headers:{"content-type":"application/json"}});
     });
     assert.equal(profile.rawSha256,createHash("sha256").update(raw).digest("hex"));
+    assert.equal(profile.profileHash,pvgisProfileHash(profile));
     assert.equal(profile.hourlyRows,43824); // leap day in 2020
     assert.ok(Math.abs(profile.annualKWhPerKWp[0]-876)<1e-6);
     assert.ok(Math.abs(profile.annualKWhPerKWp[1]-878.4)<1e-6);
@@ -61,13 +63,14 @@ test("irradiance valuation scales specific yield once and binds the reviewed pro
     version:"pvgis-era5-profile.v1",database:"PVGIS-ERA5",apiVersion:"5_3",
     sourceUrl:"https://re.jrc.ec.europa.eu/api/v5_3/seriescalc?test=1",
     rawSha256:"a".repeat(64),retrievedAt:now,years:[2019,2020,2021,2022,2023],
+    profileHash:pvgisProfileHash({rawSha256:"a".repeat(64),config}),
     hourlyRows:43824,config,
     meanMonthlyKWhPerKWp:[100,110,120,130,140,150,160,170,180,190,200,210],
     annualKWhPerKWp:[1860,1860,1860,1860,1860],
   });
   station.irradianceProfile = profile;
   const assumptions = {...demoAssumptions("EUR"),baselineMethod:"pvgis-irradiance" as const,
-    irradianceProfileHash:profile.rawSha256,availabilityPct:100,degradationPct:0,
+    irradianceProfileHash:profile.profileHash,availabilityPct:100,degradationPct:0,
     baselineReviewSourceHash:station.sourceHash,
     baselineReviewNote:"Reviewed PVGIS location and DC design against station evidence"};
   const start = Date.UTC(2026,11,20)/1000;
@@ -76,6 +79,7 @@ test("irradiance valuation scales specific yield once and binds the reviewed pro
   assert.ok(Math.abs(pvgisEnergyForPeriod(profile,start,Date.UTC(2027,0,20)/1000)-periodKWhPerKWp)<1e-9);
   assert.ok(Math.abs(result.rows[0].generationKWh-periodKWhPerKWp*10*.9)<1e-8);
   assert.equal(result.modelVersion,"pvgis-era5-irradiance.1");
+  assert.match(result.warnings.join(" "),/provisional demo estimates/);
   assert.equal(result.energyEvidence?.irradiance?.rawSha256,profile.rawSha256);
   assert.deepEqual(result.baseline?.comparison.map(v=>v.method),["historical","pvgis-irradiance"]);
   assert.equal(valuationBlockReason(station,result,start),null);
@@ -83,4 +87,7 @@ test("irradiance valuation scales specific yield once and binds the reviewed pro
   changed.irradianceProfile!.rawSha256="b".repeat(64);
   assert.match(valuationBlockReason(changed,result,start)!,/PVGIS/);
   assert.throws(()=>forecast(station,{...assumptions,irradianceProfileHash:"b".repeat(64)},start),/matching PVGIS/);
+  const changedCapacity = structuredClone(station);
+  changedCapacity.irradianceProfile!.config.dcCapacityKWp = 12;
+  assert.match(valuationBlockReason(changedCapacity,result,start)!,/PVGIS/);
 });

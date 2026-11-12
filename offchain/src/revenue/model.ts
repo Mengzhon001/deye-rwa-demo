@@ -6,7 +6,7 @@ import {
   BASELINE_MODEL,
   BaselineAnalysis,
 } from "./baseline";
-import { PvgisProfileSchema, pvgisEnergyForPeriod } from "./pvgis";
+import { PvgisProfileSchema, pvgisEnergyForPeriod, pvgisProfileHash } from "./pvgis";
 
 export const VERSION = "revenue-rights.v2";
 export const COMBINED_MODEL = "household-export.2";
@@ -309,7 +309,7 @@ export function forecast(
   if (a.baselineMethod === "pvgis-irradiance") {
     if (a.revenueModel !== "household-export")
       throw new Error("PVGIS irradiation baseline requires the household and export revenue model");
-    if (!s.irradianceProfile || a.irradianceProfileHash !== s.irradianceProfile.rawSha256)
+    if (!s.irradianceProfile || a.irradianceProfileHash !== pvgisProfileHash(s.irradianceProfile))
       throw new Error("Load and review a matching PVGIS irradiation profile before valuation");
   }
   const reviewRequired =
@@ -357,6 +357,8 @@ export function forecast(
     );
   if (a.baselineMethod === "pvgis-irradiance")
     warnings.push("PVGIS-ERA5 基于 2019–2023 年历史气象模拟光伏功率，形成未来季节性情景，并非未来天气预报或德业实测发电量。上网比例仍取德业历史计量，电价、费用和汇率仍为独立假设。PVGIS uses historical weather to model a climate baseline, not future weather or Deye-metered energy.");
+  if (a.baselineMethod === "pvgis-irradiance" && s.irradianceProfile?.config.parameterStatus === "provisional")
+    warnings.push("PVGIS 坐标、容量或组件设计含演示估计，尚未由电站方确认。该估值仅供测试，不得作为已核实的电站报价。PVGIS design inputs include provisional demo estimates and are not operator-confirmed.");
   if (baseline.observedExportRatio !== null && baseline.observedExportRatio > 1)
     warnings.push(
       "近期上网电量超过发电量，近期比例不可用。当前历史季节性估算须审阅，不代表已核实的未来自用量。Recent solar allocation is unavailable; historical seasonal estimates require review and are not metered future self-use."
@@ -439,7 +441,7 @@ export function forecast(
           meanImportKWh: meanImport,
           ...(irradiance ? {
             irradianceKWhPerKWp,
-            irradiationProfileHash: irradiance.rawSha256,
+            irradiationProfileHash: pvgisProfileHash(irradiance),
             dcCapacityKWp: irradiance.config.dcCapacityKWp,
             nonagingLossFactor: 1 - irradiance.config.nonagingLossPct / 100,
           } : {}),
@@ -634,9 +636,9 @@ export function valuationBlockReason(
 ): string | null {
   const audit = analyzeBaseline(station, asOf);
   const irradiationSelected = report?.assumptions.baselineMethod === "pvgis-irradiance";
-  if (irradiationSelected && (!station.irradianceProfile ||
-      report?.energyEvidence?.irradiance?.rawSha256 !== station.irradianceProfile.rawSha256 ||
-      report.assumptions.irradianceProfileHash !== station.irradianceProfile.rawSha256))
+  if (irradiationSelected && (!station.irradianceProfile || !report?.energyEvidence?.irradiance ||
+      pvgisProfileHash(report.energyEvidence.irradiance) !== pvgisProfileHash(station.irradianceProfile) ||
+      report.assumptions.irradianceProfileHash !== pvgisProfileHash(station.irradianceProfile)))
     return "PVGIS 气象基线已变更或未核对，请重新载入、审核并生成估值。The PVGIS profile changed or is unavailable; reload and review it before valuation.";
   if (report?.assumptions.revenueModel === "household-export" && report.modelVersion !==
       (irradiationSelected ? IRRADIANCE_MODEL : COMBINED_MODEL))

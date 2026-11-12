@@ -12,9 +12,9 @@ All three methods use the same household-payment, export-income, cost and discou
 | --- | --- | --- |
 | Long-run historical seasonal | Same-month generation mean from up to 36 complete metered months | Eligible historical export ratio; short or inconsistent evidence is labeled provisional and reviewed. |
 | Recent export ratio | Still uses the long-run historical same-month generation mean | Ratio from 7 to 30 eligible complete days before capture; unavailable when the recent energy balance is inconsistent. |
-| PVGIS irradiation climate baseline | Hourly power modeled from 2019–2023 historical weather, scaled by verified station design | Export ratio still comes from eligible Deye history; coordinates, array design, complete hourly records and source digest require review. |
+| PVGIS irradiation climate baseline | Hourly power modeled from 2019–2023 historical weather, scaled by recorded or explicitly provisional station inputs | Export ratio still comes from eligible Deye history; parameter status, complete hourly records and source digest are disclosed with the report. |
 
-As of 12 November 2026, all three applications include the third baseline's calculation and UI entry. Deye has not yet confirmed the station coordinates and array design, so the PVGIS option remains disabled for the current station. The intermediary must enter verified inputs, load the complete hourly climate profile and submit it for review before selecting the method for a new quote. Signed agreements and published products are not automatically repriced.
+As of 12 November 2026, all three applications include the third baseline. The Shanghai station can load the **provisional demonstration inputs** below for a new quote preview and review. The interface and report retain the “provisional demo estimate” label; these inputs must not be described as an operator-confirmed as-built design. Signed agreements and published products are not automatically repriced.
 
 ## From history to future energy
 
@@ -38,7 +38,19 @@ Where recent complete-day export ratios differ materially from history, reviewer
 
 The third valuation method uses PVGIS 5.3 ERA5 historical weather data from the European Commission's Joint Research Centre. PVGIS models hourly power for a 1 kWp installation from solar radiation, temperature and the specified array design for 2019–2023. The system checks the complete five-year hourly series and response parameters before averaging modeled specific yield by UTC calendar month. This is a seasonal climate baseline, not a prediction of actual sunlight in a future month or a Deye-metered generation record.
 
-The intermediary must enter verified coordinates, DC nameplate capacity, panel tilt, aspect and an additional first-year system-loss assumption for the specific station, with evidence for the location and design. PVGIS defines 0° aspect as due south. The notebook's representative cities, 1 MWp and 30° tilt are examples, not Deye station parameters. The server requests PVGIS with `peakpower=1` and `loss=0`, then applies the separate loss factor once.
+The intermediary records the source of each coordinate, DC capacity, panel tilt, aspect and additional first-year system-loss input, distinguishing recorded API values from scenario assumptions. PVGIS aspect uses 0° for south and negative values for east. Other example cities and the 1 MWp installation in the notebook are not inputs for this station. The server requests PVGIS power with `peakpower=1` and `loss=0`, then applies additional loss once in the calculation below.
+
+### Provisional Shanghai station demonstration inputs
+
+| Input | Value used | Source and status |
+| --- | ---: | --- |
+| Coordinates | 31.173725° N, 121.48858° E | `locationLat` and `locationLng` in the recorded Deye API replay; no independent site survey has been completed. |
+| DC capacity proxy | 40 kWp | The API `installedCapacity` normalizes to 40 kW. The API does not establish whether this is a DC or AC rating, so 40 kWp is an explicit numerical proxy. |
+| Fixed-panel tilt | 30° | PVGIS model-optimal fixed tilt for those coordinates, **not** the measured installation tilt. |
+| Panel aspect | −2° | PVGIS model-optimal orientation, slightly east of south, **not** the measured installation aspect. |
+| Additional first-year system loss | 14% | A demonstration scenario assumption, not a Deye loss measurement. The hourly PVGIS request uses `loss=0` to avoid double-counting. |
+
+The replayed station observation was captured on 24 September 2026 China Standard Time. PVGIS 5.3 ERA5 returned the complete 43,824-hour series for 2019–2023, with a modeled five-year mean of **1,465.70 kWh/kWp per year** before additional loss. At 40 kWp, 14% additional loss and the existing model's 98% availability assumption, the illustrative first-year generation is **49,411.78 kWh**. This is a climate-and-design scenario, not a Deye meter reading or confirmation of the DC nameplate. The raw PVGIS response digest is `c2779962f6bc066525f9556b05ade82bcba9e8495c6eeb30c1cf31f20eef067c`. Any quote still needs documented export allocation, tariffs and expenses, followed by intermediary and trustee review. The [official PVGIS API guide](https://joint-research-centre.ec.europa.eu/photovoltaic-geographical-information-system-pvgis/using-pvgis-5/api-non-interactive-service_en) defines the tilt, aspect and loss parameters.
 
 ```text
 Modeled service-period generation = Σ[mean PVGIS kWh/kWp for each calendar month

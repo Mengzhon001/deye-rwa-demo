@@ -394,7 +394,9 @@ function wfReport(report, price, currency) {
     0
   );
   return `<p class="wf-help">${t("Forecast baseline", "预测基线")}: <b>${
-    report.assumptions.baselineMethod === "recent-export-ratio"
+    report.assumptions.baselineMethod === "pvgis-irradiance"
+      ? t("PVGIS irradiation scenario × reviewed Deye export allocation", "PVGIS 辐照情景 × 经审核的德业上网分配比例")
+      : report.assumptions.baselineMethod === "recent-export-ratio"
       ? t(
           "Seasonal generation × recent export ratio",
           "季节性发电量 × 近期上网比例"
@@ -632,7 +634,7 @@ function wfEnergyRules(report) {
     e = report.energyEvidence;
   const recent = a.baselineMethod === "recent-export-ratio";
   const formula = a.baselineMethod === "pvgis-irradiance"
-    ? t("Forecast export = PVGIS ERA5 modeled specific yield for the service dates × verified DC kWp × additional loss factor × availability × degradation × reviewed Deye export ratio. Historical weather is a climate scenario, not a forecast of future weather.", "每期预测上网量 = PVGIS ERA5 服务期模拟单位发电量 × 经核实的直流侧 kWp × 额外系统损耗系数 × 可用率 × 衰减系数 × 经审核的德业历史上网比例。历史气象构成情景基线，不是未来天气预报。")
+    ? t("Forecast export = PVGIS ERA5 modeled specific yield for the service dates × disclosed DC kWp input × additional loss factor × availability × degradation × reviewed Deye export ratio. The DC input may be provisional. Historical weather is a climate scenario, not a forecast of future weather.", "每期预测上网量 = PVGIS ERA5 服务期模拟单位发电量 × 已披露的直流侧 kWp 输入 × 额外系统损耗系数 × 可用率 × 衰减系数 × 经审核的德业历史上网比例。直流容量输入可能是暂定代理值。历史气象构成情景基线，不是未来天气预报。")
     : recent
     ? t(
         "Forecast export = historical same-month mean generation × recent export ratio × availability × degradation factor × remaining-period fraction",
@@ -667,7 +669,7 @@ function wfEnergyRules(report) {
     ${b?.energyInconsistent ? `<p class="wf-help">${t("Recent exports exceed generation, so the recent solar allocation is unavailable. This report uses a reviewed historical seasonal estimate, not verified future self-use.", "近期上网量超过发电量，近期光伏分配比例不可用。本报告采用经审核的历史季节性暂定估算，不能理解为已核实的未来自用电量。")}</p>` : ""}
     <div class="wf-energy-steps"><div><span>01</span><h4>${a.baselineMethod === "pvgis-irradiance" ? t("PVGIS ERA5 modeled generation", "PVGIS ERA5 模拟发电基线") : t("Historical seasonal baseline", "历史季节性基线")}</h4><p>${a.baselineMethod === "pvgis-irradiance" ? `PVGIS-ERA5 · ${esc(e.irradiance?.years?.join("–") || "—")} · SHA-256 ${esc(e.irradiance?.rawSha256 || "—")}` : `${esc(b?.historyStart || e.history[0]?.month || "—")} → ${esc(
     b?.historyEnd || e.history.at(-1)?.month || "—"
-  )} · ${e.history.length} ${t("complete months", "个完整月")}`}</p><p>${a.baselineMethod === "pvgis-irradiance" ? t("Verified hourly power from the historical ERA5 weather series is converted to calendar-month specific yield and scaled by the station's reviewed DC design.", "先核对 ERA5 历史气象对应的逐小时模拟功率，再换算自然月单位发电量，并按本电站审核后的直流侧设计缩放。") : t(
+  )} · ${e.history.length} ${t("complete months", "个完整月")}`}</p><p>${a.baselineMethod === "pvgis-irradiance" ? t("Checked hourly modeled power from historical ERA5 weather is converted to calendar-month specific yield and scaled by the disclosed DC capacity input, which may be provisional.", "先核对 ERA5 历史气象对应的逐小时模拟功率，再换算自然月单位发电量，并按已披露的直流容量输入缩放；该容量可能是暂定代理值。") : t(
     "Average all observed years for the matching calendar month, using up to 36 complete months. Missing calendar months fall back to the full sample average.",
     "最多取36个完整月，对历年相同月份求平均，保留季节差异；缺少同月样本时，回退到全部样本均值。"
   )}</p></div>
@@ -969,17 +971,32 @@ function wfEditor(a) {
     )}</button></div></form>`
   );
 }
+function wfShanghaiPvgisDemoInputs(s) {
+  if (s?.id !== "0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd") return {};
+  const m = s.metadata || {}, latitude = Number(m.locationLat),
+    longitude = Number(m.locationLng), capacity = Number(s.capacityKW);
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude) ||
+      !Number.isFinite(capacity) || capacity <= 0) return {};
+  const captured = new Date(s.observedAt * 1000).toISOString().slice(0, 10);
+  return {
+    latitude, longitude, dcCapacityKWp: capacity,
+    tiltDeg: 30, aspectDeg: -2, nonagingLossPct: 14,
+    parameterStatus: "provisional",
+    locationEvidence: `Deye API replay captured ${captured}: locationLat ${latitude}, locationLng ${longitude}; site coordinates not independently surveyed.`,
+    designEvidence: `Deye API installedCapacity ${capacity} kW used as provisional DC kWp proxy; PVGIS modeled optimum tilt 30 degrees, aspect -2 degrees; 14% demo loss. As-built design not confirmed.`,
+  };
+}
 function wfIrradianceProfilePanel(a) {
   const s = state.stations.find(st => st.id === a.stationId),
     profile = s?.irradianceProfile,
-    c = profile?.config || {};
+    c = profile?.config || wfShanghaiPvgisDemoInputs(s);
   const field = (name, en, zh, value, min, max, step = "any") =>
     `<label>${t(en, zh)}<input type="number" name="${name}" value="${value ?? ""}" min="${min}" max="${max}" step="${step}" required></label>`;
   return `<div id="wf-irradiance-profile-${esc(a.id)}">${wfPanel(t("PVGIS irradiation profile", "PVGIS 辐照气象基线"),
     `<p class="wf-help">${t(
-      "PVGIS 5.3 uses 2019–2023 ERA5 weather to model hourly power for 1 kWp. It is a historical climate baseline for future scenarios, not a future weather forecast or Deye-metered generation. Enter this station's verified coordinates and DC design; do not use the notebook's example cities or 30° tilt unless they match the actual installation.",
-      "PVGIS 5.3 使用 2019–2023 年 ERA5 气象资料模拟 1 kWp 电站逐小时功率，作为未来情景的历史气象基线；它不是未来天气预报，也不是德业实测发电量。请填写本电站经核实的坐标和直流侧设计参数，不要直接套用附件中的代表城市或 30° 倾角。"
-    )}</p>${profile ? `<p class="wf-help">${t("Saved source", "已保存数据源")}: PVGIS-ERA5 · 2019–2023 · SHA-256 ${esc(profile.rawSha256)} · ${t("mean modeled annual yield", "平均模拟年单位发电量")} ${dsNum(profile.annualKWhPerKWp.reduce((x,y)=>x+y,0)/5,2)} kWh/kWp</p>` : `<p class="wf-help">${t("No irradiation profile has been loaded for this station.", "此电站尚未载入辐照气象基线。")}</p>`}
+      "PVGIS 5.3 uses 2019–2023 ERA5 weather to model hourly power for 1 kWp. The Shanghai demonstration prefill uses the recorded Deye coordinates and 40 kW capacity as a provisional 40 kWp DC proxy; 30° tilt, −2° aspect and 14% additional loss are scenario estimates, not as-built facts. Review or replace them before loading.",
+      "PVGIS 5.3 使用 2019—2023 年 ERA5 气象资料模拟 1 kWp 电站逐小时功率。上海演示预填使用德业记录的坐标，并暂以 API 的 40 kW 装机值作为 40 kWp 直流容量代理；30° 倾角、−2° 方位角和 14% 额外损耗均为情景估计，不是已核实的电站实装参数。载入前请核对或修改。"
+    )}</p>${profile ? `<p class="wf-help">${t("Saved source", "已保存数据源")}: PVGIS-ERA5 · 2019–2023 · SHA-256 ${esc(profile.rawSha256)} · ${t("parameter status", "参数状态")}: ${profile.config.parameterStatus === "confirmed" ? t("operator-confirmed", "已核实") : t("provisional demo estimate", "演示估计") } · ${t("mean modeled annual yield", "平均模拟年单位发电量")} ${dsNum(profile.annualKWhPerKWp.reduce((x,y)=>x+y,0)/5,2)} kWh/kWp</p>` : `<p class="wf-help">${t("No irradiation profile has been loaded for this station. Prefilled values are not saved until you fetch and verify the PVGIS series.", "此电站尚未载入辐照气象基线。预填值须经点击获取并核对后才会保存。")}</p>`}
     <form data-action="load-pvgis" data-payload="${esc(JSON.stringify({stationId:s.id}))}"><div class="wf-fields">
       ${field("latitude","Latitude (degrees)","纬度（度）",c.latitude,-90,90)}
       ${field("longitude","Longitude (degrees)","经度（度）",c.longitude,-180,180)}
@@ -987,6 +1004,7 @@ function wfIrradianceProfilePanel(a) {
       ${field("tiltDeg","Panel tilt (degrees)","组件倾角（度）",c.tiltDeg,0,90)}
       ${field("aspectDeg","PVGIS aspect (0° south, 180° north)","PVGIS 方位角（0°朝南，180°朝北）",c.aspectDeg,-180,180)}
       ${field("nonagingLossPct","Additional first-year system loss (%)","额外首年系统损耗（%）",c.nonagingLossPct,0,50)}
+      <label>${t("Parameter status", "参数状态")}<select name="parameterStatus"><option value="provisional" ${c.parameterStatus === "confirmed" ? "" : "selected"}>${t("Provisional demo estimate", "演示估计，尚未核实")}</option><option value="confirmed" ${c.parameterStatus === "confirmed" ? "selected" : ""}>${t("Confirmed against station design", "已对照电站实装资料核实")}</option></select></label>
       <label>${t("Coordinate evidence and source", "坐标依据与来源")}<input name="locationEvidence" value="${esc(c.locationEvidence || "")}" minlength="20" required></label>
       <label>${t("DC capacity, tilt and aspect evidence", "直流容量、倾角和方位角的依据")}<input name="designEvidence" value="${esc(c.designEvidence || "")}" minlength="20" required></label>
     </div><button class="btn btn-outline" type="submit">${t("Fetch and verify PVGIS hourly data", "获取并核对 PVGIS 逐小时数据")}</button></form>
@@ -998,7 +1016,7 @@ function wfReadDraft(f, a) {
   const v = structuredClone(base);
   v.baselineMethod = String(values.get("wf_baselineMethod") || "historical");
   v.irradianceProfileHash = v.baselineMethod === "pvgis-irradiance"
-    ? state.stations.find((s) => s.id === a.stationId)?.irradianceProfile?.rawSha256 || ""
+    ? state.stations.find((s) => s.id === a.stationId)?.irradianceProfile?.profileHash || ""
     : "";
   v.baselineReviewNote = String(values.get("wf_baselineReviewNote") || "");
   v.baselineReviewSourceHash = values.has("wf_baselineReviewed")
@@ -1723,6 +1741,8 @@ function wfBaselineFields(a) {
       )
     : v.revenueModel !== "household-export"
     ? t("This method requires the household-bill and export-income agreement model.", "此方法要求协议采用业主电费与售电收入合并模型。")
+    : s.irradianceProfile.config.parameterStatus === "provisional"
+    ? t("A provisional demo profile is loaded. You may compare or submit a new test quote after documenting the assumptions, but these inputs are not operator-confirmed.", "演示估计基线已载入。记录假设依据后可以试算或提交新的测试报价，但这些参数尚未经电站方确认。")
     : t("The station profile is loaded; review its source digest before using it for a new quote.", "电站基线已载入；请核对来源摘要后用于新报价。");
   return `<div class="wf-baseline-input"><h4>${t(
     "Forecast baseline",

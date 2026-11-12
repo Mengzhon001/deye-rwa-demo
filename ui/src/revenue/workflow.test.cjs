@@ -221,3 +221,18 @@ test("disabled baseline choices show observed reasons and a station-input destin
   assert.match(zh, /23 个完整日中有 15 天/);
   assert.match(zh, /前往电站参数录入/);
 });
+test("Shanghai PVGIS prefill identifies recorded API fields and provisional design assumptions", () => {
+  const r = fixture();
+  r(`var s={id:'0xe9580afb3390ce3c63fa343db9b9d8b93c5f9d39198ec78c08febb318f85f7bd',capacityKW:40,observedAt:1790180543,metadata:{locationLat:31.173725,locationLng:121.48858}};
+     var a={id:'A',stationId:s.id};state.stations=[s];`);
+  const inputs = r("wfShanghaiPvgisDemoInputs(s)");
+  assert.equal(inputs.dcCapacityKWp, 40);
+  assert.equal(inputs.tiltDeg, 30);
+  assert.equal(inputs.aspectDeg, -2);
+  assert.equal(inputs.nonagingLossPct, 14);
+  assert.equal(inputs.parameterStatus, "provisional");
+  assert.match(inputs.designEvidence, /as-built design not confirmed/i);
+  const html = r("wfIrradianceProfilePanel(a)");
+  assert.match(html, /value="31\.173725"/);
+  assert.match(html, /Provisional demo estimate/);
+});

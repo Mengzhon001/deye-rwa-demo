@@ -15,6 +15,9 @@ export const PvgisConfigSchema = z.object({
   tiltDeg: z.number().min(0).max(90),
   aspectDeg: z.number().min(-180).max(180), // PVGIS convention: 0 = south.
   nonagingLossPct: z.number().min(0).max(50),
+  // An estimate may be used in the demo, but it must not be presented as an
+  // as-built parameter confirmed by the station operator.
+  parameterStatus: z.enum(["provisional", "confirmed"]).default("provisional"),
   locationEvidence: z.string().trim().min(20).max(1000),
   designEvidence: z.string().trim().min(20).max(1000),
 });
@@ -25,6 +28,7 @@ export const PvgisProfileSchema = z.object({
   apiVersion: z.literal("5_3"),
   sourceUrl: z.string().url(),
   rawSha256: z.string().regex(/^[a-f0-9]{64}$/),
+  profileHash: z.string().regex(/^[a-f0-9]{64}$/),
   retrievedAt: z.number().int().positive(),
   years: z.array(z.number().int()).length(5),
   hourlyRows: z.number().int().positive(),
@@ -32,8 +36,18 @@ export const PvgisProfileSchema = z.object({
   // Average calendar-month production for 1 kWp, before additional loss.
   meanMonthlyKWhPerKWp: z.array(z.number().finite().nonnegative()).length(12),
   annualKWhPerKWp: z.array(z.number().finite().nonnegative()).length(5),
-});
+}).refine(v => v.profileHash === pvgisProfileHash(v), "PVGIS profile hash does not match its design inputs");
 export type PvgisProfile = z.infer<typeof PvgisProfileSchema>;
+
+// The PVGIS response does not contain DC capacity or parameter evidence.
+// Bind those inputs separately so changing a design assumption invalidates a
+// quote even when the weather response itself has the same raw digest.
+export function pvgisProfileHash(profile: { rawSha256: string; config: PvgisConfig }): string {
+  return createHash("sha256").update(JSON.stringify({
+    rawSha256: profile.rawSha256,
+    config: PvgisConfigSchema.parse(profile.config),
+  })).digest("hex");
+}
 
 export function pvgisUrl(config: PvgisConfig): string {
   const c = PvgisConfigSchema.parse(config);
@@ -101,6 +115,7 @@ export function profileFromPvgis(
   return PvgisProfileSchema.parse({
     version: "pvgis-era5-profile.v1", database: "PVGIS-ERA5",
     apiVersion: "5_3", sourceUrl: pvgisUrl(c), rawSha256,
+    profileHash: pvgisProfileHash({ rawSha256, config: c }),
     retrievedAt, years: [...PVGIS_YEARS], hourlyRows: rows.length,
     config: c, meanMonthlyKWhPerKWp: byMonth.map(v => v / 5),
     annualKWhPerKWp: byYear,

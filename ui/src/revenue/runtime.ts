@@ -40,7 +40,7 @@ import {
   valuationBlockReason,
 } from "../../../offchain/src/revenue/model";
 import { analyzeBaseline } from "../../../offchain/src/revenue/baseline";
-import { fetchPvgisProfile, PvgisConfigSchema } from "../../../offchain/src/revenue/pvgis";
+import { fetchPvgisProfile, PvgisConfigSchema, pvgisProfileHash } from "../../../offchain/src/revenue/pvgis";
 import {
   demoAssumptions,
   syntheticStation,
@@ -990,6 +990,7 @@ export class RevenueRuntime {
           latitude: numeric("latitude"), longitude: numeric("longitude"),
           dcCapacityKWp: numeric("dcCapacityKWp"), tiltDeg: numeric("tiltDeg"),
           aspectDeg: numeric("aspectDeg"), nonagingLossPct: numeric("nonagingLossPct"),
+          parameterStatus: b.parameterStatus,
           locationEvidence: b.locationEvidence, designEvidence: b.designEvidence,
         });
         const profile = await fetchPvgisProfile(config, join(this.dataDir, "pvgis"));
@@ -998,7 +999,7 @@ export class RevenueRuntime {
           if (!target) throw new Error("Station changed during PVGIS retrieval");
           target.irradianceProfile = profile;
         });
-        return { stationId, rawSha256: profile.rawSha256,
+        return { stationId, rawSha256: profile.rawSha256, profileHash: pvgisProfileHash(profile),
           years: profile.years, annualKWhPerKWp: profile.annualKWhPerKWp };
       }
       case "sync": {
