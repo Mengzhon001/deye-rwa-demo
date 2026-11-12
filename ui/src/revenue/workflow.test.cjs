@@ -206,3 +206,18 @@ test("PVGIS choice requires a station profile and shows the saved climate eviden
   assert.match(r("wfEnergyRow(report,report.rows[0])"), /PVGIS ERA5 historical weather years/);
   assert.match(r("wfEnergyFormula(report,report.rows[0])"), /10\.000 kWh\/kWp × 10\.00 kWp/);
 });
+test("disabled baseline choices show observed reasons and a station-input destination", () => {
+  const r = fixture();
+  r(`var a={id:'A',stationId:'S',assumptions:{revenueModel:'household-export',baselineMethod:'historical',baselineReviewNote:'',baselineReviewSourceHash:''}};
+     state.stations=[{id:'S',sourceHash:'station-hash',irradianceProfile:null}];
+     state.valuationChecks={A:{audit:{recentEligible:false,energyInconsistent:true,completeDays:23,inconsistentDates:Array(15).fill('2026-09-01'),recentGenerationKWh:4395.3,recentExportKWh:4398.6}}};`);
+  const en = r("wfBaselineFields(a)");
+  assert.match(en, /15 of 23 complete days/);
+  assert.match(en, /4,398\.6|4398\.6/);
+  assert.match(en, /href="#wf-irradiance-profile-A"/);
+  assert.match(r("wfIrradianceProfilePanel(a)"), /id="wf-irradiance-profile-A"/);
+  r(`t=(en,zh)=>zh`);
+  const zh = r("wfBaselineFields(a)");
+  assert.match(zh, /23 个完整日中有 15 天/);
+  assert.match(zh, /前往电站参数录入/);
+});

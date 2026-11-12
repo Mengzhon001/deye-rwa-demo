@@ -3549,6 +3549,26 @@ form[data-action="eligible"] button {
   line-height: 1.9;
   color: #8698b0;
 }
+.wf-baseline-status {
+  padding: 10px 14px;
+  border: 1px solid #d5e2f4;
+  border-radius: 8px;
+  background: #fff;
+}
+.wf-baseline-status p + p {
+  margin-top: 8px;
+}
+.wf-baseline-status strong {
+  color: #25456d;
+}
+.wf-baseline-status a {
+  color: #1855c4;
+  font-weight: 600;
+  text-decoration: underline;
+}
+[id^="wf-irradiance-profile-"] {
+  scroll-margin-top: 110px;
+}
 .wf-baseline-input textarea {
   min-height: 85px;
 }

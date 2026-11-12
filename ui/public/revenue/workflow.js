@@ -975,7 +975,7 @@ function wfIrradianceProfilePanel(a) {
     c = profile?.config || {};
   const field = (name, en, zh, value, min, max, step = "any") =>
     `<label>${t(en, zh)}<input type="number" name="${name}" value="${value ?? ""}" min="${min}" max="${max}" step="${step}" required></label>`;
-  return wfPanel(t("PVGIS irradiation profile", "PVGIS 辐照气象基线"),
+  return `<div id="wf-irradiance-profile-${esc(a.id)}">${wfPanel(t("PVGIS irradiation profile", "PVGIS 辐照气象基线"),
     `<p class="wf-help">${t(
       "PVGIS 5.3 uses 2019–2023 ERA5 weather to model hourly power for 1 kWp. It is a historical climate baseline for future scenarios, not a future weather forecast or Deye-metered generation. Enter this station's verified coordinates and DC design; do not use the notebook's example cities or 30° tilt unless they match the actual installation.",
       "PVGIS 5.3 使用 2019–2023 年 ERA5 气象资料模拟 1 kWp 电站逐小时功率，作为未来情景的历史气象基线；它不是未来天气预报，也不是德业实测发电量。请填写本电站经核实的坐标和直流侧设计参数，不要直接套用附件中的代表城市或 30° 倾角。"
@@ -990,7 +990,7 @@ function wfIrradianceProfilePanel(a) {
       <label>${t("Coordinate evidence and source", "坐标依据与来源")}<input name="locationEvidence" value="${esc(c.locationEvidence || "")}" minlength="20" required></label>
       <label>${t("DC capacity, tilt and aspect evidence", "直流容量、倾角和方位角的依据")}<input name="designEvidence" value="${esc(c.designEvidence || "")}" minlength="20" required></label>
     </div><button class="btn btn-outline" type="submit">${t("Fetch and verify PVGIS hourly data", "获取并核对 PVGIS 逐小时数据")}</button></form>
-    <p class="wf-help">${t("The raw response is archived on the server with a hash. The intermediary must review the design and the trustee must approve any resulting quote. Existing signed products are not repriced automatically.","原始响应由服务器按摘要归档。中介须复核电站设计，基于该模型的报价仍须受托人审批。已有签约产品不会自动改价。")}</p>`);
+    <p class="wf-help">${t("The raw response is archived on the server with a hash. The intermediary must review the design and the trustee must approve any resulting quote. Existing signed products are not repriced automatically.","原始响应由服务器按摘要归档。中介须复核电站设计，基于该模型的报价仍须受托人审批。已有签约产品不会自动改价。")}</p>`)}</div>`;
 }
 function wfReadDraft(f, a) {
   const values = new FormData(f),
@@ -1700,6 +1700,30 @@ function wfBaselineFields(a) {
     (audit?.materialChange && audit.recentEligible
       ? "recent-export-ratio"
       : "historical");
+  const recentReason = !audit
+    ? t("The recent data check is still loading.", "近期数据核对尚未完成。")
+    : audit.recentEligible
+    ? t("Available after review.", "完成复核后可选。")
+    : audit.energyInconsistent
+    ? t(
+        `${audit.inconsistentDates?.length || 0} of ${audit.completeDays || 0} complete days have exports above generation. Recent totals are ${dsNum(audit.recentExportKWh, 1)} kWh exported and ${dsNum(audit.recentGenerationKWh, 1)} kWh generated. Check the solar-generation and grid-export meter definitions before using a recent solar export ratio.`,
+        `${audit.completeDays || 0} 个完整日中有 ${audit.inconsistentDates?.length || 0} 天的上网量大于发电量。近期合计上网 ${dsNum(audit.recentExportKWh, 1)} kWh、发电 ${dsNum(audit.recentGenerationKWh, 1)} kWh。请先核对光伏发电和上网电表的统计口径，再使用近期光伏上网比例。`
+      )
+    : audit.conflictingDays
+    ? t("The recent daily records conflict. Reconcile the evidence and refresh the station data.", "近期逐日记录存在冲突，请核对证据并更新电站数据。")
+    : t(
+        `Only ${audit.completeDays || 0} eligible complete days are available; at least 7 before the capture day are required. Refresh the station evidence when more complete days are available.`,
+        `目前只有 ${audit.completeDays || 0} 个合格完整日，至少需要采集日前 7 个完整日。获得更多完整观测后，请更新电站证据。`
+      );
+  const pvgisReady = Boolean(s?.irradianceProfile && v.revenueModel === "household-export");
+  const pvgisReason = !s?.irradianceProfile
+    ? t(
+        "This station has no verified irradiation profile. Enter its coordinates, DC capacity, tilt, aspect and evidence in the PVGIS panel above, then fetch and verify the hourly data.",
+        "本电站尚无已核对的辐照基线。请在上方 PVGIS 面板填写坐标、直流容量、倾角、方位角及依据，然后获取并核对逐小时数据。"
+      )
+    : v.revenueModel !== "household-export"
+    ? t("This method requires the household-bill and export-income agreement model.", "此方法要求协议采用业主电费与售电收入合并模型。")
+    : t("The station profile is loaded; review its source digest before using it for a new quote.", "电站基线已载入；请核对来源摘要后用于新报价。");
   return `<div class="wf-baseline-input"><h4>${t(
     "Forecast baseline",
     "预测基线选择"
@@ -1718,10 +1742,10 @@ function wfBaselineFields(a) {
     "季节性发电量 × 近期上网比例（暂定情景）"
   )}</option><option value="pvgis-irradiance" ${
     selected === "pvgis-irradiance" ? "selected" : ""
-  } ${s?.irradianceProfile && v.revenueModel === "household-export" ? "" : "disabled"}>${t(
+  } ${pvgisReady ? "" : "disabled"}>${t(
     "PVGIS ERA5 irradiation × reviewed export allocation",
     "PVGIS 辐照气象基线 × 经审核的上网分配比例"
-  )}</option></select></label><p>${t(
+  )}</option></select></label><div class="wf-baseline-status" role="status"><p><strong>${t("Recent export ratio", "近期上网比例")} · ${audit?.recentEligible ? t("available", "可选") : t("unavailable", "暂不可选")}</strong> ${recentReason}</p><p><strong>PVGIS · ${pvgisReady ? t("available", "可选") : t("unavailable", "暂不可选")}</strong> ${pvgisReason} ${!pvgisReady && !s?.irradianceProfile ? `<a href="#wf-irradiance-profile-${esc(a.id)}">${t("Go to station inputs", "前往电站参数录入")}</a>` : ""}</p></div><p>${t(
     "Recent means up to 30 days before the capture day, with at least 7 valid complete days. Missing days and today's partial energy are excluded. Exports above generation invalidate the ratio; grid-charged resale is not inferred.",
     "近期样本取采集日前最多30天，至少须有7个完整日；缺测日和采集当天不计入。上网量超过发电量时，该比例不可用，须核对口径或审核历史估算，不推定电网充电再售电收入。"
   )}</p><p>${t(
