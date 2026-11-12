@@ -4,6 +4,18 @@ New agreements combine household solar-electricity payments with eligible grid-e
 
 The household price discount and the assigned revenue share are separate terms. By default, the household pays 80% of the grid energy price for delivered solar electricity. The vault receives 100% of the combined net receipts. The 80% factor must not be applied again as a revenue-share deduction. Both parameters are disclosed and fixed before approval and signature.
 
+## Three valuation baselines
+
+All three methods use the same household-payment, export-income, cost and discounting formulas below. They change modeled generation or export allocation, not the economic terms of an agreement already signed.
+
+| Method | Modeled generation | Export allocation and review |
+| --- | --- | --- |
+| Long-run historical seasonal | Same-month generation mean from up to 36 complete metered months | Eligible historical export ratio; short or inconsistent evidence is labeled provisional and reviewed. |
+| Recent export ratio | Still uses the long-run historical same-month generation mean | Ratio from 7 to 30 eligible complete days before capture; unavailable when the recent energy balance is inconsistent. |
+| PVGIS irradiation climate baseline | Hourly power modeled from 2019–2023 historical weather, scaled by verified station design | Export ratio still comes from eligible Deye history; coordinates, array design, complete hourly records and source digest require review. |
+
+As of 12 November 2026, all three applications include the third baseline's calculation and UI entry. Deye has not yet confirmed the station coordinates and array design, so the PVGIS option remains disabled for the current station. The intermediary must enter verified inputs, load the complete hourly climate profile and submit it for review before selecting the method for a new quote. Signed agreements and published products are not automatically repriced.
+
 ## From history to future energy
 
 The model uses up to 36 complete historical months before the evidence cutoff. It averages observations for the same calendar month. Missing seasons use the available monthly mean and receive a provisional flag. A full baseline requires at least 12 complete months with seasonal coverage. Short records, missing fields and reconciliation differences require explicit review.
@@ -20,7 +32,25 @@ Defaults are 0.7% annual degradation, 98% availability and a 90% residual-solar 
 
 Consumption minus imports is not automatically treated as solar self-use: batteries may have been charged from the grid. Exports above generation cannot establish solar self-use. Such recent records disable the recent-ratio method. Historical estimates exclude inconsistent export samples and apply the comparable same-month export-to-generation ratio to seasonal generation. If no comparable samples remain, the reviewed demo ratio is explicitly used. Raw API readings are preserved and the estimate remains provisional. The same energy cannot simultaneously count as self-use and exports. No storage arbitrage revenue is assumed.
 
-Where recent complete-day export ratios differ materially from history, reviewers must document the data reconciliation and baseline choice. The reviewed recent scenario applies the recent export ratio to historical seasonal generation, without extrapolating one day's income over five years. Seasonal selection uses the starting UTC month of each service period; periods crossing calendar months are not split into daily forecasts.
+Where recent complete-day export ratios differ materially from history, reviewers must document the data reconciliation and baseline choice. The reviewed recent scenario applies the recent export ratio to historical seasonal generation, without extrapolating one day's income over five years. The first two baselines select seasonality using the starting UTC month of each service period; periods crossing calendar months are not split. The PVGIS method below instead weights each calendar month by the service time it covers.
+
+## Third baseline: PVGIS irradiation-based climate scenario
+
+The third valuation method uses PVGIS 5.3 ERA5 historical weather data from the European Commission's Joint Research Centre. PVGIS models hourly power for a 1 kWp installation from solar radiation, temperature and the specified array design for 2019–2023. The system checks the complete five-year hourly series and response parameters before averaging modeled specific yield by UTC calendar month. This is a seasonal climate baseline, not a prediction of actual sunlight in a future month or a Deye-metered generation record.
+
+The intermediary must enter verified coordinates, DC nameplate capacity, panel tilt, aspect and an additional first-year system-loss assumption for the specific station, with evidence for the location and design. PVGIS defines 0° aspect as due south. The notebook's representative cities, 1 MWp and 30° tilt are examples, not Deye station parameters. The server requests PVGIS with `peakpower=1` and `loss=0`, then applies the separate loss factor once.
+
+```text
+Modeled service-period generation = Σ[mean PVGIS kWh/kWp for each calendar month
+                                     × covered days / days in that month]
+                                   × station DC kWp × (1 − additional first-year loss)
+                                   × availability × (1 − annual degradation)^(elapsed months/12)
+Forecast exports = modeled generation × reviewed same-season Deye export ratio
+```
+
+A service period crossing calendar months uses the actual time covered in each month. Completed service time is excluded from remaining-rights valuation. Household self-use, bills, export receipts, costs and discounting still use the common cashflow formulas below. Deye observations provide the export-allocation ratio; tariffs, FX and availability remain separate reviewed assumptions. PVGIS does not forecast household demand or prove that the grid has paid export proceeds.
+
+The server archives the raw PVGIS response and binds its SHA-256 digest, years, location and design to the valuation report. The intermediary reviews these inputs before submitting a quote, and the trustee still approves it. Refreshing the climate profile does not silently reprice a signed agreement or an older offer. A mismatched profile digest requires a new valuation. API failure, missing hours or mismatched design parameters never trigger substitution of an example city or stale profile. The [official PVGIS API guide](https://joint-research-centre.ec.europa.eu/photovoltaic-geographical-information-system-pvgis/using-pvgis-5/api-non-interactive-service_en) documents `seriescalc` inputs.
 
 ## Monthly bills and project cashflow
 
@@ -94,7 +124,7 @@ The application uses the same timeline with its saved valuation report, not this
 
 ## Existing agreements and approvals
 
-The model is identified as `household-export.1`, with `revenueModel: household-export`. Records without this discriminator remain `export-only`. A software upgrade cannot add household billing obligations to an existing signed agreement. An intermediary can explicitly switch an unsigned offer to the combined model and obtain fresh trustee approval and owner acceptance. Signed or pooled agreements retain their terms; use a new agreement or reset scenario to demonstrate the new economics.
+The standard combined-revenue model is `household-export.2`, and the PVGIS baseline model is `pvgis-era5-irradiance.1`; both use `revenueModel: household-export`. Records without this discriminator remain `export-only`. A software upgrade cannot add household billing obligations to an existing signed agreement. An intermediary can select a new baseline for an unsigned offer, with fresh trustee approval and owner acceptance. Signed or pooled agreements retain their terms; changing signed economic terms requires a new agreement and product.
 
 Reports bind source evidence, assumptions, model version, monthly calculations, cutoff and validity period. The owner signature also binds the assumptions hash. Refresh monthly, before dealing and after material changes. Completed service periods become receivables or cash rather than remaining rights.
 

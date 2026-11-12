@@ -6,9 +6,11 @@ import {
   BASELINE_MODEL,
   BaselineAnalysis,
 } from "./baseline";
+import { PvgisProfileSchema, pvgisEnergyForPeriod } from "./pvgis";
 
 export const VERSION = "revenue-rights.v2";
 export const COMBINED_MODEL = "household-export.2";
+export const IRRADIANCE_MODEL = "pvgis-era5-irradiance.1";
 export const money = z.string().regex(/^\d+$/);
 export const MonthSchema = z.object({
   month: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/),
@@ -35,6 +37,7 @@ export const StationSchema = z.object({
   alerts: z.array(z.record(z.unknown())).default([]),
   latest: z.record(z.unknown()).default({}),
   metadata: z.record(z.unknown()).default({}),
+  irradianceProfile: PvgisProfileSchema.optional(),
   telemetry: z.record(z.unknown()).optional(),
 });
 export type Station = z.infer<typeof StationSchema>;
@@ -56,8 +59,9 @@ const AssumptionsBaseSchema = z
     householdPaymentBps: z.number().int().min(1).max(9999).default(8000),
     selfUseDeliveryPct: z.number().min(0).max(100).default(90),
     baselineMethod: z
-      .enum(["historical", "recent-export-ratio"])
+      .enum(["historical", "recent-export-ratio", "pvgis-irradiance"])
       .default("historical"),
+    irradianceProfileHash: z.string().default(""),
     baselineReviewNote: z.string().max(2000).default(""),
     baselineReviewSourceHash: z.string().default(""),
     termMonths: z.number().int().min(12).max(360).default(60),
@@ -206,6 +210,10 @@ export type ForecastRow = {
     remainingFraction: number;
     exportRatio: number | null;
     meanImportKWh?: number | null;
+    irradianceKWhPerKWp?: number;
+    irradiationProfileHash?: string;
+    dcCapacityKWp?: number;
+    nonagingLossFactor?: number;
     exportSampleMonths?: string[];
     excludedExportMonths?: string[];
     assumedExportFallback?: boolean;
@@ -222,6 +230,7 @@ export type Valuation = {
     history: Array<
       Pick<Station["history"][number], "month" | "generationKWh" | "exportKWh" | "importKWh">
     >;
+    irradiance?: Station["irradianceProfile"];
   };
   baseline?: BaselineAnalysis & {
     method: Assumptions["baselineMethod"];
@@ -297,8 +306,14 @@ export function forecast(
     throw new Error(
       "Recent baseline requires at least seven complete, non-conflicting daily generation/export observations before capture day"
     );
+  if (a.baselineMethod === "pvgis-irradiance") {
+    if (a.revenueModel !== "household-export")
+      throw new Error("PVGIS irradiation baseline requires the household and export revenue model");
+    if (!s.irradianceProfile || a.irradianceProfileHash !== s.irradianceProfile.rawSha256)
+      throw new Error("Load and review a matching PVGIS irradiation profile before valuation");
+  }
   const reviewRequired =
-    baseline.materialChange || a.baselineMethod === "recent-export-ratio" || (a.revenueModel === "household-export" && baseline.energyInconsistent);
+    baseline.materialChange || a.baselineMethod !== "historical" || (a.revenueModel === "household-export" && baseline.energyInconsistent);
   const reviewRecorded =
     a.baselineReviewSourceHash === s.sourceHash &&
     a.baselineReviewNote.trim().length >= 20;
@@ -340,6 +355,8 @@ export function forecast(
     warnings.push(
       "近期情景采用历史季节性发电量 × 近期完整日上网比例；不直接将单日收入外推五年。短期样本须审核。Recent ratio applied to historical seasonal generation; provisional scenario, not a calibrated forecast."
     );
+  if (a.baselineMethod === "pvgis-irradiance")
+    warnings.push("PVGIS-ERA5 基于 2019–2023 年历史气象模拟光伏功率，形成未来季节性情景，并非未来天气预报或德业实测发电量。上网比例仍取德业历史计量，电价、费用和汇率仍为独立假设。PVGIS uses historical weather to model a climate baseline, not future weather or Deye-metered energy.");
   if (baseline.observedExportRatio !== null && baseline.observedExportRatio > 1)
     warnings.push(
       "近期上网电量超过发电量，近期比例不可用。当前历史季节性估算须审阅，不代表已核实的未来自用量。Recent solar allocation is unavailable; historical seasonal estimates require review and are not metered future self-use."
@@ -377,9 +394,16 @@ export function forecast(
       const derate =
         (((1 - a.degradationPct / 100) ** (m / 12) * a.availabilityPct) / 100) *
         fraction;
-      const generation =
-        (season.reduce((sum, h) => sum + h.generationKWh!, 0) / season.length) *
-        derate;
+      const irradiance = method === "pvgis-irradiance" ? s.irradianceProfile : undefined;
+      const irradianceKWhPerKWp = irradiance
+        ? pvgisEnergyForPeriod(irradiance, Math.max(serviceStart, asOf), serviceEnd)
+        : undefined;
+      const historicalGeneration = season.reduce((sum, h) => sum + h.generationKWh!, 0) / season.length;
+      const generation = irradiance
+        ? irradianceKWhPerKWp! * irradiance.config.dcCapacityKWp *
+          (1 - irradiance.config.nonagingLossPct / 100) *
+          (a.availabilityPct / 100) * (1 - a.degradationPct / 100) ** (m / 12)
+        : historicalGeneration * derate;
       const exportSamples = season.filter(h => h.exportKWh === null || h.exportKWh <= h.generationKWh!);
       const excludedExportMonths = season.filter(h => !exportSamples.includes(h)).map(h => h.month);
       const exportSampleGeneration = exportSamples.reduce((n,h) => n + h.generationKWh!,0);
@@ -413,6 +437,12 @@ export function forecast(
           serviceStart,
           serviceEnd,
           meanImportKWh: meanImport,
+          ...(irradiance ? {
+            irradianceKWhPerKWp,
+            irradiationProfileHash: irradiance.rawSha256,
+            dcCapacityKWp: irradiance.config.dcCapacityKWp,
+            nonagingLossFactor: 1 - irradiance.config.nonagingLossPct / 100,
+          } : {}),
           seasonMonth,
           seasonalFallback: !seasonal.has(seasonMonth),
           sampleMonths: season.map((h) => h.month),
@@ -420,10 +450,10 @@ export function forecast(
             method === "historical"
               ? season.filter((h) => h.exportKWh === null).map((h) => h.month)
               : [],
-          meanGenerationKWh:
-            season.reduce((sum, h) => sum + h.generationKWh!, 0) /
-            season.length,
-          meanExportKWh: (generation / derate || 0) * historicalRatio,
+          meanGenerationKWh: historicalGeneration,
+          meanExportKWh: method === "pvgis-irradiance"
+            ? season.reduce((sum, h) => sum + (h.exportKWh ?? h.generationKWh! * a.assumedExportRatio), 0) / season.length
+            : (generation / derate || 0) * historicalRatio,
           exportSampleMonths: exportSamples.map(h => h.month),
           excludedExportMonths,
           assumedExportFallback: exportSampleGeneration <= 0,
@@ -431,7 +461,8 @@ export function forecast(
           degradationFactor: (1 - a.degradationPct / 100) ** (m / 12),
           remainingFraction: fraction,
           exportRatio:
-            method === "recent-export-ratio" ? baseline.solarExportRatio : null,
+            method === "recent-export-ratio" ? baseline.solarExportRatio :
+              method === "pvgis-irradiance" ? historicalRatio : null,
         },
       });
     }
@@ -508,7 +539,8 @@ export function forecast(
     projectedCash.push({ at: rows[rows.length - 1].dueAt, value: retained });
   const result: Omit<Valuation, "reportHash"> = {
     version: VERSION,
-    modelVersion: a.revenueModel === "household-export" ? COMBINED_MODEL : BASELINE_MODEL,
+    modelVersion: a.baselineMethod === "pvgis-irradiance" ? IRRADIANCE_MODEL :
+      a.revenueModel === "household-export" ? COMBINED_MODEL : BASELINE_MODEL,
     energyEvidence: {
       version: "energy-calculation.v1",
       source: s.source,
@@ -520,6 +552,7 @@ export function forecast(
         exportKWh: h.exportKWh,
         importKWh: h.importKWh ?? null,
       })),
+      ...(a.baselineMethod === "pvgis-irradiance" ? { irradiance: s.irradianceProfile } : {}),
     },
     baseline: {
       ...baseline,
@@ -530,6 +563,7 @@ export function forecast(
         [
           "historical",
           ...(baseline.recentEligible ? ["recent-export-ratio"] : []),
+          ...(s.irradianceProfile && a.revenueModel === "household-export" ? ["pvgis-irradiance"] : []),
         ] as Assumptions["baselineMethod"][]
       ).map((method) => {
         const projected = buildRows(method);
@@ -599,15 +633,21 @@ export function valuationBlockReason(
   asOf: number
 ): string | null {
   const audit = analyzeBaseline(station, asOf);
-  if (report?.assumptions.revenueModel === "household-export" && report.modelVersion !== COMBINED_MODEL)
+  const irradiationSelected = report?.assumptions.baselineMethod === "pvgis-irradiance";
+  if (irradiationSelected && (!station.irradianceProfile ||
+      report?.energyEvidence?.irradiance?.rawSha256 !== station.irradianceProfile.rawSha256 ||
+      report.assumptions.irradianceProfileHash !== station.irradianceProfile.rawSha256))
+    return "PVGIS 气象基线已变更或未核对，请重新载入、审核并生成估值。The PVGIS profile changed or is unavailable; reload and review it before valuation.";
+  if (report?.assumptions.revenueModel === "household-export" && report.modelVersion !==
+      (irradiationSelected ? IRRADIANCE_MODEL : COMBINED_MODEL))
     return "请使用修正后的光伏分配模型重新估值。Recalculate with the corrected solar allocation model.";
   if (report?.assumptions.baselineMethod === "recent-export-ratio" && audit.energyInconsistent)
     return "近期上网量超过发电量，不能按100%外售继续报价。Recent export exceeds generation; reconcile the allocation before pricing.";
   if (
     audit.materialChange ||
-    report?.assumptions.baselineMethod === "recent-export-ratio"
+    report?.assumptions.baselineMethod !== "historical"
   ) {
-    if (!report || report.modelVersion !== (report.assumptions.revenueModel === "household-export" ? COMBINED_MODEL : BASELINE_MODEL))
+    if (!report || report.modelVersion !== (irradiationSelected ? IRRADIANCE_MODEL : report.assumptions.revenueModel === "household-export" ? COMBINED_MODEL : BASELINE_MODEL))
       return "请使用当前模型重新生成报价。Recalculate the baseline with the current model.";
     if (report.sourceHash !== station.sourceHash)
       return "电站数据证据已更新，请核对新数据并重新提交报价。The baseline evidence changed; review the new data and resubmit.";

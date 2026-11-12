@@ -545,6 +545,10 @@ function wfEnergyFormula(report, row) {
   const c = row.calculation,
     a = report.assumptions;
   if (!c) return "";
+  if (a.baselineMethod === "pvgis-irradiance") {
+    const ratio = c.exportRatio || 0;
+    return `${dsNum(c.irradianceKWhPerKWp, 3)} kWh/kWp × ${dsNum(c.dcCapacityKWp, 2)} kWp × ${dsNum((c.nonagingLossFactor ?? 1)*100, 2)}% × ${dsNum(c.availabilityFactor*100,2)}% × ${dsNum(c.degradationFactor*100,2)}% × ${dsNum(ratio*100,2)}% ≈ <strong>${dsNum(row.exportKWh,2)} kWh</strong>`;
+  }
   const recent = a.baselineMethod === "recent-export-ratio";
   const expression = `${dsNum(recent ? c.meanGenerationKWh : c.meanExportKWh, 2)}${
     recent ? ` × ${dsNum(c.exportRatio * 100, 2)}%` : ""
@@ -560,6 +564,10 @@ function wfEnergyFormula(report, row) {
 function wfEnergySamples(report, row) {
   const c = row.calculation,
     recent = report.assumptions.baselineMethod === "recent-export-ratio";
+  if (report.assumptions.baselineMethod === "pvgis-irradiance") {
+    const p = report.energyEvidence?.irradiance;
+    return p ? `<p>${t("PVGIS ERA5 historical weather years", "PVGIS ERA5 历史气象年份")}: ${p.years.join(", ")} · ${t("raw response SHA-256", "原始响应 SHA-256")}: ${esc(p.rawSha256)}</p><p>${t("Modeled monthly specific yield", "模拟月度单位发电量")}: ${dsNum(p.meanMonthlyKWhPerKWp[c.seasonMonth-1],2)} kWh/kWp · ${t("Reviewed Deye export allocation samples", "德业上网比例样本")}: ${esc(c.exportSampleMonths?.join(", ") || "—")}</p>` : "";
+  }
   return `<ul class="wf-energy-samples">${(report.energyEvidence?.history || [])
     .filter((h) => c.sampleMonths.includes(h.month))
     .map(
@@ -590,11 +598,14 @@ function wfEnergyRow(report, row) {
       "Not recorded in this report",
       "本报告未记录逐期凭证"
     )}</span>`;
+  const irradiation = report.assumptions.baselineMethod === "pvgis-irradiance";
   return `<details class="wf-energy-row"><summary>${t(
     "Calculation details",
     "计算明细"
   )}</summary><div><p>${
-    c.seasonalFallback
+    irradiation
+      ? t("PVGIS hourly modeled power is aggregated by UTC calendar month and prorated across this service period; Deye history supplies only the export allocation ratio.", "PVGIS 逐小时模拟功率按 UTC 自然月汇总，再按本服务期的跨月天数计算；德业历史仅提供上网分配比例。")
+      : c.seasonalFallback
       ? t(
           "No same-month history: use the average of all available complete months.",
           "缺少同月历史：使用全部可用完整月份均值。"
@@ -620,7 +631,9 @@ function wfEnergyRules(report) {
     b = report.baseline,
     e = report.energyEvidence;
   const recent = a.baselineMethod === "recent-export-ratio";
-  const formula = recent
+  const formula = a.baselineMethod === "pvgis-irradiance"
+    ? t("Forecast export = PVGIS ERA5 modeled specific yield for the service dates × verified DC kWp × additional loss factor × availability × degradation × reviewed Deye export ratio. Historical weather is a climate scenario, not a forecast of future weather.", "每期预测上网量 = PVGIS ERA5 服务期模拟单位发电量 × 经核实的直流侧 kWp × 额外系统损耗系数 × 可用率 × 衰减系数 × 经审核的德业历史上网比例。历史气象构成情景基线，不是未来天气预报。")
+    : recent
     ? t(
         "Forecast export = historical same-month mean generation × recent export ratio × availability × degradation factor × remaining-period fraction",
         "每期预测上网量 = 历史同月平均发电量 × 近期上网比例 × 可用率 × 衰减系数 × 剩余期间比例"
@@ -652,12 +665,9 @@ function wfEnergyRules(report) {
     "模型预测"
   )}</span></div>
     ${b?.energyInconsistent ? `<p class="wf-help">${t("Recent exports exceed generation, so the recent solar allocation is unavailable. This report uses a reviewed historical seasonal estimate, not verified future self-use.", "近期上网量超过发电量，近期光伏分配比例不可用。本报告采用经审核的历史季节性暂定估算，不能理解为已核实的未来自用电量。")}</p>` : ""}
-    <div class="wf-energy-steps"><div><span>01</span><h4>${t(
-      "Historical seasonal baseline",
-      "历史季节性基线"
-    )}</h4><p>${esc(b?.historyStart || e.history[0]?.month || "—")} → ${esc(
+    <div class="wf-energy-steps"><div><span>01</span><h4>${a.baselineMethod === "pvgis-irradiance" ? t("PVGIS ERA5 modeled generation", "PVGIS ERA5 模拟发电基线") : t("Historical seasonal baseline", "历史季节性基线")}</h4><p>${a.baselineMethod === "pvgis-irradiance" ? `PVGIS-ERA5 · ${esc(e.irradiance?.years?.join("–") || "—")} · SHA-256 ${esc(e.irradiance?.rawSha256 || "—")}` : `${esc(b?.historyStart || e.history[0]?.month || "—")} → ${esc(
     b?.historyEnd || e.history.at(-1)?.month || "—"
-  )} · ${e.history.length} ${t("complete months", "个完整月")}</p><p>${t(
+  )} · ${e.history.length} ${t("complete months", "个完整月")}`}</p><p>${a.baselineMethod === "pvgis-irradiance" ? t("Verified hourly power from the historical ERA5 weather series is converted to calendar-month specific yield and scaled by the station's reviewed DC design.", "先核对 ERA5 历史气象对应的逐小时模拟功率，再换算自然月单位发电量，并按本电站审核后的直流侧设计缩放。") : t(
     "Average all observed years for the matching calendar month, using up to 36 complete months. Missing calendar months fall back to the full sample average.",
     "最多取36个完整月，对历年相同月份求平均，保留季节差异；缺少同月样本时，回退到全部样本均值。"
   )}</p></div>
@@ -728,23 +738,24 @@ function wfEnergyRules(report) {
           )} · ${t("Receipt date (UTC)", "预计收款日 (UTC)")}: ${wfEnergyDate(
             first.dueAt
           )}</p><p>${
-            first.calculation.seasonalFallback
+            a.baselineMethod === "pvgis-irradiance"
+              ? t("PVGIS modeled specific yield", "PVGIS 模拟单位发电量")
+              : first.calculation.seasonalFallback
               ? t(
                   "All-history average (same-month samples unavailable)",
                   "全部历史均值（缺少同月样本）"
                 )
               : t("Same-month samples", "同月历史样本")
           }: ${
-            recent ? t("generation", "发电量") : t("export", "上网量")
-          }</p>${first.calculation.excludedExportMonths?.length ? `<p>${t("Export samples excluded because exports exceed generation", "以下月份上网量超过发电量，不参与上网比例计算")}: ${esc(first.calculation.excludedExportMonths.join(", "))}</p>` : ""}${first.calculation.assumedExportFallback ? `<p>${t("No comparable export samples; use the explicitly reviewed assumed export ratio", "没有合格上网样本，使用审核后的演示假设上网比例")}: ${dsNum(report.assumptions.assumedExportRatio * 100,2)}%</p>` : ""}${wfEnergySamples(report, first)}<p>${t(
-            "Sample mean",
-            "样本均值"
-          )}: <b>${dsNum(
-            recent
+            a.baselineMethod === "pvgis-irradiance" ? t("kWh/kWp", "kWh/kWp") : recent ? t("generation", "发电量") : t("export", "上网量")
+          }</p>${first.calculation.excludedExportMonths?.length ? `<p>${t("Export samples excluded because exports exceed generation", "以下月份上网量超过发电量，不参与上网比例计算")}: ${esc(first.calculation.excludedExportMonths.join(", "))}</p>` : ""}${first.calculation.assumedExportFallback ? `<p>${t("No comparable export samples; use the explicitly reviewed assumed export ratio", "没有合格上网样本，使用审核后的演示假设上网比例")}: ${dsNum(report.assumptions.assumedExportRatio * 100,2)}%</p>` : ""}${wfEnergySamples(report, first)}<p>${a.baselineMethod === "pvgis-irradiance" ? t("Specific yield for this service period", "本服务期单位发电量") : t("Sample mean", "样本均值")}: <b>${dsNum(
+            a.baselineMethod === "pvgis-irradiance"
+              ? first.calculation.irradianceKWhPerKWp
+              : recent
               ? first.calculation.meanGenerationKWh
               : first.calculation.meanExportKWh,
             2
-          )} kWh</b></p><div class="wf-energy-equation">${wfEnergyFormula(
+          )} ${a.baselineMethod === "pvgis-irradiance" ? "kWh/kWp" : "kWh"}</b></p><div class="wf-energy-equation">${wfEnergyFormula(
             report,
             first
           )}</div></details>`
@@ -753,7 +764,7 @@ function wfEnergyRules(report) {
             "已无剩余预测期间，收益权已到期。"
           )}</p>`
     }
-    <p class="wf-energy-footnote">${t(
+    <p class="wf-energy-footnote">${a.baselineMethod === "pvgis-irradiance" ? t("PVGIS supplies historical-weather modeled power, not a future-weather forecast. Service periods are split by UTC calendar month. Deye history supplies the export ratio, not PVGIS. Availability, loss and degradation remain reviewed assumptions. No future household-demand forecast is included; displayed values are rounded, while calculations use full precision.", "PVGIS 提供基于历史气象的模拟功率，而非未来天气预报。服务期按 UTC 自然月拆分，德业历史数据提供上网比例。可用率、损耗和衰减仍是审核假设。模型不预测未来业主用电需求；页面显示值经过四舍五入，计算使用未舍入数据。") : t(
       "Forecasts are model outputs, not future readings supplied by the API. Availability and degradation are configurable assumptions. No weather, irradiance or future household-demand forecast is included. The model selects seasonality using each period's starting UTC month; periods crossing calendar months are not split by day. The assigned rights percentage affects cash allocation, not electricity output. Displayed numbers are rounded; calculation uses full precision.",
       "预测值由模型生成，并非API提供的未来读数。可用率与衰减率为可配置假设，尚未纳入天气、辐照度及未来自用需求预测。模型按每期起始时间的UTC月份选择季节样本，跨月期间尚未逐日拆分。收益权比例只影响现金分配，不改变物理电量。显示数字经过四舍五入，实际计算使用未舍入数据。"
     )}</p>
@@ -930,7 +941,7 @@ function wfAssumptionFields(a) {
 }
 function wfEditor(a) {
   const draft = wfDrafts.get(a.id);
-  return wfPanel(
+  return wfIrradianceProfilePanel(a) + wfPanel(
     t("Valuation inputs", "估值参数"),
     `<form data-action="offer" data-wf-editor="${a.id}" data-payload="${esc(
       JSON.stringify({ applicationId: a.id })
@@ -958,11 +969,37 @@ function wfEditor(a) {
     )}</button></div></form>`
   );
 }
+function wfIrradianceProfilePanel(a) {
+  const s = state.stations.find(st => st.id === a.stationId),
+    profile = s?.irradianceProfile,
+    c = profile?.config || {};
+  const field = (name, en, zh, value, min, max, step = "any") =>
+    `<label>${t(en, zh)}<input type="number" name="${name}" value="${value ?? ""}" min="${min}" max="${max}" step="${step}" required></label>`;
+  return wfPanel(t("PVGIS irradiation profile", "PVGIS 辐照气象基线"),
+    `<p class="wf-help">${t(
+      "PVGIS 5.3 uses 2019–2023 ERA5 weather to model hourly power for 1 kWp. It is a historical climate baseline for future scenarios, not a future weather forecast or Deye-metered generation. Enter this station's verified coordinates and DC design; do not use the notebook's example cities or 30° tilt unless they match the actual installation.",
+      "PVGIS 5.3 使用 2019–2023 年 ERA5 气象资料模拟 1 kWp 电站逐小时功率，作为未来情景的历史气象基线；它不是未来天气预报，也不是德业实测发电量。请填写本电站经核实的坐标和直流侧设计参数，不要直接套用附件中的代表城市或 30° 倾角。"
+    )}</p>${profile ? `<p class="wf-help">${t("Saved source", "已保存数据源")}: PVGIS-ERA5 · 2019–2023 · SHA-256 ${esc(profile.rawSha256)} · ${t("mean modeled annual yield", "平均模拟年单位发电量")} ${dsNum(profile.annualKWhPerKWp.reduce((x,y)=>x+y,0)/5,2)} kWh/kWp</p>` : `<p class="wf-help">${t("No irradiation profile has been loaded for this station.", "此电站尚未载入辐照气象基线。")}</p>`}
+    <form data-action="load-pvgis" data-payload="${esc(JSON.stringify({stationId:s.id}))}"><div class="wf-fields">
+      ${field("latitude","Latitude (degrees)","纬度（度）",c.latitude,-90,90)}
+      ${field("longitude","Longitude (degrees)","经度（度）",c.longitude,-180,180)}
+      ${field("dcCapacityKWp","DC nameplate capacity (kWp)","直流侧额定容量（kWp）",c.dcCapacityKWp,0.001,1000000)}
+      ${field("tiltDeg","Panel tilt (degrees)","组件倾角（度）",c.tiltDeg,0,90)}
+      ${field("aspectDeg","PVGIS aspect (0° south, 180° north)","PVGIS 方位角（0°朝南，180°朝北）",c.aspectDeg,-180,180)}
+      ${field("nonagingLossPct","Additional first-year system loss (%)","额外首年系统损耗（%）",c.nonagingLossPct,0,50)}
+      <label>${t("Coordinate evidence and source", "坐标依据与来源")}<input name="locationEvidence" value="${esc(c.locationEvidence || "")}" minlength="20" required></label>
+      <label>${t("DC capacity, tilt and aspect evidence", "直流容量、倾角和方位角的依据")}<input name="designEvidence" value="${esc(c.designEvidence || "")}" minlength="20" required></label>
+    </div><button class="btn btn-outline" type="submit">${t("Fetch and verify PVGIS hourly data", "获取并核对 PVGIS 逐小时数据")}</button></form>
+    <p class="wf-help">${t("The raw response is archived on the server with a hash. The intermediary must review the design and the trustee must approve any resulting quote. Existing signed products are not repriced automatically.","原始响应由服务器按摘要归档。中介须复核电站设计，基于该模型的报价仍须受托人审批。已有签约产品不会自动改价。")}</p>`);
+}
 function wfReadDraft(f, a) {
   const values = new FormData(f),
     base = wfDrafts.get(a.id)?.assumptions || a.assumptions;
   const v = structuredClone(base);
   v.baselineMethod = String(values.get("wf_baselineMethod") || "historical");
+  v.irradianceProfileHash = v.baselineMethod === "pvgis-irradiance"
+    ? state.stations.find((s) => s.id === a.stationId)?.irradianceProfile?.rawSha256 || ""
+    : "";
   v.baselineReviewNote = String(values.get("wf_baselineReviewNote") || "");
   v.baselineReviewSourceHash = values.has("wf_baselineReviewed")
     ? state.stations.find((s) => s.id === a.stationId).sourceHash
@@ -972,6 +1009,7 @@ function wfReadDraft(f, a) {
       assumptions: {
         ...a.assumptions,
         baselineMethod: v.baselineMethod,
+        irradianceProfileHash: v.irradianceProfileHash,
         baselineReviewNote: v.baselineReviewNote,
         baselineReviewSourceHash: v.baselineReviewSourceHash,
       },
@@ -1601,7 +1639,7 @@ function wfPoolGuide(currentAction = "") {
 function wfBaselineSubmissionIssues(a, assumptions) {
   if (
     !state.valuationChecks?.[a.id]?.audit?.materialChange &&
-    assumptions.baselineMethod !== "recent-export-ratio"
+    assumptions.baselineMethod === "historical"
   )
     return [];
   const station = state.stations.find((s) => s.id === a.stationId);
@@ -1678,9 +1716,17 @@ function wfBaselineFields(a) {
   } ${audit?.recentEligible ? "" : "disabled"}>${t(
     "Seasonal generation × recent export ratio (provisional)",
     "季节性发电量 × 近期上网比例（暂定情景）"
+  )}</option><option value="pvgis-irradiance" ${
+    selected === "pvgis-irradiance" ? "selected" : ""
+  } ${s?.irradianceProfile && v.revenueModel === "household-export" ? "" : "disabled"}>${t(
+    "PVGIS ERA5 irradiation × reviewed export allocation",
+    "PVGIS 辐照气象基线 × 经审核的上网分配比例"
   )}</option></select></label><p>${t(
     "Recent means up to 30 days before the capture day, with at least 7 valid complete days. Missing days and today's partial energy are excluded. Exports above generation invalidate the ratio; grid-charged resale is not inferred.",
     "近期样本取采集日前最多30天，至少须有7个完整日；缺测日和采集当天不计入。上网量超过发电量时，该比例不可用，须核对口径或审核历史估算，不推定电网充电再售电收入。"
+  )}</p><p>${t(
+    "The PVGIS option appears after the intermediary loads and verifies a station-specific hourly climate profile above. It changes modeled generation; export allocation still relies on Deye observations.",
+    "中介在上方载入并核对本电站的逐小时历史气象基线后，才可选择 PVGIS。该方法改变预测发电量，上网分配比例仍依据德业观测。"
   )}</p><label>${t(
     "Basis for choosing this baseline (20+ characters when review required)",
     "基线选择依据（需复核时至少20个字符）"
@@ -1760,8 +1806,8 @@ function wfBaselineComparison(a) {
       ],
     ])}
     <p class="wf-help">${t(
-      "Both rows below use the SAME tariff, costs, FX and discount rate. The recent scenario changes the export behavior but retains historical generation seasonality, degradation and downtime. It is not a daily-income × 1,800 shortcut.",
-      "下表两种基线使用同一电价、费用、汇率和折现率。近期情景更新上网行为，保留历史发电季节性、衰减和停机假设，不是把单日收益直接乘以1800。"
+      "All available rows use the same tariff, costs, FX and discount rate. The recent scenario changes export behavior; the PVGIS scenario changes modeled generation using historical ERA5 weather. Neither is a future weather forecast or a daily-income shortcut.",
+      "下表可用的基线使用同一电价、费用、汇率和折现率。近期情景改变上网行为；PVGIS 情景用历史 ERA5 气象资料改变模拟发电量。两者都不是未来天气预报，也不是单日收益的直接外推。"
     )}</p>
     ${
       preview?.baseline
@@ -1776,10 +1822,9 @@ function wfBaselineComparison(a) {
             preview.baseline.comparison.map((c) => [
               c.method === "historical"
                 ? t("Historical seasonal export", "长期历史季节性上网")
-                : t(
-                    "Recent export behavior · provisional",
-                    "近期上网行为 · 暂定"
-                  ),
+                : c.method === "pvgis-irradiance"
+                  ? t("PVGIS ERA5 modeled generation · provisional", "PVGIS ERA5 模拟发电量 · 暂定")
+                  : t("Recent export behavior · provisional", "近期上网行为 · 暂定"),
               dsNum(c.firstYearExportKWh, 2),
               dsCash(c.grossLocal),
               money(c.valueUSDC6),
@@ -1856,7 +1901,7 @@ function wfReassessment(a, mode) {
   const r = a.reassessment;
   let controls = "";
   if (mode === "agent")
-    controls = `<form data-action="prepare-reassessment" data-wf-editor="${
+    controls = wfIrradianceProfilePanel(a) + `<form data-action="prepare-reassessment" data-wf-editor="${
       a.id
     }" data-payload="${esc(
       JSON.stringify({ applicationId: a.id })

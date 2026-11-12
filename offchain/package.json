@@ -10,7 +10,7 @@
     "demo:simulate": "node --import tsx src/cli.ts simulate-period",
     "demo:lifecycle": "node --import tsx src/cli.ts emit-lifecycle",
     "test:demo": "node --import tsx src/validate.ts",
-    "test:revenue": "node --import tsx --test src/revenue/model.test.ts src/revenue/billing.test.ts src/revenue/deye.test.ts"
+    "test:revenue": "node --import tsx --test src/revenue/model.test.ts src/revenue/billing.test.ts src/revenue/deye.test.ts src/revenue/pvgis.test.ts"
   },
   "dependencies": {
     "ethers": "^6.13.4",

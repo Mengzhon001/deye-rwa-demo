@@ -40,6 +40,7 @@ import {
   valuationBlockReason,
 } from "../../../offchain/src/revenue/model";
 import { analyzeBaseline } from "../../../offchain/src/revenue/baseline";
+import { fetchPvgisProfile, PvgisConfigSchema } from "../../../offchain/src/revenue/pvgis";
 import {
   demoAssumptions,
   syntheticStation,
@@ -87,6 +88,7 @@ const uint = z.string().regex(/^[1-9]\d{0,17}$/);
 const access: Record<string, readonly Role[]> = {
   source: ["agent"],
   sync: ["agent"],
+  "load-pvgis": ["agent"],
   discover: ["agent"],
   apply: ["owner"],
   supplement: ["owner"],
@@ -972,6 +974,33 @@ export class RevenueRuntime {
       }
       case "discover":
         return new DeyeClient(deyeConfig()).listStations();
+      case "load-pvgis": {
+        const stationId = z.string().min(1).parse(b.stationId);
+        const station = s.stations.find(v => v.id === stationId);
+        if (!station) throw new Error("Select a station before loading its PVGIS profile");
+        const numeric = (key: string): number => {
+          const value = b[key];
+          if (typeof value !== "number" && (typeof value !== "string" || !value.trim()))
+            throw new Error(`PVGIS ${key} requires an explicitly entered number`);
+          const parsed = Number(value);
+          if (!Number.isFinite(parsed)) throw new Error(`PVGIS ${key} must be finite`);
+          return parsed;
+        };
+        const config = PvgisConfigSchema.parse({
+          latitude: numeric("latitude"), longitude: numeric("longitude"),
+          dcCapacityKWp: numeric("dcCapacityKWp"), tiltDeg: numeric("tiltDeg"),
+          aspectDeg: numeric("aspectDeg"), nonagingLossPct: numeric("nonagingLossPct"),
+          locationEvidence: b.locationEvidence, designEvidence: b.designEvidence,
+        });
+        const profile = await fetchPvgisProfile(config, join(this.dataDir, "pvgis"));
+        this.repo.update(v => {
+          const target = v.stations.find(x => x.id === stationId);
+          if (!target) throw new Error("Station changed during PVGIS retrieval");
+          target.irradianceProfile = profile;
+        });
+        return { stationId, rawSha256: profile.rawSha256,
+          years: profile.years, annualKWhPerKWp: profile.annualKWhPerKWp };
+      }
       case "sync": {
         if (s.mode !== "live")
           throw new Error("Select live mode explicitly first");
@@ -986,7 +1015,13 @@ export class RevenueRuntime {
             await transact("invalidate", vault, "invalidateValuation");
           this.repo.update((v) => {
             const i = v.stations.findIndex((x) => x.id === st.id);
-            if (i >= 0) v.stations[i] = st;
+            if (i >= 0) {
+              // A telemetry refresh changes the evidence hash, not the reviewed
+              // physical array design. Keep the climate profile for the same
+              // station; a fresh baseline review is still required for pricing.
+              st.irradianceProfile = v.stations[i].irradianceProfile;
+              v.stations[i] = st;
+            }
             else v.stations.push(st);
             v.liveAcceptance = {
               retrieved: true,
@@ -1087,6 +1122,7 @@ export class RevenueRuntime {
         const assumptions = AssumptionsSchema.parse({
           ...a.assumptions,
           baselineMethod: proposed.baselineMethod,
+          irradianceProfileHash: proposed.irradianceProfileHash,
           baselineReviewNote: proposed.baselineReviewNote,
           baselineReviewSourceHash: proposed.baselineReviewSourceHash,
         });
@@ -2688,7 +2724,7 @@ export class RevenueRuntime {
             reason: block,
             reviewRequired:
               audit.materialChange ||
-              report?.assumptions.baselineMethod === "recent-export-ratio",
+              (report?.assumptions.baselineMethod !== "historical" && !!report),
             audit,
             comparison,
             reassessmentCurrent,
