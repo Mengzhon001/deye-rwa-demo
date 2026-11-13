@@ -1,4 +1,12 @@
 function appStorageKey(k) { return globalThis.RevenueNetworks?.storageKey(k) || k; }
+function clearStaleOffchainPending() {
+  const key = appStorageKey("revenue.pending");
+  try {
+    const pending = JSON.parse(sessionStorage.getItem(key) || "null");
+    if (pending && JSON.parse(pending.canonical).action === "load-pvgis")
+      sessionStorage.removeItem(key);
+  } catch { /* Leave other pending operations untouched for transaction recovery. */ }
+}
 function walletProvider() { return window.RoleLogin ? window.RoleLogin.provider() : window.ethereum; }
 "use strict";
 let lang = localStorage.getItem("revenue.lang") || "zh",
@@ -1649,6 +1657,8 @@ document.addEventListener("submit", async (e) => {
 });
 async function runBusinessAction(action,payload,retryId) {
   if (!state) { feedback(t('Business state is still loading. Please wait before submitting.', '业务状态仍在加载，请稍候再提交。'),true);return; }
+  const loadingPvgis = action === "load-pvgis";
+  const walletOperation = walletChainActions.has(action) || action === "sign";
   const canonical = JSON.stringify({ actor, action, payload });
   const pending = JSON.parse(
     sessionStorage.getItem(appStorageKey("revenue.pending")) || "null"
@@ -1665,8 +1675,20 @@ async function runBusinessAction(action,payload,retryId) {
     originalDisabled.set(b, b.disabled);
     b.disabled = true;
   });
-  feedback(t("Waiting for confirmed operation…", "等待操作确认…"));
-  window.RevenueGuide?.operation({stage:walletChainActions.has(action)||action==="sign"?"wallet":"processing",action,message:t("Read and confirm the business operation yourself. No step is complete until its result is verified.","请本人阅读并确认业务操作，只有核实结果后才算完成。")});
+  feedback(loadingPvgis
+    ? t("Fetching five years of PVGIS hourly weather data, checking every hour and saving the source digest. This is an off-chain request; no wallet confirmation is needed. It may take up to 2½ minutes.", "正在从 PVGIS 获取五年逐小时气象数据，逐条核对并保存来源摘要。这是链下数据请求，无需钱包确认，最多可能需要约两分半钟。")
+    : action === "offer"
+      ? t("Calculating and saving the valuation quote. The trustee will review it next; no wallet confirmation is needed.", "正在计算并保存估值报价，随后由受托人审批。此步骤无需钱包确认。")
+      : walletOperation
+        ? t("Waiting for your wallet signature or blockchain confirmation…", "正在等待钱包签名或链上确认…")
+        : t("Checking and saving this off-chain business record. No wallet confirmation is needed.", "正在核对并保存链下业务记录，无需钱包确认。"));
+  window.RevenueGuide?.operation({stage:walletOperation?"wallet":"processing",action,message:loadingPvgis
+    ? t("The PVGIS service is responding. Keep this page open; no wallet signature or blockchain transaction is involved.", "正在等待 PVGIS 数据服务返回，请保持页面打开；无需签名，也不会产生链上交易。")
+    : action === "offer"
+      ? t("The server is calculating the forecast and checking valuation evidence. Wait for the saved quote before handing it to the trustee.", "服务器正在计算预测并核对估值依据。请等待报价保存成功后再交由受托人审批。")
+      : walletOperation
+        ? t("Read the wallet request and confirm it yourself. The operation is complete only after its result is verified.", "请本人核对钱包请求并确认；只有核实结果后才算完成。")
+        : t("The server is checking this business record; no wallet signature is required.", "服务器正在核对业务记录，此步骤无需钱包签名。")});
   try {
     let result;
     if (networkConfig?.walletRequired && action === "sign") {
@@ -1686,7 +1708,7 @@ async function runBusinessAction(action,payload,retryId) {
     )
       result = await walletAction(action, payload);
     else
-      result = await api("/api/actions", { action, payload, idempotencyKey });
+      result = await api("/api/actions", { action, payload, idempotencyKey }, loadingPvgis ? AbortSignal.timeout(170000) : undefined);
     sessionStorage.removeItem(appStorageKey("revenue.pending"));
     wfAfter(action, payload, result);
     if(action==="distribute"&&["agent","trustee"].includes(role))page="agent_product";
@@ -1704,22 +1726,27 @@ async function runBusinessAction(action,payload,retryId) {
       ].includes(action)
     )
       document.querySelector("#main").scrollTop = 0;
-    feedback(
-      t(
-        "Confirmed. State and transaction receipts refreshed.",
-        "操作已确认，状态与交易凭证已更新。"
-      ) + (action === "discover" ? " " + JSON.stringify(result.result) : "")
-    );
+    feedback(loadingPvgis
+      ? t("PVGIS data verified and saved. Review the baseline, then submit a new valuation for trustee approval.", "PVGIS 数据已核对并保存。请复核预测基线，再提交新报价供受托人审批。")
+      : action === "offer"
+        ? t("Valuation quote saved. The trustee can now review it.", "估值报价已保存，现在由受托人审批。")
+        : walletOperation
+          ? t("Confirmed. State and transaction receipts refreshed.", "操作已确认，状态与交易凭证已更新。")
+          : t("Business record saved and state refreshed.", "业务记录已保存，状态已更新。") + (action === "discover" ? " " + JSON.stringify(result.result) : ""));
     return {ok:true,result};
   } catch (error) {
-    feedback(error.message, true);
+    if (loadingPvgis) sessionStorage.removeItem(appStorageKey("revenue.pending"));
+    const message = loadingPvgis && ["TimeoutError", "AbortError"].includes(error.name)
+      ? t("PVGIS did not respond in time. No wallet transaction was submitted. Refresh the business state before trying again; the server may have saved the source after the page stopped waiting.", "PVGIS 数据服务响应超时。没有提交钱包交易。请先刷新业务状态再重试；页面停止等待后，服务器仍可能已保存数据。")
+      : error.message;
+    feedback(message, true);
     await refresh();
     if(action==="subscribe"&&payload.amountUSDC6){
       const field=document.querySelector('form[data-action="subscribe"] [name="amountUSDC6"]');
       if(field){const amount=BigInt(payload.amountUSDC6);field.value=`${amount/1000000n}.${String(amount%1000000n).padStart(6,"0")}`;}
     }
-    window.RevenueGuide?.operation({stage:"failed",action,message:error.message});
-    return {ok:false,error:error.message};
+    window.RevenueGuide?.operation({stage:"failed",action,message});
+    return {ok:false,error:message};
   } finally {
     document.querySelectorAll("button").forEach((b) => {
       if (originalDisabled.has(b)) b.disabled = originalDisabled.get(b);
@@ -1735,6 +1762,7 @@ async function runBusinessAction(action,payload,retryId) {
   }
   try {
     networkConfig = await publicGet("/api/network");
+    clearStaleOffchainPending();
     if (networkConfig.walletRequired) {
       walletLanding();
       const session = await window.RoleLogin.resume(networkConfig);

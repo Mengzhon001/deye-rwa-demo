@@ -1007,7 +1007,8 @@ function wfIrradianceProfilePanel(a) {
       <label>${t("Parameter status", "参数状态")}<select name="parameterStatus"><option value="provisional" ${c.parameterStatus === "confirmed" ? "" : "selected"}>${t("Provisional demo estimate", "演示估计，尚未核实")}</option><option value="confirmed" ${c.parameterStatus === "confirmed" ? "selected" : ""}>${t("Confirmed against station design", "已对照电站实装资料核实")}</option></select></label>
       <label>${t("Coordinate evidence and source", "坐标依据与来源")}<input name="locationEvidence" value="${esc(c.locationEvidence || "")}" minlength="20" required></label>
       <label>${t("DC capacity, tilt and aspect evidence", "直流容量、倾角和方位角的依据")}<input name="designEvidence" value="${esc(c.designEvidence || "")}" minlength="20" required></label>
-    </div><button class="btn btn-outline" type="submit">${t("Fetch and verify PVGIS hourly data", "获取并核对 PVGIS 逐小时数据")}</button></form>
+    </div><button class="btn btn-outline" type="submit">${profile ? t("Refetch and verify PVGIS hourly data", "重新获取并核对 PVGIS 逐小时数据") : t("Fetch and verify PVGIS hourly data", "获取并核对 PVGIS 逐小时数据")}</button></form>
+    ${profile ? `<p class="wf-help">${t("The saved PVGIS profile can already be used for a new valuation. Refetch only when the station inputs need to change; no wallet confirmation is required.", "已保存的 PVGIS 基线可直接用于新估值。仅在电站参数需要变更时重新获取；此操作无需钱包确认。")}</p>` : ""}
     <p class="wf-help">${t("The raw response is archived on the server with a hash. The intermediary must review the design and the trustee must approve any resulting quote. Existing signed products are not repriced automatically.","原始响应由服务器按摘要归档。中介须复核电站设计，基于该模型的报价仍须受托人审批。已有签约产品不会自动改价。")}</p>`)}</div>`;
 }
 function wfReadDraft(f, a) {

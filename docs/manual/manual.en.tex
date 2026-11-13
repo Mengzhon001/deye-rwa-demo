@@ -1,6 +1,6 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=22mm,footskip=10mm]{geometry}
-\usepackage{fontspec,xeCJK,graphicx,array,longtable,booktabs,xurl,pdflscape,tikz,titlesec,amsmath}
+\usepackage{fontspec,xeCJK,graphicx,array,longtable,booktabs,xurl,pdflscape,tikz,titlesec,amsmath,needspace}
 \usepackage[hidelinks]{hyperref}
 \usetikzlibrary{arrows.meta}
 \setmainfont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6,BoldFont=Songti.ttc,BoldFeatures={FontIndex=0}]
@@ -1146,7 +1146,25 @@ G denotes forecast generation, E is validated eligible export and q is the self-
 \[C_t=(B_t+E_t p^{export}_t-K_t)\,f_t\,a_t,\qquad V_0=\sum_{t=1}^{60}\frac{\widehat C_t}{(1+r)^{\tau_t/12}}.\]
 K represents agreed station costs borne by the rights, f is the demo FX conversion into USDC and a is the signed assignment proportion. New agreements default to 100\% assignment, with the owner retaining a benefit through the discounted tariff. Discounting uses expected cash-collection dates, so tau includes receipt delays. The default 10\% nominal annual discount rate is a pricing assumption, not a promised return, and 6\% and 14\% sensitivities are also shown.
 
-\clearpage
+\subsection{Discount-rate meaning and pricing basis}
+The discount rate converts each expected future net receipt into a value on the valuation date. A higher rate reduces present value for unchanged cashflows. It differs from the owner paying 80\% of the grid tariff, the pool retaining 10\% of initial cash at settlement, and the investor's eventual net IRR. The current 10\% is a demonstration pricing assumption, not yet fully calibrated against this product's realized collections and comparable transactions. The 6\% and 14\% cases are sensitivity scenarios, not a probability range.
+
+\[r_{\mathrm{rights}}\approx r_{\mathrm{benchmark}}+\pi_{\mathrm{payment}}+\pi_{\mathrm{operations}}+\pi_{\mathrm{legal/liquidity}}.\]
+Start with a low-risk benchmark in the valuation currency with a duration comparable to the receipts. Assess household payments and grid export collections, generation and operations, data integrity, contract enforceability and illiquidity. The equation is a calibration framework requiring evidence, not a way to generate one objectively correct rate. The intermediary should document each premium using agreement terms, payment history, grid settlement, station performance, exit limits and comparable transactions; the trustee reviews the rationale. Correlated risks cannot be priced by arbitrarily adding percentages.
+
+When forecast cashflows already deduct expected generation loss, expenses or nonpayment, the same expected loss must not be charged again in full through the risk premium. For example, if 100 USDC is billed but only 90 USDC is expected to be collected, the report must state whether it discounts 100 or 90 and what residual risks the rate covers. Here, nominal means cashflows and rates are not adjusted for inflation; the system compounds the annual rate over actual days, rather than multiplying a simple monthly rate by 12. Tax treatment, cashflow currency, price growth and expected receipt dates must also be consistent.
+
+\subsection{Currency convention and current system limitation}
+The current system converts CNY household bills, export proceeds and station costs into USDC using a fixed demonstration FX assumption, then discounts them at one 10\% annual rate by expected collection date. The rate should therefore be read as the required return on USDC-denominated rights cashflows. US Treasury yields can be a low-risk reference, but USDC, cross-currency settlement and enforceability risks still require assessment. Fixed FX does not imply a constant future exchange rate. A CNY valuation should instead discount CNY cashflows with a CNY rate and convert the present value on the valuation date; applying a CNY bond yield directly to USDC cashflows is inconsistent.
+
+For 41.888 USDC expected exactly one year later, present values at 6\%, 10\% and 14\% are approximately 39.52, 38.08 and 36.74 USDC. Each monthly receipt is discounted using the actual days from valuation to expected collection; five years of receipts are not divided by 1.10 just once. A higher discount rate changes the quote, not the owner tariff or the contractual investor cashflows automatically.
+
+\subsection{Comparables and approval record}
+As of 12 November 2026, the US Treasury five-year yield was 4.81\% on 10 November and the ChinaBond five-year government yield was 1.329\% on 12 November. Subtraction from 10\% gives residuals of 5.19 and 8.67 percentage points respectively, but the currencies cannot be mixed and neither result validates a premium. The IEA reported nominal after-tax WACC of 4.4\% to 5.4\% for revenue-supported Chinese utility-scale solar projects in 2019 and 6.4\% to 6.9\% with merchant risk. These historical financing costs refer to a different scale and rights structure. Centrifuge now follows product-specific NAV policies; the 3\% rate in its legacy Tinlake explanation is only an illustrative calculation, not a protocol-wide rate.
+
+\par\noindent{\footnotesize\textbf{Public sources}\quad \href{https://www.iea.org/articles/the-cost-of-capital-in-clean-energy-transitions}{IEA (2021)}; \href{https://docs.centrifuge.io/user/manager/nav/}{Centrifuge NAV}; \href{https://developer.centrifuge.io/developer/legacy/tinlake/}{Tinlake}; \href{https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/more}{ChinaBond}; \href{https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value=2026\&type=daily_treasury_yield_curve}{US Treasury}.}\par
+Each formal quote should record its valuation currency, benchmark curve and observation date, evidence for the premiums, expected losses already deducted from forecast cashflows, compounding convention, present values at 6\%, 10\% and 14\%, reviewer and validity period. Product-specific calibration requires sufficient realized household payments, grid proceeds and comparable transaction prices. A revised rate takes effect through a new quote or revaluation, never by silently rewriting a signed agreement.
+
 \subsection{Comparison of the three valuation baselines}
 The three methods change the forecast baseline for generation or export allocation in each future service period. The formulas for discounted household payments, export receipts, agreed costs, assignment and cashflow timing remain common. These baselines are not three different rights agreements, and the valuation discount rate is not a guaranteed investor return.
 

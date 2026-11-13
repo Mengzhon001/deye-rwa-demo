@@ -1,6 +1,6 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=22mm,footskip=10mm]{geometry}
-\usepackage{fontspec,xeCJK,graphicx,array,longtable,booktabs,xurl,pdflscape,tikz,titlesec,amsmath}
+\usepackage{fontspec,xeCJK,graphicx,array,longtable,booktabs,xurl,pdflscape,tikz,titlesec,amsmath,needspace}
 \usepackage[hidelinks]{hyperref}
 \usetikzlibrary{arrows.meta}
 \setmainfont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6,BoldFont=Songti.ttc,BoldFeatures={FontIndex=0}]
@@ -1235,7 +1235,25 @@ G表示预测发电量，E表示经核验的合资格售电量，q表示自用�
 \[C_t=(B_t+E_t p^{export}_t-K_t)\,f_t\,a_t,\qquad V_0=\sum_{t=1}^{60}\frac{\widehat C_t}{(1+r)^{\tau_t/12}}.\]
 K表示约定由收益权承担的站点成本，f为本币换USDC的演示汇率，a为签署协议的归集比例。新协议默认归集100\%，业主通过优惠电价保留利益。现金流按预计实际收款日期贴现，τ包含回款延迟。默认10\%名义年折现率是定价假设，不是承诺收益，报告同时比较6\%和14\%。
 
-\clearpage
+\subsection{折现率的含义与定价依据}
+折现率用于把未来各期预计收到的净现金流换算为估值日的价格。相同现金流下，折现率越高，现值越低。它与业主按电网价80\%缴费的优惠比例、募集结算时自动留存10\%现金的规则、投资者最后实现的净IRR均不是同一个参数。当前10\%为演示定价假设，尚未依据本产品的实际回款和可比交易充分校准；6\%及14\%只是敏感性情景，不是收益概率区间。
+
+\[r_{\mathrm{rights}}\approx r_{\mathrm{benchmark}}+\pi_{\mathrm{payment}}+\pi_{\mathrm{operations}}+\pi_{\mathrm{legal/liquidity}}.\]
+定价时可先选估值币种及与现金流期限相近的低风险基准，再评估业主缴费和电网售电回款、发电与运营、数据完整性、合同执行及流动性风险。上式是需要证据支持的校准框架，不会自动给出唯一正确利率。中介应根据协议条款、历史缴费、售电结算凭证、电站运行、退出限制和可比交易记录每项溢价的理由，受托管理人再复核。风险之间可能相关，不能随意相加。
+
+模型已经把预计发电损失、费用或欠费计入未来净现金流时，不能把同一预期损失完整再计入风险溢价。例如某期预计应收100 USDC，但根据收款记录预计只收90 USDC，就应先解释现金流采用100还是90，再确定折现率覆盖哪些剩余风险。这里的“名义”表示现金流和利率都未剔除通胀，系统使用以实际天数为指数的年复利折现，并不是把简单月利率乘以12。合同税费口径、现金流币种、价格增长和预计收款日也必须一致。
+
+\subsection{币种口径与当前系统限制}
+当前系统先按固定演示汇率把人民币业主电费、售电收入和站点费用换成USDC，再用同一个10\%年利率按预计收款日折现。因此应把此利率理解为USDC计价收益权的要求回报。美元国债可作为低风险参考，但USDC、跨币种结算和合同执行风险仍要单独评估；固定汇率并不证明未来汇率不变。若改为人民币估值，应先用人民币口径利率折现人民币现金流，再于估值日换算现值，不能把人民币国债收益率直接套在已换成USDC的现金流上。
+
+以一年后收到41.888 USDC为例，采用6\%、10\%和14\%折现时的现值分别约为39.52、38.08和36.74 USDC。每月实际计算使用各期预计收款日和估值日之间的天数，并不是把五年总收入一次性除以1.10。折现率上升影响报价，不代表业主电价或投资者合约现金流自动改变。
+
+\subsection{可比资料与审批记录}
+截至2026年11月12日可核对的公开资料中，11月10日美国国债五年期收益率为4.81\%，11月12日中债五年期国债收益率为1.329\%。与10\%直接相减分别得到5.19和8.67个百分点，但两种币种不能混用，差值也不能证明这些风险溢价合理。IEA报告给出的2019年中国大型光伏项目税后名义加权资本成本在收入受保障时为4.4\%至5.4\%，在承担市场售电风险时为6.4\%至6.9\%。这些是不同规模和权利结构的历史融资成本，只能作为背景。Centrifuge现行文件按各产品估值政策确定NAV，旧版Tinlake说明中的3\%只是教学算例，也不是协议统一利率。
+
+\par\noindent{\footnotesize\textbf{公开资料}\quad \href{https://www.iea.org/articles/the-cost-of-capital-in-clean-energy-transitions}{IEA (2021)}; \href{https://docs.centrifuge.io/user/manager/nav/}{Centrifuge NAV}; \href{https://developer.centrifuge.io/developer/legacy/tinlake/}{Tinlake}; \href{https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/more}{ChinaBond}; \href{https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value=2026\&type=daily_treasury_yield_curve}{US Treasury}.}\par
+每次正式报价应记录估值币种、基准曲线和观察日、溢价证据、已从预测现金流扣除的预期损失、复利口径、6\%与10\%及14\%三种现值、审批人和估值有效期。取得足够实际业主缴费、电网回款及可比交易资料后，再校准本产品专属利率。新利率仅通过新报价或重新估值生效，不能静默改写已签协议。
+
 \subsection{三种估值基线的比较}
 三种方法改变的是未来各期发电量或上网比例的预测基线。业主优惠电费、售电收入、约定成本、归集比例及按预计收款时间折现的现金流公式保持一致。因此，不能把三种基线理解为三套不同的收益权经济条款，也不能把估值折现率当成投资者的保证收益率。
 

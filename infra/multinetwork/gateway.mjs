@@ -38,7 +38,9 @@ export function createGateway(config) {
       // Each chain accepts only its own backend session; cookies never select an upstream.
       headers.cookie=(req.headers.cookie||'').split(';').map(c=>c.trim()).filter(c=>c.startsWith(network.cookieName+'=')).join('; ');
       delete headers['x-forwarded-host'];delete headers['x-forwarded-for'];delete headers['x-forwarded-proto'];
-      const upstream=httpRequest({hostname:target.hostname,port:target.port,path:localPath+url.search,method:req.method,headers,timeout:120000},response=>{
+      // PVGIS can take up to 150 seconds before the backend reports its own timeout.
+      // Give that response time to reach the browser instead of returning a generic 503.
+      const upstream=httpRequest({hostname:target.hostname,port:target.port,path:localPath+url.search,method:req.method,headers,timeout:180000},response=>{
         const h={...response.headers};delete h['access-control-allow-origin'];delete h['access-control-allow-credentials'];
         if(publicRead&&req.method==='GET'&&publicOrigins.has(req.headers.origin)){h['access-control-allow-origin']=req.headers.origin;h.vary='Origin';}
         if(h['set-cookie'])h['set-cookie']=h['set-cookie'].map(c=>c.replace(/Path=\/([;]|$)/,`Path=/networks/${network.id}/$1`));

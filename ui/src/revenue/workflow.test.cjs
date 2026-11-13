@@ -201,6 +201,8 @@ test("PVGIS choice requires a station profile and shows the saved climate eviden
   r(`state.stations[0].irradianceProfile={rawSha256:'${"a".repeat(64)}',years:[2019,2020,2021,2022,2023],annualKWhPerKWp:[1000,1000,1000,1000,1000],meanMonthlyKWhPerKWp:Array(12).fill(83),config:{latitude:31.23,longitude:121.47,dcCapacityKWp:10,tiltDeg:25,aspectDeg:0,nonagingLossPct:10,locationEvidence:'verified coordinates',designEvidence:'verified design'}};
      a.assumptions.baselineMethod='pvgis-irradiance';`);
   assert.doesNotMatch(r("wfBaselineFields(a)"), /value="pvgis-irradiance"[^>]*disabled/);
+  assert.match(r("wfIrradianceProfilePanel(a)"), /Refetch and verify PVGIS hourly data/);
+  assert.match(r("wfIrradianceProfilePanel(a)"), /no wallet confirmation is required/);
   assert.match(r("wfBaselineSubmissionIssues(a,a.assumptions)[0].field"), /wf_baselineReviewNote/);
   r(`var report={assumptions:a.assumptions,energyEvidence:{history:[],irradiance:state.stations[0].irradianceProfile},rows:[{month:1,generationKWh:90,exportKWh:45,calculation:{serviceStart:0,serviceEnd:86400,seasonMonth:1,sampleMonths:[],exportSampleMonths:['2025-01'],meanGenerationKWh:100,meanExportKWh:50,irradianceKWhPerKWp:10,dcCapacityKWp:10,nonagingLossFactor:.9,availabilityFactor:1,degradationFactor:1,remainingFraction:1,exportRatio:.5}}]};`);
   assert.match(r("wfEnergyRow(report,report.rows[0])"), /PVGIS ERA5 historical weather years/);

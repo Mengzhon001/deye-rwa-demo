@@ -29,3 +29,12 @@ test('mutations are never retried against a different product',async()=>{
  assert.equal(f.calls.length,1);assert.equal(f.calls[0].options.method,'POST');
  assert.equal(f.storage.get('revenue.selected-product'),'old-vault');
 });
+test('a stale PVGIS data request never blocks product switching as a wallet transaction',()=>{
+ const f=context([]);
+ f.storage.set('revenue.pending',JSON.stringify({canonical:JSON.stringify({action:'load-pvgis'})}));
+ vm.runInContext('clearStaleOffchainPending()',f.c);
+ assert.equal(f.storage.has('revenue.pending'),false);
+ f.storage.set('revenue.pending',JSON.stringify({canonical:JSON.stringify({action:'subscribe'})}));
+ vm.runInContext('clearStaleOffchainPending()',f.c);
+ assert.equal(f.storage.has('revenue.pending'),true);
+});
