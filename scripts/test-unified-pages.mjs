@@ -2,7 +2,7 @@ import{chromium}from'playwright';import{readFileSync,writeFileSync,existsSync,st
 const root=resolve(import.meta.dirname,'..'),out=join(root,'ui/site-dist'),base='https://mengzhon001.github.io/deye-rwa-demo/',config=JSON.parse(readFileSync(process.env.REVENUE_UNIFIED_PUBLIC_CONFIG)),live=process.env.REVENUE_PAGES_LIVE==='true';
 let server,local;
 if(!live){server=createServer((req,res)=>{let file=resolve(out,new URL(req.url,'http://localhost').pathname.slice(1)||'index.html');if(!file.startsWith(out+'/'))return res.writeHead(404).end();if(existsSync(file)&&statSync(file).isDirectory())file=join(file,'index.html');if(!existsSync(file))return res.writeHead(404).end();res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.pdf':'application/pdf'}[extname(file)]||'application/octet-stream'));res.end(readFileSync(file));});await new Promise(r=>server.listen(0,'127.0.0.1',r));local='http://127.0.0.1:'+server.address().port+'/';}
-const browser=await chromium.launch({headless:true});
+const browser=await chromium.launch({headless:true,channel:process.env.REVENUE_PLAYWRIGHT_CHANNEL||'chrome'});
 async function context(opts={}){const c=await browser.newContext(opts);if(!live)await c.route(base+'**',async route=>{const r=await route.fetch({url:route.request().url().replace(base,local)});await route.fulfill({response:r});});return c;}
 try{
  const c=await context({viewport:{width:1440,height:950},reducedMotion:'reduce'}),p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
