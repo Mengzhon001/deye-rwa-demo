@@ -1091,11 +1091,23 @@ function wfDetail(a, mode) {
       ]) + note("notes", t("Review notes / reason", "审核意见 / 原因")),
       { applicationId: a.id }
     );
-  if (mode === "owner" && a.status === "supplement")
+  if (mode === "owner" && ["supplement", "rejected"].includes(a.status))
     action = form(
       "supplement",
       t("Submit supplementary information", "提交补充材料"),
-      note("notes", t("Supplement", "补充说明")),
+      note("notes", t("Supplement", "补充说明")) +
+      input("eq_commissionedOn", t("PV commissioning date", "光伏投运日期"), a.equipment?.commissionedOn || "", "date", "required") +
+      input("eq_pvUsefulLifeYears", t("Supported PV life (years)", "光伏有证据支持的寿命（年）"), a.equipment?.pvUsefulLifeYears || "", "number", 'min="1" max="60" required') +
+      input("eq_pvAnnualLossPct", t("Annual PV loss (%)", "光伏年衰减（%）"), a.equipment?.pvAnnualLossPct ?? 0.7, "number", 'min="0" max="10" step="0.01" required') +
+      input("eq_batteryCommissionedOn", t("Battery commissioning (if used)", "电池投运日期（如参与收益）"), a.equipment?.battery?.commissionedOn || "", "date") +
+      input("eq_batteryUsefulLifeYears", t("Battery supported life (years)", "电池有证据支持的寿命（年）"), a.equipment?.battery?.usefulLifeYears || "", "number", 'min="1" max="30"') +
+      input("eq_batteryStateOfHealthPct", t("Battery SOH (%)", "电池健康度 SOH（%）"), a.equipment?.battery?.stateOfHealthPct || "", "number", 'min="0" max="100" step="0.01"') +
+      input("eq_batteryMinimumHealthPct", t("Minimum SOH (%)", "最低健康度 SOH（%）"), a.equipment?.battery?.minimumHealthPct || "", "number", 'min="0" max="100" step="0.01"') +
+      input("eq_batteryAnnualCapacityLossPct", t("Annual battery capacity loss (%)", "电池年容量衰减（%）"), a.equipment?.battery?.annualCapacityLossPct || "", "number", 'min="0" max="20" step="0.01"') +
+      input("eq_batteryDependentSelfUsePct", t("Battery-dependent solar self-use (%)", "依赖电池的光伏自用比例（%）"), a.equipment?.battery?.batteryDependentSelfUsePct || "", "number", 'min="0" max="100" step="0.01"') +
+      input("eq_batteryReplacementMonth", t("Replacement month", "更换月份"), a.equipment?.battery?.replacementMonth || "", "number", 'min="1" max="360"') +
+      input("eq_batteryReplacementCostLocal", t("Replacement cost", "更换成本"), a.equipment?.battery?.replacementCostLocal || "", "number", 'min="0" step="0.01"') +
+      input("eq_evidence", t("Equipment evidence", "设备证据"), a.equipment?.evidence || "", "text", 'minlength="20" required'),
       { applicationId: a.id }
     );
   if (
@@ -1203,6 +1215,8 @@ function wfDetail(a, mode) {
         )} →</button>`
       : ""
   }
+    ${a.equipment ? wfPanel(t("Equipment and remaining life", "设备与剩余寿命"),
+      `<p>${t("PV commissioned", "光伏投运")}: ${esc(a.equipment.commissionedOn)} · ${t("Supported life", "有证据支持的寿命")}: ${esc(a.equipment.pvUsefulLifeYears)} ${t("years", "年")} · ${t("Future PV loss", "未来光伏衰减")}: ${esc(a.equipment.pvAnnualLossPct)}%.</p><p>${t("Battery SOH", "电池健康度 SOH")}: ${a.equipment.battery ? esc(a.equipment.battery.stateOfHealthPct)+"%" : t("Not supplied / not used", "未提供或未计入")}. ${t("SOC is not SOH", "SOC 不是 SOH")}.</p><p>${esc(a.equipment.evidence)}</p><p>${a.equipment.reviewedAt ? t("Reviewed by intermediary", "中介已审核") : t("Awaiting intermediary review", "等待中介审核")}</p>`) : wfPanel(t("Equipment evidence", "设备证据"), t("Equipment fields are missing; supply them before approval.", "缺少设备资料，请补充后再审批。"))}
     ${wfBaselineComparison(a)}${wfReassessment(a, mode)}
     <div class="wf-two wf-info">${wfPanel(
       t("Station & evidence", "电站与数据证据"),
@@ -1371,7 +1385,7 @@ function wfAfter(action, payload, result) {
     ].includes(action)
   ) {
     wfSelect(payload.applicationId);
-    if (action === "review" && payload.decision === "approved")
+    if (action === "review" && payload.decision === "approved" && result?.result?.status !== "rejected")
       page = "agent_financing";
     if (action === "reopen-offer") {
       page = "agent_financing";

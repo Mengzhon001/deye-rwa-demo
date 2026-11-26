@@ -544,7 +544,7 @@ async function main() {
   const preview = await r.previewOffer(
     "agent",
     applicationId,
-    s.applications[0].assumptions
+    r.repo.read().applications[0].assumptions
   );
   assert.ok(BigInt(preview.rightsValueUSDC6) > 0n);
   assert.equal(

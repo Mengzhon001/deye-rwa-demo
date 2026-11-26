@@ -63,6 +63,27 @@ const date = (v) =>
         { timeZone: "UTC" }
       )
     : "—";
+function equipmentApiDefaults(station) {
+  const m = station?.metadata || {};
+  // Monitoring registration dates and SOC are not commissioning dates or SOH.
+  const iso = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : "";
+  const number = (v, low, high) => typeof v === "number" && Number.isFinite(v) && v >= low && v <= high ? String(v) : "";
+  return {
+    commissionedOn: iso(m.commissioningDate),
+    pvUsefulLifeYears: number(m.pvUsefulLifeYears, 1, 60),
+    pvAnnualLossPct: number(m.pvAnnualLossPct, 0, 10) || "0.7",
+    batteryCommissionedOn: iso(m.batteryCommissioningDate),
+    batteryUsefulLifeYears: number(m.batteryUsefulLifeYears, 1, 30),
+    batteryStateOfHealthPct: number(m.batterySOH, 0, 100),
+  };
+}
+function prefillEquipment(form, stationId) {
+  const defaults = equipmentApiDefaults(state?.stations?.find(s => s.id === stationId));
+  for (const [key, value] of Object.entries(defaults)) {
+    const field = form.elements.namedItem("eq_" + key);
+    if (field && value && !field.value) field.value = value;
+  }
+}
 const names = {
   owner: ["Household", "业主"],
   agent: ["Intermediary", "中介机构"],
@@ -604,6 +625,8 @@ function content() {
       return stations();
     case "owner_apply":
       if (wfSelected) return applications("owner");
+      {
+      const equipmentDefaults = equipmentApiDefaults(state.stations[0]);
       return (
         `<div class="wf-workspace wf-owner-intro"><h2>${t(
           "Sell a defined share of future revenue",
@@ -622,6 +645,19 @@ function content() {
               t("Station", "电站"),
               state.stations.map((s) => [s.id, s.name])
             ) +
+              input("eq_commissionedOn", t("PV commissioning date", "光伏投运日期"), equipmentDefaults.commissionedOn, "date", "required") +
+              input("eq_pvUsefulLifeYears", t("Supported PV life in years", "光伏有证据支持的使用寿命（年）"), equipmentDefaults.pvUsefulLifeYears, "number", 'min="1" max="60" required') +
+              input("eq_pvAnnualLossPct", t("Expected annual PV performance loss (%)", "预计光伏年性能衰减（%）"), equipmentDefaults.pvAnnualLossPct, "number", 'min="0" max="10" step="0.01" required') +
+              input("eq_batteryCommissionedOn", t("Battery commissioning date (if used)", "电池投运日期（如参与收益）"), equipmentDefaults.batteryCommissionedOn, "date") +
+              input("eq_batteryUsefulLifeYears", t("Battery supported life in years", "电池有证据支持的使用寿命（年）"), equipmentDefaults.batteryUsefulLifeYears, "number", 'min="1" max="30"') +
+              input("eq_batteryStateOfHealthPct", t("Battery state of health, not SOC (%)", "电池健康度 SOH，非电量 SOC（%）"), equipmentDefaults.batteryStateOfHealthPct, "number", 'min="0" max="100" step="0.01"') +
+              input("eq_batteryMinimumHealthPct", t("Minimum operating SOH (%)", "最低运行健康度 SOH（%）"), "", "number", 'min="0" max="100" step="0.01"') +
+              input("eq_batteryAnnualCapacityLossPct", t("Battery annual capacity loss (%)", "电池年容量衰减（%）"), "", "number", 'min="0" max="20" step="0.01"') +
+              input("eq_batteryDependentSelfUsePct", t("Share of solar self-use supported by battery (%)", "依赖电池的光伏自用比例（%）"), "", "number", 'min="0" max="100" step="0.01"') +
+              input("eq_batteryReplacementMonth", t("Planned replacement month (optional)", "计划更换月份（可选）"), "", "number", 'min="1" max="360"') +
+              input("eq_batteryReplacementCostLocal", t("Replacement cost in station currency", "更换成本（电站本币）"), "", "number", 'min="0" step="0.01"') +
+              `<p>${t("Only explicit equipment fields from the station API are prefilled. Its registration date and SOC are not commissioning date or battery SOH. Confirm all values with inspection or warranty evidence; the intermediary reviews them before approval.", "只预填电站 API 明确提供的设备字段。平台注册日期和 SOC 不能代替投运日期或电池 SOH。请用检测或保修资料核对所有数值，中介将在批准前复核。")}</p>` +
+              input("eq_evidence", t("Equipment evidence and source", "设备资料与依据"), "", "text", 'minlength="20" maxlength="2000" required') +
               note(
                 "notes",
                 t(
@@ -633,6 +669,7 @@ function content() {
         ) +
         applications("owner")
       );
+      }
     case "owner_agreement":
       return applications("owner");
     case "owner_funds":
@@ -1381,6 +1418,8 @@ async function refresh({ signal, valid = () => true } = {}) {
 }
 document.addEventListener("change", e => {
   if (e.target.id === "product-select") switchProduct(e.target.value).catch(error => feedback(error.message, true));
+  if (e.target.name === "stationId" && e.target.form?.dataset.action === "apply")
+    prefillEquipment(e.target.form, e.target.value);
 });
 document.addEventListener("click", async e => {
   const product = e.target.closest("[data-product-vault]");
@@ -1612,7 +1651,7 @@ document.addEventListener("submit", async (e) => {
       Object.assign(payload, draft);
     }
     for (const [k, v] of new FormData(f)) {
-      if (v === "" || k.startsWith("wf_")) continue;
+      if (v === "" || k.startsWith("wf_") || k.startsWith("eq_")) continue;
       payload[k] = unitFields.includes(k)
         ? toUnits(v)
         : ["period", "distributionId", "caseId"].includes(k)
@@ -1624,6 +1663,20 @@ document.addEventListener("submit", async (e) => {
         : ["acceptProvisional", "riskAccepted", "demoAcknowledged"].includes(k)
         ? true
         : v;
+    }
+    if (action === "apply" || action === "supplement") {
+      const eq = new FormData(f);
+      const val = (key) => String(eq.get("eq_" + key) || "");
+      const battery = val("batteryCommissionedOn") ? {
+        commissionedOn: val("batteryCommissionedOn"),
+        usefulLifeYears: Number(val("batteryUsefulLifeYears")),
+        stateOfHealthPct: Number(val("batteryStateOfHealthPct")),
+        minimumHealthPct: Number(val("batteryMinimumHealthPct")),
+        annualCapacityLossPct: Number(val("batteryAnnualCapacityLossPct")),
+        batteryDependentSelfUsePct: Number(val("batteryDependentSelfUsePct")),
+        ...(val("batteryReplacementMonth") ? {replacementMonth: Number(val("batteryReplacementMonth")), replacementCostLocal: Number(val("batteryReplacementCostLocal"))} : {}),
+      } : undefined;
+      payload.equipment = {commissionedOn: val("commissionedOn"), pvUsefulLifeYears: Number(val("pvUsefulLifeYears")), pvAnnualLossPct: Number(val("pvAnnualLossPct")), ...(battery ? {battery} : {}), source:"owner-declared", evidence:val("evidence")};
     }
   } catch (error) {
     feedback(t("Check the form: ", "请检查表单：") + error.message, true);

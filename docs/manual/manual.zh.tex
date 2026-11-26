@@ -1254,6 +1254,13 @@ K表示约定由收益权承担的站点成本，f为本币换USDC的演示汇�
 \par\noindent{\footnotesize\textbf{公开资料}\quad \href{https://www.iea.org/articles/the-cost-of-capital-in-clean-energy-transitions}{IEA (2021)}; \href{https://docs.centrifuge.io/user/manager/nav/}{Centrifuge NAV}; \href{https://developer.centrifuge.io/developer/legacy/tinlake/}{Tinlake}; \href{https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/more}{ChinaBond}; \href{https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value=2026\&type=daily_treasury_yield_curve}{US Treasury}.}\par
 每次正式报价应记录估值币种、基准曲线和观察日、溢价证据、已从预测现金流扣除的预期损失、复利口径、6\%与10\%及14\%三种现值、审批人和估值有效期。取得足够实际业主缴费、电网回款及可比交易资料后，再校准本产品专属利率。新利率仅通过新报价或重新估值生效，不能静默改写已签协议。
 
+\subsection{设备状态、剩余权益与保险资料}
+新申请须填报光伏投运日期、有证据支持的使用寿命和预计年性能衰减。若电池参与收益计算，还须填报电池投运日期、健康度 SOH、最低运行健康度、容量年衰减、由电池支持的光伏自用比例，以及更换月份与成本。德业 API 明确提供的字段可以预填，缺项由业主填写并提交依据。SOC 是当前剩余电量，不能当作 SOH。中介核对资料后才可批准正式报价。拟出让期限超过设备可支持的剩余寿命，或电池在更换前低于经审核的最低健康度时，系统将拒绝申请。现有已签产品不会自动重算。
+
+历史实测电量已经反映截至采集日的设备状况，未来衰减从估值日开始。电池容量下降只改变经审核为依赖储能的自用电量和对应上网量，更换费用在指定月份计入成本。NREL 的光伏基准采用每年0.7\%组件衰减，具体电站检测证据优先于公开平均值。\href{https://atb.nrel.gov/electricity/2024b/residential_pv}{NREL 光伏技术假设}和\href{https://www.energy.gov/cmei/2022-grid-energy-storage-technology-cost-and-performance-assessment}{美国能源部储能评估}分别说明光伏衰减、储能日历寿命和循环寿命。
+
+\href{https://www.nrel.gov/docs/fy21osti/78588.pdf}{NREL 光伏保险报告}提供六年理赔数据，可用于识别灾害类型和损失严重程度，但没有与该上海电站匹配的承保暴露量，不能据此计算本电站的年度出险概率或直接给出收益权风险溢价。系统继续使用明确标注的10\%演示折现率及6\%和14\%敏感性。公开保险资料并不表示本电站已经投保，业主也无须提交保单才能申请。
+
 \subsection{三种估值基线的比较}
 三种方法改变的是未来各期发电量或上网比例的预测基线。业主优惠电费、售电收入、约定成本、归集比例及按预计收款时间折现的现金流公式保持一致。因此，不能把三种基线理解为三套不同的收益权经济条款，也不能把估值折现率当成投资者的保证收益率。
 

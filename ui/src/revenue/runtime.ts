@@ -40,6 +40,7 @@ import {
   valuationBlockReason,
 } from "../../../offchain/src/revenue/model";
 import { analyzeBaseline } from "../../../offchain/src/revenue/baseline";
+import { EquipmentEvidenceSchema, equipmentEligibility } from "../../../offchain/src/revenue/equipment";
 import { fetchPvgisProfile, PvgisConfigSchema, pvgisProfileHash } from "../../../offchain/src/revenue/pvgis";
 import {
   demoAssumptions,
@@ -605,13 +606,23 @@ export class RevenueRuntime {
       )
     )
       throw new Error("Application requires assessment first");
-    const parsed = AssumptionsSchema.parse(assumptions || a.assumptions);
+    let parsed = AssumptionsSchema.parse(assumptions || a.assumptions);
     if (parsed.termMonths !== 60)
       throw new Error("This product has a five-year term");
     const station = this.repo
       .read()
       .stations.find((s) => s.id === a.stationId)!;
     const now = await this.now();
+    if (a.equipment) {
+      const gate = equipmentEligibility(a.equipment, now, parsed.termMonths);
+      if (gate.status !== "eligible") throw new Error(gate.reasons.join("; "));
+      parsed = AssumptionsSchema.parse({ ...parsed, equipmentEvidence: a.equipment,
+        degradationPct: a.equipment.pvAnnualLossPct,
+        costs: [...parsed.costs.filter(c => c.id !== "battery-replacement"),
+          ...(a.equipment.battery?.replacementMonth ? [{ id: "battery-replacement", label: "Battery replacement",
+            payer: "revenue" as const, annualLocal: a.equipment.battery.replacementCostLocal!,
+            replacementMonth: a.equipment.battery.replacementMonth, evidence: a.equipment.evidence }] : [])] });
+    }
     const start =
       a.status === "pooled" ? Number(await this.vault.settledAt()) || now : now;
     return forecast(station, parsed, start, now);
@@ -1047,6 +1058,12 @@ export class RevenueRuntime {
         const id = hash({ stationId: station.id, owner: this.address(actor) });
         if (s.applications.some((a) => a.id === id))
           throw new Error("Station application already exists");
+        const equipment = b.equipment ? EquipmentEvidenceSchema.parse(b.equipment) : station.source === "synthetic"
+          ? EquipmentEvidenceSchema.parse({ commissionedOn: "2024-01-01", pvUsefulLifeYears: 30,
+              pvAnnualLossPct: 0.7, source: "owner-declared", evidence: "Synthetic station test fixture; no real equipment is represented" })
+          : undefined;
+        if (equipment && station.source !== "synthetic" && station.latest.batteryPowerKW != null && !equipment.battery)
+          throw new Error("Battery equipment details are required for this station; SOC alone is not health evidence");
         this.repo.update((v) =>
           v.applications.push({
             id,
@@ -1058,15 +1075,17 @@ export class RevenueRuntime {
               .max(2000)
               .parse(b.notes || ""),
             assumptions: demoAssumptions(station.currency),
+            equipment,
           })
         );
         return { id };
       }
       case "supplement": {
         const a = app();
-        if (a.status !== "supplement")
+        if (!["supplement", "rejected"].includes(a.status))
           throw new Error("Supplementation was not requested");
         a.notes = z.string().min(1).max(2000).parse(b.notes);
+        if (b.equipment) a.equipment = EquipmentEvidenceSchema.parse(b.equipment);
         a.status = "submitted";
         this.saveApp(a);
         return;
@@ -1075,15 +1094,39 @@ export class RevenueRuntime {
         const a = app();
         if (a.status !== "submitted")
           throw new Error("Application is not awaiting review");
-        a.status = z
+        const decision = z
           .enum(["approved", "supplement", "rejected"])
           .parse(b.decision);
+        let equipmentRejection = "";
+        if (decision === "approved") {
+          if (!a.equipment) throw new Error("Equipment evidence must be supplied before approval");
+          const reviewed = EquipmentEvidenceSchema.parse({ ...a.equipment, reviewedAt: now, reviewer: this.address(actor) });
+          const result = equipmentEligibility(reviewed, now, a.assumptions.termMonths);
+          if (result.status === "rejected") equipmentRejection = result.reasons.join("; ");
+          else if (result.status !== "eligible") throw new Error(result.reasons.join("; "));
+          a.equipment = reviewed;
+          if (!equipmentRejection) a.assumptions = AssumptionsSchema.parse({
+            ...a.assumptions,
+            degradationPct: reviewed.pvAnnualLossPct,
+            equipmentEvidence: reviewed,
+            costs: [
+              ...a.assumptions.costs.filter(c => c.id !== "battery-replacement"),
+              ...(reviewed.battery?.replacementMonth ? [{
+                id: "battery-replacement", label: "Battery replacement", payer: "revenue" as const,
+                annualLocal: reviewed.battery.replacementCostLocal!,
+                replacementMonth: reviewed.battery.replacementMonth,
+                evidence: reviewed.evidence,
+              }] : []),
+            ],
+          });
+        }
+        a.status = equipmentRejection ? "rejected" : decision;
         a.notes = z
           .string()
           .max(2000)
-          .parse(b.notes || "");
+          .parse(equipmentRejection || b.notes || "");
         this.saveApp(a);
-        return;
+        return { status: a.status, reason: a.notes };
       }
       case "reopen-offer": {
         const a = app();
@@ -1175,6 +1218,18 @@ export class RevenueRuntime {
         const previousReport = a.offer?.reportHash;
         if (a.assumptions.termMonths !== 60)
           throw new Error("This first product has a frozen five-year term");
+        if (a.equipment) {
+          const result = equipmentEligibility(a.equipment, now, a.assumptions.termMonths);
+          if (result.status !== "eligible") throw new Error(result.reasons.join("; "));
+          a.assumptions = AssumptionsSchema.parse({
+            ...a.assumptions, equipmentEvidence: a.equipment,
+            degradationPct: a.equipment.pvAnnualLossPct,
+            costs: [...a.assumptions.costs.filter(c => c.id !== "battery-replacement"),
+              ...(a.equipment.battery?.replacementMonth ? [{ id: "battery-replacement", label: "Battery replacement",
+                payer: "revenue" as const, annualLocal: a.equipment.battery.replacementCostLocal!,
+                replacementMonth: a.equipment.battery.replacementMonth, evidence: a.equipment.evidence }] : [])],
+          });
+        }
         a.offer = forecast(
           s.stations.find((v) => v.id === a.stationId)!,
           a.assumptions,

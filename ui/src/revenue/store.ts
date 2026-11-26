@@ -12,6 +12,7 @@ import {
   Station,
   Valuation,
 } from "../../../offchain/src/revenue/model";
+import type { EquipmentEvidence } from "../../../offchain/src/revenue/equipment";
 export type StaticActor =
   | "owner"
   | "agent"
@@ -35,6 +36,7 @@ export type Application = {
     | "pooled";
   notes: string;
   assumptions: Assumptions;
+  equipment?: EquipmentEvidence;
   offer?: Valuation;
   priceUSDC6?: string;
   agreementHash?: string;

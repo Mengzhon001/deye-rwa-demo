@@ -7,6 +7,7 @@ import {
   BaselineAnalysis,
 } from "./baseline";
 import { PvgisProfileSchema, pvgisEnergyForPeriod, pvgisProfileHash } from "./pvgis";
+import { EquipmentEvidenceSchema } from "./equipment";
 
 export const VERSION = "revenue-rights.v2";
 export const COMBINED_MODEL = "household-export.2";
@@ -73,6 +74,7 @@ const AssumptionsBaseSchema = z
     fxUSDC: z.number().positive().default(1),
     inflationPct: z.number().min(-20).max(30).default(2),
     degradationPct: z.number().min(0).max(10).default(0.7),
+    equipmentEvidence: EquipmentEvidenceSchema.optional(),
     availabilityPct: z.number().min(0).max(100).default(98),
     assumedExportRatio: z.number().min(0).max(1).default(0.6),
     paymentDelayMonths: z.number().int().min(0).max(12).default(1),
@@ -412,9 +414,17 @@ export function forecast(
       const historicalRatio = exportSampleGeneration > 0
         ? exportSamples.reduce((n,h) => n + (h.exportKWh ?? h.generationKWh! * a.assumedExportRatio),0) / exportSampleGeneration
         : a.assumedExportRatio;
-      const exported = method === "recent-export-ratio"
+      const baselineExported = method === "recent-export-ratio"
         ? generation * baseline.solarExportRatio!
         : generation * historicalRatio;
+      const battery = a.equipmentEvidence?.battery;
+      const batteryHealth = battery ? (battery.replacementMonth && m + 1 >= battery.replacementMonth
+        ? 100 - (m + 1 - battery.replacementMonth) * battery.annualCapacityLossPct / 12
+        : battery.stateOfHealthPct - m * battery.annualCapacityLossPct / 12) : 100;
+      const batterySelfUseLoss = battery && battery.stateOfHealthPct > 0
+        ? Math.max(0, generation - baselineExported) * battery.batteryDependentSelfUsePct / 100 *
+          Math.max(0, 1 - Math.max(0, batteryHealth) / battery.stateOfHealthPct) : 0;
+      const exported = Math.min(generation, baselineExported + batterySelfUseLoss);
       // Imports are a separate household payment, not pool income or a pool deduction.
       const meanImport = season.every(h => h.importKWh != null)
         ? season.reduce((n, h) => n + h.importKWh!, 0) / season.length : null;
